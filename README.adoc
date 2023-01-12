@@ -1,0 +1,63 @@
+// Core Document Attributes
+:title: Neovim Lua User Configuration
+:showtitle:
+:author: Jacob Logemann
+:authorinitials: JL
+:doctype: article
+:experimental: true
+:rev: v0.0.2-23-g16a807b
+:revdate: 2022-01-01
+:revision: 16a807b5730405039619e108acdcbe74966e452e
+:revnumber: v0.1
+:toc:
+:toclevels: 3
+:toc-title: Overview
+
+// Links
+:astronvim: link:https://github.com/astronvim/astronvim[AstroNvim]
+:neovim: link:https://github.com/neovim/neovim[Neovim]
+:leadermap: link:https://neovim.io/doc/user/map.html#leader[<leader>]
+
+// Customizations
+
+// GitHub Specific Crap...
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+= {title}
+
+My custom {neovim} configuration written in lua powered by {astronvim}.
+
+== Configuration
+
+=== Mappings
+
+.Normal Mode
+[%collapsible]
+====
+[cols="25h,~",width=100%]
+|===
+|Description |Keybinding
+|{leadermap} mapping |kbd:[Space]
+|Save current buffer|kbd:[Ctrl+S]
+|===
+====
+
+== Installation
+
+_Obviously, this requires {neovim}_.
+
+.Installation process
+[source,sh]
+----
+# Clone the AstroNvim project into the config directory.
+git clone https://github.com/astronvim/astronvim ~/.config/nvim
+
+# Clone this configuration as the user configuration.
+git clone https://github.com/jakelogemann/nvim-lua-user ~/.config/nvim/lua/user
+----
