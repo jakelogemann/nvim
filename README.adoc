@@ -14,7 +14,7 @@
 :toc-title: Overview
 
 // Links
-:astronvim: link:https://github.com/astronvim/astronvim[AstroNvim]
+:lazy-nvim: link:https://github.com/folke/lazy.nvim[lazy.nvim]
 :neovim: link:https://github.com/neovim/neovim[Neovim]
 :leadermap: link:https://neovim.io/doc/user/map.html#leader[<leader>]
 
@@ -31,7 +31,7 @@ endif::[]
 
 = {title}
 
-My custom {neovim} configuration written in lua powered by {astronvim}.
+My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 
 == Configuration
 
