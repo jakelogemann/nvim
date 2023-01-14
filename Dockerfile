@@ -1,7 +1,7 @@
 FROM debian:unstable-slim
 ENV DEBIAN="noninteractive"
 RUN apt-get update -qqy \
-&& apt-get install -qqy neovim \
+&& apt-get install -qqy --no-install-recommends git neovim python3 python3-pip \
 && rm -rf /var/cache/apt
 
 ARG USER_NAME="developer"
