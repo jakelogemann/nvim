@@ -78,11 +78,9 @@ jobs:
       tags: ${{ steps.meta.outputs.tags }}
       digest: ${{ steps.build.outputs.digest }}
       imageid: ${{ steps.build.outputs.imageid }}
-      image_uri: ${{ env.IMAGE_URI }}
     env:
       DOCKER_BUILDKIT: 1
       DOCKER_CLI_EXPERIMENTAL: enabled
-      IMAGE_URI: ${{ env.REGISTRY }}${{ inputs.registry_path }}/${{ inputs.name }}
       REGISTRY: ${{ inputs.registry || 'ghcr.io' }}
     steps:
 
