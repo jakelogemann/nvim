@@ -9,7 +9,7 @@ end
 local impatient_ok, impatient = pcall(require, "impatient")
 if impatient_ok then impatient.enable_profile() end
 
-require "our.options"
-require "our.plugins"
-require "our.autocmds"
-require "our.commands"
+require "options"
+require "plugins"
+require "autocmds"
+require "commands"

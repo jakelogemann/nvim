@@ -1,7 +1,7 @@
 -- plugin manager configuration.
 vim.g.mapleader = " " -- keep before most things so mappings are correct.
-vim.g.plugin_root = vim.fn.stdpath "data" .. "/lazy"
-vim.g.plugin_manager = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+vim.g.plugin_root = vim.fn.stdpath "config" .. "/vendor"
+vim.g.plugin_manager = vim.fn.stdpath "config" .. "/vendor/lazy.nvim"
 vim.g.plugin_manager_branch = "stable"
 vim.g.plugin_manager_repo = "https://github.com/folke/lazy.nvim.git"
 vim.g.plugin_manager_options = {

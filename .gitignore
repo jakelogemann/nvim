@@ -1,0 +1,7 @@
+.DS_Store
+/vendor
+/lazy-lock.json
+*.swo
+*.swp
+*.bkp
+*.log

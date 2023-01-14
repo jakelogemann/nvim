@@ -1,6 +1,16 @@
 # Configuration for pre-commit (https://pre-commit.com)
 ---
 repos:
+  - repo: local
+    hooks:
+      - id: format-lua-files
+        name: format lua files
+        entry: stylua
+        language: system
+        types: [lua]
+        pass_filenames: true
+
+  # See https://pre-commit.com for more information.
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.3.0
     hooks:
@@ -21,13 +31,3 @@ repos:
       # - id: no-commit-to-branch
       - id: trailing-whitespace
 
-  - repo: local
-    hooks:
-      - id: format-lua-files
-        name: format lua files
-        entry: stylua
-        language: system
-        types: [lua]
-        pass_filenames: true
-
-# See https://pre-commit.com for more information.
