@@ -1,13 +1,20 @@
 FROM debian:unstable-slim
+
 ENV DEBIAN="noninteractive"
+ENV XDG_CONFIG_DIR="~/.config"
+ENTRYPOINT ["nvim"]
+CMD []
+
 RUN apt-get update -qqy \
 && apt-get install -qqy --no-install-recommends git neovim python3 python3-pip \
 && rm -rf /var/cache/apt
 
-ARG USER_NAME="developer"
-ARG NVIM_CONFIG_DIR="~/.config/nvim"
-RUN mkdir -p "${NVIM_CONFIG_DIR}"
-COPY ./init.lua ./lua ./spell "${NVIM_CONFIG_DIR}/"
-RUN cd "${NVIM_CONFIG_DIR}" && nvim --headless "+Lazy! sync" +qa
-ENTRYPOINT ["nvim"]
-CMD []
+
+# USER developer
+ARG NVIM_CONFIG_DIR="${XDG_CONFIG_DIR}/nvim"
+WORKDIR ${NVIM_CONFIG_DIR}
+RUN mkdir vendor && git clone https://github.com/folke/lazy.nvim.git vendor/lazy.nvim
+COPY ./init.lua ./lua ./spell ./
+RUN nvim --headless "+Lazy! sync" +qa
+
+WORKDIR /
