@@ -1,13 +1,5 @@
 -- Global objects
-globals = {
-  "PACKER_BOOTSTRAP",
-  "astronvim",
-  "astronvim_installation",
-  "vim",
-  "bit",
-  "C",
-  "packer_plugins",
-}
+globals = { "vim", "bit", "C" }
 
 -- Rerun tests only if their modification time changed
 cache = true

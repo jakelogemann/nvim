@@ -57,8 +57,11 @@ if vim.fn.has "neovide" then
   vim.g.neovide_hide_mouse_when_typing = true
 end
 
+vim.g.treesitter_parsers_dir = vim.fn.stdpath "data" .. "/parsers"
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 vim.g.autoformat_enabled = false -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
 vim.g.cmp_enabled = true -- enable completion at start
 vim.g.matchup_matchparen_deferred = 1
 vim.g.autopairs_enabled = true -- enable autopairs at start
-vim.g.diagnostics_enabled = true -- enable diagnostics at start
+vim.g.diagnostics_enabled = false -- enable diagnostics at start

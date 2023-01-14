@@ -56,7 +56,10 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter",
     priority = 100,
     init = function()
+      local parsers_install_dir = vim.fn.stdpath "data" .. "/parsers"
+      vim.opt.runtimepath:append(parsers_install_dir)
       require("nvim-treesitter.configs").setup {
+        parser_install_dir = parsers_install_dir,
         -- A list of parser names, or "all"
         ensure_installed = {
           "c",
@@ -217,8 +220,11 @@ require("lazy").setup({
     module = "mason",
     lazy = true,
     dependencies = { "williamboman/mason-lspconfig.nvim" },
-    config = true,
-    opts = {},
+    init = function()
+      local mason_lspconfig = require "mason-lspconfig"
+      mason_lspconfig.setup { ensure_installed = require("lsp").ensure_installed }
+      mason_lspconfig.setup_handlers { require("lsp").setup_server }
+    end,
   },
   {
     "TimUntersberger/neogit",
@@ -376,6 +382,7 @@ require("lazy").setup({
     config = function()
       local cmp = require "cmp"
       local luasnip = require "luasnip"
+
       cmp.setup {
         snippet = {
           expand = function(args) luasnip.lsp_expand(args.body) end,
