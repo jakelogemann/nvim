@@ -53,6 +53,7 @@ My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 _Obviously, this requires {neovim}_.
 
 .Installation process
+[%collapsible]
 [source,sh]
 ----
 # Clone the AstroNvim project into the config directory.

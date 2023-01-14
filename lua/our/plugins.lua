@@ -26,7 +26,8 @@ vim.opt.rtp:prepend(vim.g.plugin_manager)
 require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
-    event = 'VeryLazy',
+    priority = 100,
+    init = function() pcall(require('nvim-treesitter.install').update { with_sync = true }) end,
   },
   {
     'folke/which-key.nvim',
@@ -50,6 +51,53 @@ require('lazy').setup({
   {
     'neovim/nvim-lspconfig',
     module = 'lspconfig',
+    dependencies = {
+      -- Automatically install LSPs to stdpath for neovim
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+
+      -- Useful status updates for LSP
+      'j-hui/fidget.nvim',
+
+      -- Additional lua configuration, makes nvim stuff amazing
+      'folke/neodev.nvim',
+    },
+  },
+  { 'tpope/vim-fugitive', module = 'fugitive' },
+  {
+    'lewis6991/gitsigns.nvim',
+    opts = {
+      signs = {
+        add = { text = '+' },
+        change = { text = '~' },
+        delete = { text = '_' },
+        topdelete = { text = '‾' },
+        changedelete = { text = '~' },
+      },
+    },
+  },
+  {
+    'nvim-lualine/lualine.nvim',
+    opts = {
+      icons_enabled = false,
+      -- theme = 'onedark',
+      component_separators = '|',
+      section_separators = '',
+    },
+  },
+  { -- Add indentation guides even on blank lines
+    'lukas-reineke/indent-blankline.nvim',
+    opts = {
+      char = '┊',
+      show_trailing_blankline_indent = false,
+    },
+  },
+  { -- "gc" to comment visual regions/lines
+    'numToStr/Comment.nvim',
+    config = true,
+  },
+  { -- Detect tabstop and shiftwidth automatically
+    'tpope/vim-sleuth',
   },
   {
     'onsails/lspkind.nvim',
@@ -121,17 +169,25 @@ require('lazy').setup({
   },
   { 'folke/neoconf.nvim', cmd = 'Neoconf' },
   { 'lewis6991/impatient.nvim', lazy = true },
-  { 'github/copilot.vim', enabled = false },
+  { 'github/copilot.vim', cmd = 'Copilot' },
   { 'b0o/SchemaStore.nvim', module = 'schemastore' },
-  { 'nvim-telescope/telescope.nvim', cmd = 'Telescope', dependencies = { 'nvim-lua/plenary.nvim' } },
-  { 'folke/persistence.nvim', event = 'BufReadPre', module = 'persistence', config = true },
-  { 'folke/neodev.nvim' },
   {
-    'rebelot/heirline.nvim',
-    event = 'UiEnter',
-    opts = {},
+    'nvim-telescope/telescope.nvim',
+    cmd = 'Telescope',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      defaults = {
+        mappings = {
+          i = {
+            ['<C-u>'] = false,
+            ['<C-d>'] = false,
+          },
+        },
+      },
+    },
   },
-
+  { 'folke/persistence.nvim', event = 'BufReadPre', module = 'persistence', config = true },
+  { 'folke/neodev.nvim', config = true },
   { 'stevearc/dressing.nvim', event = 'VeryLazy' },
 
   {
