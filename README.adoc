@@ -50,10 +50,11 @@ My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 
 == Installation
 
-_Obviously, this requires {neovim}_.
-
 .Installation process
 [%collapsible]
+====
+_Obviously, this requires {neovim}_.
+
 [source,sh]
 ----
 # Clone the AstroNvim project into the config directory.
@@ -62,3 +63,4 @@ git clone https://github.com/astronvim/astronvim ~/.config/nvim
 # Clone this configuration as the user configuration.
 git clone https://github.com/jakelogemann/nvim-lua-user ~/.config/nvim/lua/user
 ----
+====
