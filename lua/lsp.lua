@@ -1,5 +1,14 @@
 local M = { servers = vim.empty_dict() }
 
+M.default_capabilities = vim.lsp.protocol.make_client_capabilities()
+M.capabilities = require("cmp_nvim_lsp").default_capabilities(M.default_capabilities)
+M.servers["sumneko_lua"] = {
+  Lua = {
+    workspace = { checkThirdParty = false },
+    telemetry = { enable = false },
+  },
+}
+
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 function M.on_attach(_, bufnr)
@@ -54,16 +63,6 @@ function M.on_attach(_, bufnr)
   )
 end
 
-M.default_capabilities = vim.lsp.protocol.make_client_capabilities()
-M.capabilities = require("cmp_nvim_lsp").default_capabilities(M.default_capabilities)
-
-M.servers["sumneko_lua"] = {
-  Lua = {
-    workspace = { checkThirdParty = false },
-    telemetry = { enable = false },
-  },
-}
-
 function M.setup_server(name)
   require("lspconfig")[name].setup {
     capabilities = M.capabilities,
@@ -73,5 +72,4 @@ function M.setup_server(name)
 end
 
 M.ensure_installed = vim.tbl_keys(M.servers)
-
 return M
