@@ -82,8 +82,7 @@ jobs:
     env:
       DOCKER_BUILDKIT: 1
       DOCKER_CLI_EXPERIMENTAL: enabled
-      IMAGE_URI: ${{ inputs.registry }}${{ inputs.registry_path }}/${{ inputs.name }}
-      PLATFORMS: ${{ inputs.platforms || 'linux/amd64,linux/arm64' }}
+      IMAGE_URI: ${{ env.REGISTRY }}${{ inputs.registry_path }}/${{ inputs.name }}
       REGISTRY: ${{ inputs.registry || 'ghcr.io' }}
     steps:
 
@@ -113,6 +112,8 @@ jobs:
       - name: build.
         id: build
         uses: docker/build-push-action@v3
+        env:
+          IMAGE_URI: ${{ env.REGISTRY }}${{ inputs.registry_path || github.repository_owner }}/${{ inputs.name || github.repository_name }}
         with:
           context: .
           cache-to: type=gha,mode=max
@@ -129,14 +130,6 @@ jobs:
             ${{ env.IMAGE_URI }}:${{ github.sha }}
 
       - name: summarize.
-        continue-on-error: true
-        if: always()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            await core.summary.addCodeBlock(JSON.stringify(github, null, 2), "json").write();
-
-      - name: add context.
         continue-on-error: true
         if: always()
         uses: actions/github-script@v6
