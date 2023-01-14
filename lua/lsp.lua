@@ -1,7 +1,5 @@
 local M = { servers = vim.empty_dict() }
 
-M.default_capabilities = vim.lsp.protocol.make_client_capabilities()
-M.capabilities = require("cmp_nvim_lsp").default_capabilities(M.default_capabilities)
 M.servers["sumneko_lua"] = {
   Lua = {
     workspace = { checkThirdParty = false },
@@ -65,11 +63,12 @@ end
 
 function M.setup_server(name)
   require("lspconfig")[name].setup {
-    capabilities = M.capabilities,
+    capabilities = require("cmp_nvim_lsp").default_capabilities(M.default_capabilities),
     on_attach = M.on_attach,
     settings = M.servers[name],
   }
 end
 
 M.ensure_installed = vim.tbl_keys(M.servers)
+M.default_capabilities = vim.lsp.protocol.make_client_capabilities()
 return M

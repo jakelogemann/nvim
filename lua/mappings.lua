@@ -1,0 +1,17 @@
+function nmap(keys, fn, desc) vim.keymap.set("n", keys, fn, { desc = desc }) end
+
+nmap("<leader>e", "<cmd>NeoTreeFloatToggle<cr>", "[E]xplore")
+nmap("<leader>sf", "<cmd>FindFiles<cr>", "[F]ind/[F]iles")
+nmap("<leader>sh", "<cmd>FindHelp<cr>", "[H]elp tags")
+nmap("<leader>sw", "<cmd>GrepByWord<cr>", "by [W]ord")
+nmap("<leader>sg", "<cmd>LiveGrep<cr>", "live [G]rep")
+nmap("<leader>sb", "<cmd>Buffers<cr>", "[B]uffers")
+nmap("<leader>sm", "<cmd>ManPages<cr>", "[M]an")
+nmap("<leader>sq", "<cmd>QF<cr>", "[Q]uickfixes")
+nmap("<leader>sl", "<cmd>LOC<cr>", "[L]oclist")
+nmap("<leader>ss", "<cmd>Symbols<cr>", "[S]ymbols")
+nmap("<leader>sd", "<cmd>Telescope diagnostics<cr>", "[D]iagnostics")
+nmap("<leader>sc", "<cmd>Telescope commands<cr>", "[C]ommands")
+nmap("<leader>s`", "<cmd>Telescope marks<cr>", "marks")
+nmap("<leader>s/", "<cmd>Telescope builtin<cr>", "builtins")
+nmap("<leader>st", "<cmd>Telescope treesitter<cr>", "treesitter")

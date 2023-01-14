@@ -5,11 +5,12 @@ if vim.fn.has "nvim-0.8" ~= 1 or vim.version().prerelease then
   }, " "))
 end
 
--- install profiling, if we have the right things available.
-local impatient_ok, impatient = pcall(require, "impatient")
-if impatient_ok then impatient.enable_profile() end
+-- install profiling, if available.
+local ok, profiler = pcall(require, "impatient")
+if ok then profiler.enable_profile() end
 
 require "options"
 require "plugins"
 require "autocmds"
 require "commands"
+require "mappings"
