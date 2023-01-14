@@ -111,7 +111,7 @@ jobs:
         id: build
         uses: docker/build-push-action@v3
         env:
-          IMAGE_URI: ${{ env.REGISTRY }}${{ inputs.registry_path || github.repository_owner }}/${{ inputs.name || github.repository_name }}
+          IMAGE_URI: ${{ env.REGISTRY }}${{ inputs.registry_path || github.repository_owner }}/${{ inputs.name || github.event.repository.name }}
         with:
           context: .
           cache-to: type=gha,mode=max
