@@ -108,7 +108,8 @@ jobs:
           username: ${{ secrets.registry_user || github.actor || 'github-actions' }}
           password: ${{ secrets.registry_secret || secrets.GITHUB_TOKEN }}
 
-      - id: fetch.
+      - name: fetch.
+        id: fetch
         uses: actions/checkout@v3
         with: {ref: "${{ inputs.ref }}"}
 
@@ -130,7 +131,7 @@ jobs:
             ${{ env.IMAGE_URI }}:${{ github.ref_name }}
             ${{ env.IMAGE_URI }}:${{ github.sha }}
 
-      - name: summarize
+      - name: summarize.
         continue-on-error: true
         if: always()
         uses: actions/github-script@v6
