@@ -133,26 +133,17 @@ jobs:
       - name: summarize
         continue-on-error: true
         if: always()
-        run: |
-          append_summary(){ cat "$1" | tee -a "${GITHUB_STEP_SUMMARY}"; }
-
-          append_summary <<-EOF
-          ## ${{ env.IMAGE_URI }}
-          - digest: ${{ steps.build.outputs.digest || 'null' }}
-          - image: ${{ env.IMAGE_URI }}
-          - iid: ${{ steps.build.outputs.imageid || 'null' }}
-          - tags: ${{ steps.meta.outputs.tags }}
-          - platforms: ${{ env.PLATFORMS }}
-          EOF
-
-          declare -a contexts=(inputs steps job github runner)
-          for i in "${contexts[@]}"; do append_summary <<-__DETAIL_ITEM
-            <details><summary>$i</summary>
-
-            ~~~json
-            ${{toJSON($i)}}
-            ~~~
-
-            </details>
-            __DETAIL_ITEM
-          done
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { summary } = core;
+            summary.addHeading("${{ env.IMAGE_URI }}");
+            summary.addList([
+              "event_name: `${{ github.event_name }}`",
+              "digest: `${{ steps.build.outputs.digest || 'null' }}`",
+              "image: `${{ env.IMAGE_URI }}`",
+              "iid: `${{ steps.build.outputs.imageid || 'null' }}`",
+              "tags: `${{ steps.meta.outputs.tags }}`",
+              "platforms: `${{ env.PLATFORMS }}`",
+            ])
+            await summary.write()
