@@ -7,6 +7,89 @@ M.servers["sumneko_lua"] = {
   },
 }
 
+M.servers["clangd"] = {
+  capabilities = { offsetEncoding = "utf-8" },
+}
+
+M.servers["tsserver"] = {
+  javascript = {
+    inlayHints = {
+      includeInlayEnumMemberValueHints = true,
+      includeInlayFunctionLikeReturnTypeHints = true,
+      includeInlayFunctionParameterTypeHints = true,
+      includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+      includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+      includeInlayPropertyDeclarationTypeHints = true,
+      includeInlayVariableTypeHints = true,
+    },
+  },
+  typescript = {
+    inlayHints = {
+      includeInlayEnumMemberValueHints = true,
+      includeInlayFunctionLikeReturnTypeHints = true,
+      includeInlayFunctionParameterTypeHints = true,
+      includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+      includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+      includeInlayPropertyDeclarationTypeHints = true,
+      includeInlayVariableTypeHints = true,
+    },
+  },
+}
+
+M.servers["yamlls"] = {
+  yaml = {
+    schemas = {
+      ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*.{yml,yaml}",
+      ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
+      ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
+    },
+  },
+}
+
+M.servers["gopls"] = {
+  ["memoryMode"] = "DegradedClosed",
+  gopls = {
+    ["build.directoryFilters"] = { "-**/node_modules" },
+    ["build.buildFlags"] = { "-trimpath" },
+    ["formatting.gofumpt"] = true,
+    ["ui.diagnostic.diagnosticsDelay"] = "500ms",
+    ["build.env"] = {
+      GONOPROXY = table.concat({
+        "github.internal.digitalocean.com",
+        "github.com/polis-dev/sol",
+        "github.com/digitalocean",
+      }, ","),
+      GONOSUMDB = table.concat({
+        "github.internal.digitalocean.com",
+        "github.com/polis-dev/sol",
+        "github.com/digitalocean",
+      }, ","),
+      GOPRIVATE = table.concat({
+        "github.internal.digitalocean.com",
+        "github.com/polis-dev/sol",
+        "github.com/digitalocean",
+      }, ","),
+    },
+    analyses = {
+      unusedparams = true,
+      -- unusedvariable = true,
+      -- unusedwrite = true,
+      -- nilness = true,
+      -- shadow = true,
+    },
+    staticcheck = true,
+    hints = {
+      assignVariableTypes = true,
+      compositeLiteralFields = true,
+      compositeLiteralTypes = true,
+      constantValues = true,
+      functionTypeParameters = true,
+      parameterNames = true,
+      rangeVariableTypes = true,
+    },
+  },
+}
+
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
 function M.on_attach(_, bufnr)

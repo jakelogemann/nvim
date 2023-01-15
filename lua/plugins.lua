@@ -52,6 +52,25 @@ require("lazy").setup({
     event = "UiEnter",
     config = function() vim.cmd "colorscheme catppuccin-macchiato" end,
   },
+  {
+    "akinsho/toggleterm.nvim",
+    event = "VeryLazy",
+    cmd = "ToggleTerm",
+    config = true,
+    opts = {
+      size = 10,
+      open_mapping = [[<F7>]],
+      shading_factor = 2,
+      direction = "float",
+      float_opts = {
+        border = "curved",
+        highlights = {
+          border = "Normal",
+          background = "Normal",
+        },
+      },
+    },
+  },
   { -- install/configure treesitter (syntax highlighting but.. better)
     "nvim-treesitter/nvim-treesitter",
     priority = 100,
@@ -168,7 +187,8 @@ require("lazy").setup({
     "folke/which-key.nvim",
     init = function()
       require("which-key").register({
-        s = { name = "[S]earch" },
+        s = { name = "search" },
+        z = { name = "toggle" },
       }, { prefix = "<leader>" })
     end,
   },
@@ -461,6 +481,8 @@ require("lazy").setup({
         },
         always_show = { -- remains visible even if other settings would normally hide it
           ".gitignore",
+          "vendor",
+          "target",
         },
         never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
           ".DS_Store",
@@ -478,6 +500,37 @@ require("lazy").setup({
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
       defaults = {
+        layout_strategy = "flex",
+        layout_config = {
+          bottom_pane = {
+            height = 25,
+            preview_cutoff = 120,
+            prompt_position = "top",
+          },
+          center = {
+            height = 0.4,
+            preview_cutoff = 40,
+            prompt_position = "top",
+            width = 0.5,
+          },
+          cursor = {
+            height = 0.9,
+            preview_cutoff = 40,
+            width = 0.8,
+          },
+          horizontal = {
+            height = 0.9,
+            preview_cutoff = 120,
+            prompt_position = "bottom",
+            width = 0.8,
+          },
+          vertical = {
+            height = 0.9,
+            preview_cutoff = 40,
+            prompt_position = "bottom",
+            width = 0.8,
+          },
+        },
         mappings = {
           i = {
             ["<C-u>"] = false,
