@@ -54,13 +54,12 @@ function utils.echo(messages)
 end
 
 --- Echo a message and prompt the user for yes or no response
--- @param messages the message to echo
+-- @param prompt the message to echo
 -- @return True if the user responded y, False for any other response
-function utils.confirm_prompt(messages)
-  if messages then utils.echo(messages) end
+function utils.confirm(prompt)
+  if prompt then utils.echo(prompt) end
   local confirmed = string.lower(vim.fn.input "(y/n) ") == "y"
-  utilutils.echo()
-  utils.echo()
+  utils.echo() -- clear the prompt & response.
   return confirmed
 end
 

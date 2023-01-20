@@ -1,3 +1,5 @@
+local groups = {}
+
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight yanked text",
   group = vim.api.nvim_create_augroup("yank", { clear = true }),
@@ -23,4 +25,11 @@ vim.api.nvim_create_autocmd("BufWritePre", {
       end
     end
   end,
+})
+
+vim.api.nvim_create_autocmd("BufWritePre", {
+  desc = "Automatically Format",
+  group = vim.api.nvim_create_augroup("autoformat", { clear = true }),
+  pattern = { "*.lua", "*.json", "*.go", "*.ts", "*.js" },
+  callback = function() vim.cmd "Format" end,
 })

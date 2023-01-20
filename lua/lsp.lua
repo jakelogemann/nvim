@@ -5,7 +5,11 @@ M.servers["sumneko_lua"] = {
     diagnostics = {
       globals = { "vim" },
     },
-    workspace = { checkThirdParty = false },
+    workspace = {
+      -- Make the server aware of Neovim runtime files
+      library = vim.api.nvim_get_runtime_file("", true),
+      checkThirdParty = false,
+    },
     telemetry = { enable = false },
   },
 }
@@ -43,6 +47,7 @@ M.servers["yamlls"] = {
   yaml = {
     schemas = {
       ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*.{yml,yaml}",
+      ["http://json.schemastore.org/catalog-info"] = "{catalog-info,catalog/**/*}.{yml,yaml}",
       ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
       ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
     },
