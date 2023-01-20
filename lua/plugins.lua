@@ -620,6 +620,7 @@ require("lazy").setup({
       },
     },
   },
+  { "tjdevries/colorbuddy.nvim", config = true, event = "VeryLazy" },
   { "aarondiel/spread.nvim", dependencies = { "nvim-treesitter" } },
   { "folke/neoconf.nvim", cmd = "Neoconf" },
   { "lewis6991/impatient.nvim", lazy = true },
