@@ -3,6 +3,7 @@ function nmap(keys, fn, desc) vim.keymap.set("n", keys, fn, { desc = desc }) end
 nmap("<C-s>", "<cmd>write<cr>", "Save current buffer")
 nmap("<f1>", "<cmd>FindHelp<cr>", "Find help")
 nmap("<leader>e", "<cmd>NeoTreeFloatToggle<cr>", "[E]xplore")
+nmap("<leader>E", "<cmd>Oil<cr>", "[E]xplore")
 nmap("<leader>gg", "<cmd>Neogit kind=tab<cr>", "git")
 nmap("<leader>s/", "<cmd>Telescope builtin<cr>", "available")
 nmap("<leader>s`", "<cmd>Telescope marks<cr>", "marks")
@@ -25,3 +26,5 @@ nmap("<leader>zs", function() vim.opt.spell = not vim.opt.spell:get() end, "spel
 nmap("<leader>zw", function() vim.opt.wrap = not vim.opt.wrap:get() end, "wrap")
 nmap("<leader>zl", function() vim.opt.list = not vim.opt.list:get() end, "list")
 nmap("<leader>zp", function() vim.opt.paste = not vim.opt.paste:get() end, "paste")
+nmap("<leader>so", "<cmd>lua require'spread'.out({silent = true})<cr>", "spread")
+nmap("<leader>sc", "<cmd>lua require'spread'.combine({silent = true})<cr>", "combine")

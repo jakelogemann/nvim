@@ -2,6 +2,9 @@ local M = { servers = vim.empty_dict() }
 
 M.servers["sumneko_lua"] = {
   Lua = {
+    diagnostics = {
+      globals = { "vim" },
+    },
     workspace = { checkThirdParty = false },
     telemetry = { enable = false },
   },
