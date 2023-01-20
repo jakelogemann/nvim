@@ -42,7 +42,7 @@ vim.opt.rtp:prepend(vim.g.plugin_manager)
 require("lazy").setup({
   { -- Emac's ORG-mode; reimplemented for Neovim
     "nvim-neorg/neorg",
-    ft = "norg",
+    ft = "org",
     config = true,
     opts = {},
   },
@@ -620,7 +620,24 @@ require("lazy").setup({
       },
     },
   },
-  { "tjdevries/colorbuddy.nvim", config = true, event = "VeryLazy" },
+  {
+    "cshuaimin/ssr.nvim",
+    module = "ssr",
+    opts = {
+      min_width = 50,
+      min_height = 5,
+      max_width = 120,
+      max_height = 25,
+      keymaps = {
+        close = "q",
+        next_match = "n",
+        prev_match = "N",
+        replace_confirm = "<cr>",
+        replace_all = "<leader><cr>",
+      },
+    },
+  },
+  { "tjdevries/colorbuddy.nvim", config = true, event = "UiEnter" },
   { "aarondiel/spread.nvim", dependencies = { "nvim-treesitter" } },
   { "folke/neoconf.nvim", cmd = "Neoconf" },
   { "lewis6991/impatient.nvim", lazy = true },
