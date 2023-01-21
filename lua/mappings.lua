@@ -32,6 +32,7 @@ nmap("<leader>g[", "prev hunk", "<cmd>Gitsigns prev_hunk<cr>")
 nmap("<leader>g]", "next hunk", "<cmd>Gitsigns next_hunk<cr>")
 nmap("<leader>gg", "git", "<cmd>Neogit kind=tab<cr>")
 nmap("<leader>h/", "search help", "<cmd>FindHelp<cr>")
+nmap("<leader>hl", "lua.vim", "<cmd>help lua.vim<cr>")
 nmap("<leader>hL", "lua-ref", "<cmd>help luaref-Lib<cr>")
 nmap("<leader>hN", "nvim.txt", "<cmd>help nvim.txt<cr>")
 nmap("<leader>hP", "lazy.nvim", "<cmd>help lazy.nvim.txt<cr>")
@@ -63,6 +64,18 @@ nmap("<leader>zp", "paste", function() vim.bo.paste = not vim.opt.paste:get() en
 nmap("<leader>zr", "ruler", function() vim.wo.ruler = not vim.opt.ruler:get() end)
 nmap("<leader>zs", "spell", function() vim.bo.spell = not vim.opt.spell:get() end)
 nmap("<leader>zw", "wrap", function() vim.wo.wrap = not vim.opt.wrap:get() end)
+nmap("<leader>z<tab>", "tabs/spaces", function()
+  vim.ui.select({ "tabs", "spaces" }, {
+    prompt = "Select tabs or spaces:",
+    format_item = function(item) return "I'd like to use " .. item end,
+  }, function(choice)
+    if choice == "spaces" then
+      vim.bo.expandtab = true
+    else
+      vim.bo.expandtab = false
+    end
+  end)
+end)
 
 nmap("<leader>zn", "number", function()
   local ln = vim.opt.number:get()
