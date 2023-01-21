@@ -11,9 +11,9 @@ require("which-key").register({
   p = { name = "project" },
   s = { name = "search" },
   t = { name = "tab" },
+  u = { name = "ui" },
   w = { name = "window" },
   z = { name = "toggle" },
-  u = { name = "ui" },
 }, { prefix = "<leader>" })
 
 nmap("<C-s>", "Save current buffer", "<cmd>write<cr>")
@@ -63,6 +63,7 @@ nmap("<leader>zl", "list", function() vim.bo.list = not vim.opt.list:get() end)
 nmap("<leader>zp", "paste", function() vim.bo.paste = not vim.opt.paste:get() end)
 nmap("<leader>zr", "ruler", function() vim.wo.ruler = not vim.opt.ruler:get() end)
 nmap("<leader>zs", "spell", function() vim.bo.spell = not vim.opt.spell:get() end)
+nmap("<leader>zo", "outline", "<cmd>SymbolsOutline<cr>")
 nmap("<leader>zw", "wrap", function() vim.wo.wrap = not vim.opt.wrap:get() end)
 nmap("<leader>z<tab>", "tabs/spaces", function()
   vim.ui.select({ "tabs", "spaces" }, {
