@@ -196,15 +196,6 @@ require("lazy").setup({
       }
     end,
   },
-  { -- WhichKey highlights keyboard mappings to help with discovery!
-    "folke/which-key.nvim",
-    init = function()
-      require("which-key").register({
-        s = { name = "search" },
-        z = { name = "toggle" },
-      }, { prefix = "<leader>" })
-    end,
-  },
   { -- Language Server Configuration
     "neovim/nvim-lspconfig",
     module = "lspconfig",
@@ -330,11 +321,70 @@ require("lazy").setup({
   },
   { -- simplistic lua statusline plugin.
     "nvim-lualine/lualine.nvim",
+    dependencies = { "tjdevries/colorbuddy.nvim" },
+    config = true,
     opts = {
-      icons_enabled = false,
-      -- theme = 'onedark',
-      component_separators = "|",
-      section_separators = "",
+      options = {
+        icons_enabled = true,
+        theme = "auto",
+        extensions = {
+          "fugitive",
+          "fzf",
+          "man",
+          "neo-tree",
+          "quickfix",
+          "symbols-outline",
+          "toggleterm",
+        },
+        section_separators = {
+          left = "",
+          right = "",
+        },
+        component_separators = {
+          left = "",
+          right = "",
+        },
+        disabled_filetypes = {
+          statusline = {},
+          winbar = {},
+        },
+        ignore_focus = {},
+        always_divide_middle = true,
+        globalstatus = false,
+        refresh = {
+          statusline = 1000,
+          tabline = 1000,
+          winbar = 1000,
+        },
+      },
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = {
+          "branch",
+          "diff",
+          "diagnostics",
+        },
+        lualine_c = { "filename" },
+        lualine_x = {
+          "encoding",
+          "fileformat",
+          "filetype",
+        },
+        lualine_y = { "progress" },
+        lualine_z = { "location" },
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { "filename" },
+        lualine_x = { "location" },
+        lualine_y = {},
+        lualine_z = {},
+      },
+      tabline = {},
+      winbar = {},
+      inactive_winbar = {},
+      extensions = {},
     },
   },
   { -- Add indentation guides even on blank lines
@@ -562,7 +612,7 @@ require("lazy").setup({
       columns = {
         "icon",
         -- "permissions",
-        -- "size",
+        "size",
         -- "mtime",
       },
       -- Buffer-local options to use for oil buffers
@@ -648,4 +698,5 @@ require("lazy").setup({
   { "stevearc/dressing.nvim", event = "VeryLazy" },
   { "L3MON4D3/LuaSnip", lazy = true },
   { "saadparwaiz1/cmp_luasnip", lazy = true },
+  { "folke/which-key.nvim" },
 }, vim.g.plugin_manager_options)

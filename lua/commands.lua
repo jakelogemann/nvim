@@ -9,3 +9,8 @@ cmd("Buffers", "Interactively find open buffers", function() require("telescope.
 cmd("ManPages", "Interactively find man pages", function() require("telescope.builtin").man_pages {} end)
 cmd("QF", "Interactively find quickfix", function() require("telescope.builtin").quickfix {} end)
 cmd("LOC", "Interactively find loclist", function() require("telescope.builtin").loclist {} end)
+cmd("ToggleLineNumbers", "toggle line numbers in current buffer", function()
+  local ln = vim.opt.number:get()
+  vim.wo.number = not ln
+  vim.wo.relativenumber = ln
+end)

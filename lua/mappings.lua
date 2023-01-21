@@ -1,30 +1,78 @@
-function nmap(keys, fn, desc) vim.keymap.set("n", keys, fn, { desc = desc }) end
+function nmap(keys, desc, fn) vim.keymap.set("n", keys, fn, { desc = desc }) end
 
-nmap("<C-s>", "<cmd>write<cr>", "Save current buffer")
-nmap("<f1>", "<cmd>FindHelp<cr>", "Find help")
-nmap("<leader>e", "<cmd>NeoTreeFloatToggle<cr>", "[E]xplore")
-nmap("<leader>E", "<cmd>Oil<cr>", "[E]xplore")
-nmap("<leader>gg", "<cmd>Neogit kind=tab<cr>", "git")
-nmap("<leader>s/", "<cmd>Telescope builtin<cr>", "available")
-nmap("<leader>s`", "<cmd>Telescope marks<cr>", "marks")
-nmap("<leader>sb", "<cmd>Buffers<cr>", "buffers")
-nmap("<leader>sc", "<cmd>Telescope commands<cr>", "commands")
-nmap("<leader>sd", "<cmd>Telescope diagnostics<cr>", "diagnostics")
-nmap("<leader>sf", "<cmd>FindFiles<cr>", "find files")
-nmap("<leader>sg", "<cmd>LiveGrep<cr>", "live grep")
-nmap("<leader>sh", "<cmd>FindHelp<cr>", "help tags")
-nmap("<leader>sl", "<cmd>LOC<cr>", "loclist")
-nmap("<leader>sm", "<cmd>ManPages<cr>", "man pages")
-nmap("<leader>sq", "<cmd>QF<cr>", "quickfix")
-nmap("<leader>ss", "<cmd>Symbols<cr>", "symbols")
-nmap("<leader>st", "<cmd>Telescope treesitter<cr>", "treesitter")
-nmap("<leader>sw", "<cmd>GrepByWord<cr>", "grep by word")
-nmap("<leader>zc", function() vim.opt.conceallevel = vim.opt.conceallevel:get() == 0 and 2 or 0 end, "conceal")
-nmap("<leader>zn", function() vim.opt.number = not vim.opt.number:get() end, "number")
-nmap("<leader>zr", function() vim.opt.ruler = not vim.opt.ruler:get() end, "ruler")
-nmap("<leader>zs", function() vim.opt.spell = not vim.opt.spell:get() end, "spell")
-nmap("<leader>zw", function() vim.opt.wrap = not vim.opt.wrap:get() end, "wrap")
-nmap("<leader>zl", function() vim.opt.list = not vim.opt.list:get() end, "list")
-nmap("<leader>zp", function() vim.opt.paste = not vim.opt.paste:get() end, "paste")
-nmap("<leader>so", "<cmd>lua require'spread'.out({silent = true})<cr>", "spread")
-nmap("<leader>sc", "<cmd>lua require'spread'.combine({silent = true})<cr>", "combine")
+require("which-key").register({
+  a = { name = "actions" },
+  b = { name = "buffer" },
+  f = { name = "file" },
+  g = { name = "git" },
+  h = { name = "help" },
+  i = { name = "insert" },
+  o = { name = "open" },
+  p = { name = "project" },
+  s = { name = "search" },
+  t = { name = "tab" },
+  w = { name = "window" },
+  z = { name = "toggle" },
+  u = { name = "ui" },
+}, { prefix = "<leader>" })
+
+nmap("<C-s>", "Save current buffer", "<cmd>write<cr>")
+nmap("<f1>", "Find help", "<cmd>FindHelp<cr>")
+nmap("<leader>E", "[E]xplore", "<cmd>Oil<cr>")
+nmap("<leader>ac", "combine args", function() require("spread").combine() end)
+nmap("<leader>as", "spread args", function() require("spread").out() end)
+nmap("<leader>bN", "new buf", "<cmd>bnew<cr>")
+nmap("<leader>bn", "next buf", "<cmd>bNext<cr>")
+nmap("<leader>bp", "prev buf", "<cmd>bprevious<cr>")
+nmap("<leader>bs", "scratch", "<cmd>enew<cr>")
+nmap("<leader>bw", "write buf", "<cmd>write<cr>")
+nmap("<leader>e", "[E]xplore", "<cmd>NeoTreeFloatToggle<cr>")
+nmap("<leader>f/", "search", "<cmd>LiveGrep<cr>")
+nmap("<leader>g[", "prev hunk", "<cmd>Gitsigns prev_hunk<cr>")
+nmap("<leader>g]", "next hunk", "<cmd>Gitsigns next_hunk<cr>")
+nmap("<leader>gg", "git", "<cmd>Neogit kind=tab<cr>")
+nmap("<leader>h/", "search help", "<cmd>FindHelp<cr>")
+nmap("<leader>hL", "lua-ref", "<cmd>help luaref-Lib<cr>")
+nmap("<leader>hN", "nvim.txt", "<cmd>help nvim.txt<cr>")
+nmap("<leader>hP", "lazy.nvim", "<cmd>help lazy.nvim.txt<cr>")
+nmap("<leader>hM", "search man", "<cmd>ManPages<cr>")
+nmap("<leader>id", "date", function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date()), "n", true) end)
+nmap("<leader>it", "time", function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%R"), "n", true) end)
+nmap("<leader>iy", "year", function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%Y"), "n", true) end)
+nmap("<leader>p/", "search", "<cmd>FindFiles<cr>")
+nmap("<leader>pc", "project config", "<cmd>Neoconf<cr>")
+nmap("<leader>s/", "available", "<cmd>Telescope builtin<cr>")
+nmap("<leader>s`", "marks", "<cmd>Telescope marks<cr>")
+nmap("<leader>sb", "buffers", "<cmd>Buffers<cr>")
+nmap("<leader>sc", "commands", "<cmd>Telescope commands<cr>")
+nmap("<leader>sd", "diagnostics", "<cmd>Telescope diagnostics<cr>")
+nmap("<leader>sf", "find files", "<cmd>FindFiles<cr>")
+nmap("<leader>sg", "live grep", "<cmd>LiveGrep<cr>")
+nmap("<leader>sh", "help tags", "<cmd>FindHelp<cr>")
+nmap("<leader>sl", "loclist", "<cmd>LOC<cr>")
+nmap("<leader>sm", "man pages", "<cmd>ManPages<cr>")
+nmap("<leader>sq", "quickfix", "<cmd>QF<cr>")
+nmap("<leader>ss", "symbols", "<cmd>Symbols<cr>")
+nmap("<leader>st", "treesitter", "<cmd>Telescope treesitter<cr>")
+nmap("<leader>sw", "grep by word", "<cmd>GrepByWord<cr>")
+nmap("<leader>zc", "conceal", function() vim.opt.conceallevel = vim.opt.conceallevel:get() == 0 and 2 or 0 end)
+nmap("<leader>zg", "gitsigns", "<cmd>Gitsigns toggle_signs<cr>")
+nmap("<leader>`", "term", "<cmd>ToggleTerm direction=float<cr>")
+nmap("<leader>zl", "list", function() vim.bo.list = not vim.opt.list:get() end)
+nmap("<leader>zp", "paste", function() vim.bo.paste = not vim.opt.paste:get() end)
+nmap("<leader>zr", "ruler", function() vim.wo.ruler = not vim.opt.ruler:get() end)
+nmap("<leader>zs", "spell", function() vim.bo.spell = not vim.opt.spell:get() end)
+nmap("<leader>zw", "wrap", function() vim.wo.wrap = not vim.opt.wrap:get() end)
+
+nmap("<leader>zn", "number", function()
+  local ln = vim.opt.number:get()
+  vim.wo.number = not ln
+  vim.wo.relativenumber = ln
+end)
+
+nmap("<leader>usw", "shiftwidth", function()
+  vim.ui.input(
+    { prompt = "set shiftwidth " },
+    function(input) vim.o.shiftwidth = tonumber(input) or vim.o.shiftwidth end
+  )
+end)
