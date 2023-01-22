@@ -12,13 +12,16 @@ require("which-key").register({
   s = { name = "search" },
   t = { name = "tab" },
   u = { name = "ui" },
+  U = { name = "user" },
   w = { name = "window" },
   z = { name = "toggle" },
 }, { prefix = "<leader>" })
 
+nmap("gcc", "comment line", "<Plug>(comment_toggle_linewise)<cr>")
+nmap("gcb", "comment block", "<Plug>(comment_toggle_linewise)<cr>")
 nmap("<C-s>", "Save current buffer", "<cmd>write<cr>")
 nmap("<f1>", "Find help", "<cmd>FindHelp<cr>")
-nmap("<leader>E", "[E]xplore", "<cmd>Oil<cr>")
+nmap("<leader>e", "explore", "<cmd>Oil<cr>")
 nmap("<leader>ac", "combine args", function() require("spread").combine() end)
 nmap("<leader>as", "spread args", function() require("spread").out() end)
 nmap("<leader>bN", "new buf", "<cmd>bnew<cr>")
@@ -26,7 +29,7 @@ nmap("<leader>bn", "next buf", "<cmd>bNext<cr>")
 nmap("<leader>bp", "prev buf", "<cmd>bprevious<cr>")
 nmap("<leader>bs", "scratch", "<cmd>enew<cr>")
 nmap("<leader>bw", "write buf", "<cmd>write<cr>")
-nmap("<leader>e", "[E]xplore", "<cmd>NeoTreeFloatToggle<cr>")
+nmap("<leader><leader>", "browse", "<cmd>NeoTreeFloatToggle<cr>")
 nmap("<leader>f/", "search", "<cmd>LiveGrep<cr>")
 nmap("<leader>g[", "prev hunk", "<cmd>Gitsigns prev_hunk<cr>")
 nmap("<leader>g]", "next hunk", "<cmd>Gitsigns next_hunk<cr>")
@@ -41,6 +44,7 @@ nmap("<leader>id", "date", function() vim.api.nvim_feedkeys("i" .. tostring(requ
 nmap("<leader>it", "time", function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%R"), "n", true) end)
 nmap("<leader>iy", "year", function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%Y"), "n", true) end)
 nmap("<leader>p/", "search", "<cmd>FindFiles<cr>")
+nmap("<leader>b/", "search", "<cmd>Buffers<cr>")
 nmap("<leader>pc", "project config", "<cmd>Neoconf<cr>")
 nmap("<leader>s/", "available", "<cmd>Telescope builtin<cr>")
 nmap("<leader>s`", "marks", "<cmd>Telescope marks<cr>")
@@ -57,7 +61,7 @@ nmap("<leader>ss", "symbols", "<cmd>Symbols<cr>")
 nmap("<leader>st", "treesitter", "<cmd>Telescope treesitter<cr>")
 nmap("<leader>sw", "grep by word", "<cmd>GrepByWord<cr>")
 nmap("<leader>zc", "conceal", function() vim.opt.conceallevel = vim.opt.conceallevel:get() == 0 and 2 or 0 end)
-nmap("<leader>zg", "gitsigns", "<cmd>Gitsigns toggle_signs<cr>")
+nmap("<leader>zgs", "gitsigns", "<cmd>Gitsigns toggle_signs<cr>")
 nmap("<leader>`", "term", "<cmd>ToggleTerm direction=float<cr>")
 nmap("<leader>zl", "list", function() vim.bo.list = not vim.opt.list:get() end)
 nmap("<leader>zp", "paste", function() vim.bo.paste = not vim.opt.paste:get() end)

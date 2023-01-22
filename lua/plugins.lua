@@ -21,6 +21,7 @@ vim.g.plugin_manager_options = {
   },
 }
 
+-- lazy.nvim can not be setup multiple times (which sucks).
 if vim.g.lazy_did_setup then return end
 
 if not vim.loop.fs_stat(vim.g.plugin_manager) then
@@ -48,21 +49,8 @@ require("lazy").setup({
   },
   { -- my colorscheme of choice
     "catppuccin/nvim",
-    module = "catppuccin",
     event = "UiEnter",
     config = function() vim.cmd "colorscheme catppuccin-macchiato" end,
-  },
-  {
-    "aduros/ai.vim",
-    event = "VeryLazy",
-    enable = false,
-    cmd = "AI",
-    config = function()
-      vim.g.ai_context_before = 25
-      vim.g.ai_context_after = 25
-      vim.g.ai_indicator_style = "virtual_text"
-      vim.g.ai_timeout = 20
-    end,
   },
   {
     "akinsho/toggleterm.nvim",
@@ -199,7 +187,6 @@ require("lazy").setup({
   },
   { -- Language Server Configuration
     "neovim/nvim-lspconfig",
-    module = "lspconfig",
     dependencies = {
       "williamboman/mason.nvim",
       "j-hui/fidget.nvim",
@@ -208,13 +195,11 @@ require("lazy").setup({
   },
   { -- Useful status updates for LSP
     "j-hui/fidget.nvim",
-    module = "fidget",
     lazy = true,
     config = true,
   },
   { -- Automatically installs LSPs to stdpath for neovim
     "williamboman/mason.nvim",
-    module = "mason",
     lazy = true,
     dependencies = { "williamboman/mason-lspconfig.nvim" },
     init = function()
@@ -322,71 +307,82 @@ require("lazy").setup({
   },
   { -- simplistic lua statusline plugin.
     "nvim-lualine/lualine.nvim",
-    dependencies = { "tjdevries/colorbuddy.nvim" },
-    config = true,
-    opts = {
-      options = {
-        icons_enabled = true,
-        theme = "auto",
-        extensions = {
-          "fugitive",
-          "fzf",
-          "man",
-          "neo-tree",
-          "quickfix",
-          "symbols-outline",
-          "toggleterm",
-        },
-        section_separators = {
-          left = "",
-          right = "",
-        },
-        component_separators = {
-          left = "",
-          right = "",
-        },
-        disabled_filetypes = {
-          statusline = {},
-          winbar = {},
-        },
-        ignore_focus = {},
-        always_divide_middle = true,
-        globalstatus = false,
-        refresh = {
-          statusline = 1000,
-          tabline = 1000,
-          winbar = 1000,
-        },
-      },
-      sections = {
-        lualine_a = { "mode" },
-        lualine_b = {
-          "branch",
-          "diff",
-          "diagnostics",
-        },
-        lualine_c = { "filename" },
-        lualine_x = {
-          "encoding",
-          "fileformat",
-          "filetype",
-        },
-        lualine_y = { "progress" },
-        lualine_z = { "location" },
-      },
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { "filename" },
-        lualine_x = { "location" },
-        lualine_y = {},
-        lualine_z = {},
-      },
-      tabline = {},
-      winbar = {},
-      inactive_winbar = {},
-      extensions = {},
+    module = "lualine",
+    dependencies = {
+      "catppuccin/nvim",
+      "tjdevries/colorbuddy.nvim",
+      "folke/lazy.nvim",
     },
+    config = function()
+      require("lualine").setup {
+        options = {
+          icons_enabled = true,
+          theme = "auto",
+          extensions = {
+            "fugitive",
+            "fzf",
+            "man",
+            "neo-tree",
+            "quickfix",
+            "symbols-outline",
+            "toggleterm",
+          },
+          section_separators = {
+            left = "",
+            right = "",
+          },
+          component_separators = {
+            left = "",
+            right = "",
+          },
+          disabled_filetypes = {
+            statusline = {},
+            winbar = {},
+          },
+          ignore_focus = {},
+          always_divide_middle = true,
+          globalstatus = false,
+          refresh = {
+            statusline = 1000,
+            tabline = 1000,
+            winbar = 1000,
+          },
+        },
+        sections = {
+          lualine_a = { "mode" },
+          lualine_b = {
+            "branch",
+            "diff",
+            "diagnostics",
+          },
+          lualine_c = { "filename" },
+          lualine_x = {
+            "encoding",
+            "fileformat",
+            "filetype",
+            {
+              require("lazy.status").updates,
+              cond = require("lazy.status").has_updates,
+              color = { fg = "ff9e64" },
+            },
+          },
+          lualine_y = { "progress" },
+          lualine_z = { "location" },
+        },
+        inactive_sections = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { "filename" },
+          lualine_x = { "location" },
+          lualine_y = {},
+          lualine_z = {},
+        },
+        tabline = {},
+        winbar = {},
+        inactive_winbar = {},
+        extensions = {},
+      }
+    end,
   },
   { -- Add indentation guides even on blank lines
     "lukas-reineke/indent-blankline.nvim",
@@ -398,6 +394,10 @@ require("lazy").setup({
   { -- "gc" to comment visual regions/lines
     "numToStr/Comment.nvim",
     config = true,
+    opts = {
+      ignore = "^$",
+      mappings = false,
+    },
   },
   { -- Detect tabstop and shiftwidth automatically
     "tpope/vim-sleuth",
@@ -406,15 +406,16 @@ require("lazy").setup({
     "onsails/lspkind.nvim",
     lazy = true,
     enable = not vim.g.icons,
-    module = "lspkind",
     dependencies = { "neovim/nvim-lspconfig" },
   },
   { -- Parenthesis highlighting
     "p00f/nvim-ts-rainbow",
+    enable = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
   { -- Autoclose tags
     "windwp/nvim-ts-autotag",
+    enable = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
   { -- Context based commenting
@@ -481,9 +482,11 @@ require("lazy").setup({
     "nvim-neo-tree/neo-tree.nvim",
     config = true,
     event = "UiEnter",
-    dependencies = { "MunifTanjim/nui.nvim", "nvim-tree/nvim-web-devicons" },
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "nvim-tree/nvim-web-devicons",
+    },
     opts = {
-
       mappings = {
         ["<F5>"] = "refresh",
         ["o"] = "open",
@@ -613,7 +616,7 @@ require("lazy").setup({
       columns = {
         "icon",
         -- "permissions",
-        "size",
+        -- "size",
         -- "mtime",
       },
       -- Buffer-local options to use for oil buffers
@@ -626,6 +629,8 @@ require("lazy").setup({
         foldcolumn = "0",
         spell = false,
         list = false,
+        number = false,
+        relativenumber = false,
         conceallevel = 3,
         concealcursor = "n",
       },
@@ -673,7 +678,6 @@ require("lazy").setup({
   },
   {
     "cshuaimin/ssr.nvim",
-    module = "ssr",
     opts = {
       min_width = 50,
       min_height = 5,

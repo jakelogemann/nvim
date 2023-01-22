@@ -67,3 +67,5 @@ vim.g.cmp_enabled = true -- enable completion at start
 vim.g.matchup_matchparen_deferred = 1
 vim.g.autopairs_enabled = true -- enable autopairs at start
 vim.g.diagnostics_enabled = true -- enable diagnostics at start
+vim.g.loaded_ruby_provider = false
+vim.g.loaded_perl_provider = false

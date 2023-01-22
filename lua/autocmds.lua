@@ -48,3 +48,13 @@ vim.api.nvim_create_autocmd("TermOpen", {
     vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
   end,
 })
+
+vim.api.nvim_create_autocmd("BufEnter", {
+  desc = "setup oil buffers",
+  group = vim.api.nvim_create_augroup("oil-buf", { clear = true }),
+  pattern = "Oil://*",
+  callback = function()
+    vim.wo.number = false
+    vim.wo.relativenumber = false
+  end,
+})
