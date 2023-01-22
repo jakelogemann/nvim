@@ -1,11 +1,11 @@
 // Core Document Attributes
 :title: Neovim Lua User Configuration
 :showtitle:
-:author: jlogemann
+:author: Jacob Logemann
 :authorinitials: JL
 :doctype: article
 :experimental: true
-:revdate: 2023-01-22
+:revdate: 2022-01-01
 :revnumber: v0.1
 :toc:
 :toclevels: 3
@@ -14,7 +14,6 @@
 // Links
 :lazy-nvim: link:https://github.com/folke/lazy.nvim[lazy.nvim]
 :neovim: link:https://github.com/neovim/neovim[Neovim]
-:spell: link:https://neovim.io/doc/user/spell.html[spell]
 :leadermap: link:https://neovim.io/doc/user/map.html#leader[<leader>]
 
 // Customizations
@@ -32,17 +31,7 @@ endif::[]
 
 My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 
-
-
-
 == Configuration
-
-**Unsorted Features**:
-- _[optional]_ copilot support (by language).
-- _[almost]_ idempotent configuration (`:source %` to reload _[almost]_ all files!).
-- extra additions to {spell}.
-- **_awesome_** {leader} mappings!
-- _other random defaults that we personally like_.
 
 === Mappings
 
@@ -66,9 +55,10 @@ _Obviously, this requires {neovim}_.
 
 [source,sh]
 ----
-# Clone the project into the config directory.
-git clone https://github.com/polis-dev/nvim ~/.config/nvim
-# Start nvim, follow the prompts!
-nvim
+# Clone the AstroNvim project into the config directory.
+git clone https://github.com/astronvim/astronvim ~/.config/nvim
+
+# Clone this configuration as the user configuration.
+git clone https://github.com/jakelogemann/nvim-lua-user ~/.config/nvim/lua/user
 ----
 ====

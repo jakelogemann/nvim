@@ -1,4 +1,4 @@
-# Note that you can quickly re-sort this file by using: `:%sort` in vim
+# list of my personal random additions (see `:help spell` for more).
 # vim: ft=gitignore:spell
 (a,b)-tree
 0,1
