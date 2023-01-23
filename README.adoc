@@ -81,9 +81,9 @@ _Obviously, this requires {neovim}_.
 
 [source,sh]
 ----
-# Clone the project into the config directory.
-git clone https://github.com/polis-dev/nvim ~/.config/nvim
-# Start nvim, follow the prompts!
-nvim
+git clone https://github.com/polis-dev/nvim ~/.config/nvim && nvim
 ----
+
+_yep, thats it!_
+
 ====
