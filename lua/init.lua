@@ -15,5 +15,6 @@ require "options"
 require "plugins"
 -- other requirements are unordered:
 require "autocmds"
+require "toggle"
 require "commands"
 require "mappings"
