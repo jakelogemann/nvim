@@ -53,6 +53,8 @@ My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 |===
 |Description |Keybinding
 |{leadermap} mapping |kbd:[Space]
+|Select more incrementally|kbd:[Ctrl+Space]
+|Select less incrementally|kbd:[Ctrl+Backspace]
 |Save current buffer|kbd:[Ctrl+S]
 |===
 ====

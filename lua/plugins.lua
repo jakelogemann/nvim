@@ -7,6 +7,10 @@ vim.g.plugin_manager_repo = "https://github.com/folke/lazy.nvim.git"
 vim.g.plugin_manager_options = {
   -- available options can be found in the README file:
   --   https://github.com/folke/lazy.nvim/tree/main#%EF%B8%8F-configuration
+  defaults = {
+    lazy = true,
+    version = "*",
+  },
   root = vim.g.plugin_root,
   -- dev = { path = vim.g.plugin_root },
   performance = {
@@ -50,7 +54,7 @@ require("lazy").setup({
   { -- my colorscheme of choice
     "catppuccin/nvim",
     event = "UiEnter",
-    config = function() vim.cmd "colorscheme catppuccin-macchiato" end,
+    config = function() vim.cmd.colorscheme "catppuccin-macchiato" end,
   },
   {
     "akinsho/toggleterm.nvim",
@@ -76,6 +80,7 @@ require("lazy").setup({
   { -- install/configure treesitter (syntax highlighting but.. better)
     "nvim-treesitter/nvim-treesitter",
     priority = 100,
+    lazy = false,
     init = function()
       local parsers_install_dir = vim.fn.stdpath "data" .. "/parsers"
       vim.opt.runtimepath:append(parsers_install_dir)
@@ -307,6 +312,7 @@ require("lazy").setup({
   },
   { -- simplistic lua statusline plugin.
     "nvim-lualine/lualine.nvim",
+    lazy = false,
     module = "lualine",
     dependencies = {
       "catppuccin/nvim",
@@ -481,7 +487,8 @@ require("lazy").setup({
   {
     "nvim-neo-tree/neo-tree.nvim",
     config = true,
-    event = "UiEnter",
+    lazy = true,
+    event = "VeryLazy",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-tree/nvim-web-devicons",
@@ -563,7 +570,8 @@ require("lazy").setup({
   },
   { -- fast, minimal fuzzy finder for.. everything.
     "nvim-telescope/telescope.nvim",
-    event = "UiEnter",
+    event = "VeryLazy",
+    lazy = true,
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {
       defaults = {
@@ -609,6 +617,7 @@ require("lazy").setup({
   },
   {
     "stevearc/oil.nvim",
+    cmd = "Oil",
     config = true,
     opts = {
       -- Id is automatically added at the beginning, and name at the end
@@ -758,6 +767,7 @@ require("lazy").setup({
   },
   {
     "folke/which-key.nvim",
+    event = "UiEnter",
     config = true,
     opts = {
       plugins = {
@@ -842,11 +852,11 @@ require("lazy").setup({
     },
   },
   { "tjdevries/colorbuddy.nvim", config = true, event = "UiEnter" },
-  { "aarondiel/spread.nvim", dependencies = { "nvim-treesitter" } },
+  { "aarondiel/spread.nvim", event = "VeryLazy", dependencies = { "nvim-treesitter" } },
   { "folke/neoconf.nvim", cmd = "Neoconf" },
   { "lewis6991/impatient.nvim", lazy = true },
   { "github/copilot.vim", cmd = "Copilot" },
-  { "b0o/SchemaStore.nvim", module = "schemastore" },
+  { "b0o/SchemaStore.nvim", event = "VeryLazy", module = "schemastore" },
   { "folke/persistence.nvim", event = "BufReadPre", module = "persistence", config = true },
   { "folke/neodev.nvim", config = true },
   { "stevearc/dressing.nvim", event = "VeryLazy" },
