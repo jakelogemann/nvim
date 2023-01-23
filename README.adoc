@@ -56,7 +56,7 @@ Custom {neovim} configuration written in lua powered by {lazy-nvim}.
 |Select more/less incrementally|kbd:[Ctrl+Space] kbd:[Ctrl+Backspace]
 |Save current buffer|kbd:[Ctrl+S]
 |Search help|kbd:[<F1>]
-|Floating terminal|kbd:[Space+`]
+|Floating terminal|kbd:[<leader>`]
 |Find a buffer|kbd:[<leader>b/]
 
 |===
