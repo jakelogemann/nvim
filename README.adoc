@@ -15,7 +15,7 @@
 :lazy-nvim: link:https://github.com/folke/lazy.nvim[lazy.nvim]
 :neovim: link:https://github.com/neovim/neovim[Neovim]
 :spell: link:https://neovim.io/doc/user/spell.html[spell]
-:leadermap: link:https://neovim.io/doc/user/map.html#leader[<leader>]
+:leader: link:https://neovim.io/doc/user/map.html#leader[<leader>]
 
 // Customizations
 
