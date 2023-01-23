@@ -12,7 +12,7 @@ vim.opt.fileencoding = "utf-8" -- File content encoding for the buffer
 vim.opt.fillchars = { eob = " " } -- Disable `~` on nonexistent lines
 vim.opt.foldenable = false
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- set Treesitter based folding
-vim.opt.foldlevelstart = 1
+vim.opt.foldlevel = 0
 vim.opt.foldmethod = "expr"
 vim.opt.history = 100 -- Number of commands to remember in a history table
 vim.opt.ignorecase = true -- Case insensitive searching
@@ -22,10 +22,10 @@ vim.opt.list = true -- show whitespace characters
 vim.opt.listchars = { tab = "│→", extends = "⟩", precedes = "⟨", trail = "·", nbsp = "␣" }
 vim.opt.mouse = "a" -- Enable mouse support
 vim.opt.number = true -- Show numberline
+vim.opt.relativenumber = false
 vim.opt.preserveindent = true -- Preserve indent structure as much as possible
 vim.opt.pyxversion = 3 -- only use python3.
 vim.opt.pumheight = 10 -- Height of the pop up menu
-vim.opt.relativenumber = true -- Show relative numberline
 vim.opt.scrolloff = 8 -- Number of lines to keep above and below the cursor
 vim.opt.shiftwidth = 2 -- Number of space inserted for indentation
 vim.opt.shortmess = vim.opt.shortmess + { I = true, s = true }

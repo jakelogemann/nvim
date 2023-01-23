@@ -5,10 +5,9 @@ repos:
     hooks:
       - id: format-lua-files
         name: format lua files
-        entry: stylua
+        entry: stylua ./lua
         language: system
-        types: [lua]
-        pass_filenames: true
+        pass_filenames: false
 
   # See https://pre-commit.com for more information.
   - repo: https://github.com/pre-commit/pre-commit-hooks
