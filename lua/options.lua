@@ -49,6 +49,9 @@ vim.opt.undofile = true -- Enable persistent undo
 vim.opt.updatetime = 300 -- Length of time to wait before triggering the plugin
 vim.opt.wrap = false -- wrap long lines?
 vim.opt.writebackup = false -- Disable making a backup before overwriting a file
+vim.opt.guifont = "DaddyTimeMono NerdFont:h13"
+--vim.opt.wildchar = "<Tab>"
+vim.opt.wildmenu = true
 
 -- ad-hoc configuration not tied to specific plugins.
 if vim.fn.has "neovide" then
