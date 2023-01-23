@@ -30,14 +30,11 @@ endif::[]
 
 = {title}
 
-My custom {neovim} configuration written in lua powered by {lazy-nvim}.
-
-
-
+Custom {neovim} configuration written in lua powered by {lazy-nvim}.
 
 == Configuration
 
-**Unsorted Features**:
+* plugin manager: {lazy-nvim} 
 
 * _[optional]_ copilot support (by language).
 
@@ -49,15 +46,13 @@ My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 
 * _other random defaults that we personally like_.
 
-=== Mappings
-
-.Normal Mode
+.Mappings
 [%collapsible]
 ====
 [cols="25h,~",width=100%]
 |===
 |Description |Keybinding
-|{leadermap} mapping |kbd:[Space]
+|{leader} mapping |kbd:[Space]
 |Select more incrementally|kbd:[Ctrl+Space]
 |Select less incrementally|kbd:[Ctrl+Backspace]
 |Save current buffer|kbd:[Ctrl+S]
@@ -66,7 +61,7 @@ My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 
 == Installation
 
-.Obviously, this requires {neovim}.
+.Install **latest** {neovim} 
 [%collapsible]
 ====
 
