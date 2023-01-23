@@ -38,11 +38,16 @@ My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 == Configuration
 
 **Unsorted Features**:
-- _[optional]_ copilot support (by language).
-- _[almost]_ idempotent configuration (`:source %` to reload _[almost]_ all files!).
-- extra additions to {spell}.
-- **_awesome_** {leader} mappings!
-- _other random defaults that we personally like_.
+
+* _[optional]_ copilot support (by language).
+
+* _[almost]_ idempotent configuration (`:source %` to reload _[almost]_ all files!).
+
+* extra additions to {spell}.
+
+* **_awesome_** {leader} mappings!
+
+* _other random defaults that we personally like_.
 
 === Mappings
 
