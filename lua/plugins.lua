@@ -841,6 +841,11 @@ require("lazy").setup(
       init = function() require("mini.surround").setup {} end,
     },
     {
+      "pwntester/octo.nvim",
+      lazy = false,
+      config = true,
+    },
+    {
       "folke/noice.nvim",
       dependencies = { "MunifTanjim/nui.nvim", "echasnovski/mini.nvim" },
       event = "UiEnter",
