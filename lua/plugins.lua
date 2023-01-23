@@ -861,5 +861,6 @@ require("lazy").setup({
   { "folke/neodev.nvim", config = true },
   { "stevearc/dressing.nvim", event = "VeryLazy" },
   { "L3MON4D3/LuaSnip", lazy = true },
+  { "dstein64/vim-startuptime", cmd = "StartupTime" },
   { "saadparwaiz1/cmp_luasnip", lazy = true },
 }, vim.g.plugin_manager_options)

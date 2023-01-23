@@ -66,6 +66,14 @@ My custom {neovim} configuration written in lua powered by {lazy-nvim}.
 
 == Installation
 
+.Obviously, this requires {neovim}.
+[%collapsible]
+====
+
+* macOS via Brew: `brew install --HEAD neovim`.
+
+====
+
 .Installation process
 [%collapsible]
 ====
