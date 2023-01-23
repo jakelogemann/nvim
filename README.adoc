@@ -69,15 +69,15 @@ Custom {neovim} configuration written in lua powered by {lazy-nvim}.
 
 ====
 
-.Installation process
+.Setup process
 [%collapsible]
 ====
 
 [source,sh]
 ----
-git clone https://github.com/polis-dev/nvim ~/.config/nvim && nvim
+git clone https://github.com/polis-dev/nvim ~/.config/nvim
 ----
 
-_yep, thats all there is to it!_
+_yep, thats all there is to it! **start `nvim` and enjoy!_**
 
 ====
