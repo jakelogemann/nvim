@@ -87,6 +87,14 @@ require("lazy").setup(
       },
       init = function() _G.Terminal = require("toggleterm.terminal").Terminal end,
     },
+    {
+      "zbirenbaum/copilot.lua",
+      event = "InsertEnter",
+      cmd = "Copilot",
+      config = function()
+        require('copilot').setup({})
+      end
+    },
     { -- install/configure treesitter (syntax highlighting but.. better)
       "nvim-treesitter/nvim-treesitter",
       priority = 100,
