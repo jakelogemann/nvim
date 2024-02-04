@@ -1,0 +1,136 @@
+name: image
+
+on:
+  push: {branches: [main], paths: ["Dockerfile"]}
+  pull_request: {branches: [main], paths: ["Dockerfile"]}
+  schedule: [{ cron: "0 0 * * *"}]
+  workflow_call:
+    inputs:
+      ref:
+        required: false
+        type: string
+        default: main
+        description: ref to build
+      name:
+        required: true
+        type: string
+        description: image name to build.
+      platforms:
+        required: false
+        default: linux/amd64
+        type: string
+        description: >
+          comma-separated list platforms to build for.
+          (eg. linux/amd64,linux/arm64,linux/arm/v7)
+      publish:
+        required: false
+        default: true
+        type: boolean
+        description: publish image after building?
+      registry:
+        required: false
+        default: ghcr.io
+        type: string
+        description: image registry to publish to.
+      registry_path:
+        required: false
+        default: /${{ github.repository }}
+        type: string
+        description: path within the image registry to publish to.
+    outputs:
+      image_name:
+        description: "The name of the image that was built."
+        value: ${{ inputs.name }}
+      image_registry:
+        description: "The registry that the image was published to."
+        value: ${{ inputs.registry }}
+      digest:
+        description: digest of the image that was built.
+        value: ${{ jobs.build_image.outputs.digest }}
+      imageid:
+        description: unique image id of the image that was built.
+        value: ${{ jobs.build_image.outputs.imageid }}
+      image_uri:
+        description: "The URI of the image that was built."
+        value: ${{ jobs.build_image.outputs.image_uri }}
+      tags:
+        description: "The tags that were built."
+        value: ${{ jobs.build_image.outputs.tags }}
+    secrets:
+      registry_user:
+        required: true
+        description: registry user to to publish image(s) as.
+      registry_secret:
+        required: true
+        description: secret used when publishing to the registry.
+
+jobs:
+  main:
+    name: "${{ inputs.name || github.repository_name }}"
+    runs-on: ubuntu-latest
+    concurrency:
+      group: "${{ inputs.ref }}__${{ inputs.name }}"
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+      digest: ${{ steps.build.outputs.digest }}
+      imageid: ${{ steps.build.outputs.imageid }}
+    env:
+      DOCKER_BUILDKIT: 1
+      DOCKER_CLI_EXPERIMENTAL: enabled
+      REGISTRY: ${{ inputs.registry || 'ghcr.io' }}
+    steps:
+
+      - name: plan.
+        continue-on-error: true
+        if: always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await core.summary.addHeading("${{ env.IMAGE_URI }}").write();
+
+      - name: setup.
+        uses: docker/setup-buildx-action@v2
+
+      - name: login.
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.registry_user || github.actor || 'github-actions' }}
+          password: ${{ secrets.registry_secret || secrets.GITHUB_TOKEN }}
+
+      - name: fetch.
+        id: fetch
+        uses: actions/checkout@v3
+        with: {ref: "${{ inputs.ref }}"}
+
+      - name: build.
+        id: build
+        uses: docker/build-push-action@v3
+        env:
+          IMAGE_URI: ${{ env.REGISTRY }}/${{ inputs.registry_path || github.repository_owner }}/${{ inputs.name || github.event.repository.name }}
+        with:
+          context: .
+          cache-to: type=gha,mode=max
+          cache-from: type=gha
+          platforms: ${{ inputs.platforms || 'linux/amd64,linux/arm64' }}
+          push: ${{ inputs.publish || github.event_name == 'push' }}
+          labels: |-
+            org.opencontainers.image.url=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=UNLICENSED
+          tags: |-
+            ${{ env.IMAGE_URI }}:latest
+            ${{ env.IMAGE_URI }}:${{ github.ref_name }}
+            ${{ env.IMAGE_URI }}:${{ github.sha }}
+
+      - name: summarize.
+        continue-on-error: true
+        if: always()
+        uses: actions/github-script@v6
+        with: {script: "await core.summary.addCodeBlock(JSON.stringify(context, null, 2), 'json').write()"}
+

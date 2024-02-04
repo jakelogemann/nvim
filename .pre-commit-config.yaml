@@ -1,0 +1,32 @@
+# Configuration for pre-commit (https://pre-commit.com)
+---
+repos:
+  - repo: local
+    hooks:
+      - id: format-lua-files
+        name: format lua files
+        entry: stylua ./lua
+        language: system
+        pass_filenames: false
+
+  # See https://pre-commit.com for more information.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.3.0
+    hooks:
+      - id: check-added-large-files
+        exclude: ^modules/srv-bucket/.*$
+      - id: check-case-conflict
+      - id: check-json
+        exclude: ^\..*\.json$
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-toml
+      - id: check-vcs-permalinks
+      - id: check-yaml
+      - id: destroyed-symlinks
+      - id: detect-private-key
+      # - id: end-of-file-fixer
+      - id: forbid-new-submodules
+      # - id: no-commit-to-branch
+      - id: trailing-whitespace
+

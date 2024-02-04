@@ -1,0 +1,86 @@
+// Core Document Attributes
+:title: Neovim Lua User Configuration
+:showtitle:
+:author: jakelogemann
+:authorinitials: JL
+:doctype: article
+:experimental: true
+:revdate: 2023-01-22
+:revnumber: v0.1
+:toc:
+:toclevels: 3
+:toc-title: Overview
+
+// Links
+:lazy-nvim: link:https://github.com/folke/lazy.nvim[lazy.nvim]
+:neovim: link:https://github.com/neovim/neovim[Neovim]
+:spell: link:https://neovim.io/doc/user/spell.html[spell]
+:leader: link:https://neovim.io/doc/user/map.html#leader[<leader>]
+
+// Customizations
+
+// GitHub Specific Crap...
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+endif::[]
+
+= {title}
+
+Custom {neovim} configuration written in lua powered by {lazy-nvim}.
+
+== Configuration
+
+* plugin manager: {lazy-nvim} 
+
+* _[optional]_ copilot support (by language).
+
+* _[almost]_ idempotent configuration (`:source %` to reload _[almost]_ all files!).
+
+* extra additions to {spell}.
+
+* **_awesome_** {leader} mappings!
+
+* _other random defaults that we personally like_.
+
+.Mappings
+[%collapsible]
+====
+[cols="25h,~",width=100%]
+|===
+|Description |Keybinding
+|{leader} mapping |kbd:[Space]
+|Select more/less incrementally|kbd:[Ctrl+Space] kbd:[Ctrl+Backspace]
+|Save current buffer|kbd:[Ctrl+S]
+|Search help|kbd:[<F1>]
+|Floating terminal|kbd:[<leader>`]
+|Find a buffer|kbd:[<leader>b/]
+
+|===
+====
+
+== Installation
+
+.Install **latest** {neovim} 
+[%collapsible]
+====
+
+* macOS via Brew: `brew install --HEAD neovim`.
+
+====
+
+.Setup process
+[%collapsible]
+====
+
+[source,sh]
+----
+git clone https://github.com/jakelogemann/nvim-config.git ~/.config/nvim
+----
+
+_yep, thats all there is to it! **start `nvim` and enjoy!_**
+
+====
