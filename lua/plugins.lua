@@ -24,30 +24,31 @@ return {
     "tpope/vim-eunuch",
     lazy = true,
     cmd = {
-      "Remove", -- Delete a file on disk without E211: File no longer available.
-      "Delete", -- Delete a file on disk and the buffer too.
-      "Move", -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
-      "Chmod", -- Change the permissions of the current file.
-      "Mkdir", -- Create a directory, defaulting to the parent of the current file.
-      "Cfind", -- Run find and load the results into the quickfix list.
-      "Clocate", -- Run locate and load the results into the quickfix list.
+      "Remove",    -- Delete a file on disk without E211: File no longer available.
+      "Delete",    -- Delete a file on disk and the buffer too.
+      "Move",      -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
+      "Chmod",     -- Change the permissions of the current file.
+      "Mkdir",     -- Create a directory, defaulting to the parent of the current file.
+      "Cfind",     -- Run find and load the results into the quickfix list.
+      "Clocate",   -- Run locate and load the results into the quickfix list.
       "Lfind",
-      "Llocate", -- Like above, but use the location list.
-      "Wall", -- Write every open window. Handy for kicking off tools like guard.
+      "Llocate",   -- Like above, but use the location list.
+      "Wall",      -- Write every open window. Handy for kicking off tools like guard.
       "SudoWrite", -- Write a privileged file with sudo.
-      "SudoEdit", -- Edit a privileged file with sudo.
+      "SudoEdit",  -- Edit a privileged file with sudo.
     },
   },
   { -- my current colorscheme of choice.
     "catppuccin/nvim",
-    event = "UiEnter",
-    config = function() vim.cmd.colorscheme "catppuccin-macchiato" end,
+    lazy = false,
+    config = function()
+      vim.cmd.colorscheme "catppuccin-macchiato"
+    end,
   },
   {
     "akinsho/toggleterm.nvim",
     event = "VeryLazy",
     cmd = "ToggleTerm",
-    config = true,
     opts = {
       size = 10,
       open_mapping = [[<C-Space>]],
@@ -68,7 +69,8 @@ return {
     "zbirenbaum/copilot.lua",
     event = "InsertEnter",
     cmd = "Copilot",
-    config = function() require("copilot").setup {} end,
+    opts = {
+    },
   },
   { -- install/configure treesitter (syntax highlighting but.. better)
     "nvim-treesitter/nvim-treesitter",
@@ -195,8 +197,6 @@ return {
   },
   { -- Useful status updates for LSP
     "j-hui/fidget.nvim",
-    lazy = true,
-    config = true,
   },
   { -- Automatically installs LSPs to stdpath for neovim
     "williamboman/mason.nvim",
@@ -213,8 +213,7 @@ return {
   },
   {
     "TimUntersberger/neogit",
-    enable = false,
-    config = true,
+    cmd = { "Neogit", "NeogitResetState" },
     opts = {
       disable_signs = false,
       disable_hint = false,
@@ -384,7 +383,6 @@ return {
   },
   { -- "gc" to comment visual regions/lines
     "numToStr/Comment.nvim",
-    config = true,
     opts = {
       ignore = "^$",
       mappings = false,
@@ -401,7 +399,6 @@ return {
   },
   { -- Parenthesis highlighting
     "p00f/nvim-ts-rainbow",
-    enable = false,
     dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
   { -- Autoclose tags
@@ -471,9 +468,7 @@ return {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
-    config = true,
-    lazy = true,
-    event = "VeryLazy",
+    event = "UiEnter",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-tree/nvim-web-devicons",
@@ -485,28 +480,31 @@ return {
       },
 
       source_selector = {
-        winbar = false, -- toggle to show selector on winbar
-        statusline = false, -- toggle to show selector on statusline
+        winbar = false,                        -- toggle to show selector on winbar
+        statusline = false,                    -- toggle to show selector on statusline
         show_scrolled_off_parent_node = false, -- boolean
-        tab_labels = { -- table
-          filesystem = "  Files ", -- string | nil
-          buffers = "  Buffers ", -- string | nil
-          git_status = "  Git ", -- string | nil
-          diagnostics = " 裂Diagnostics ", -- string | nil
-        },
+        --tab_labels = { -- table
+        --  filesystem = "  Files ", -- string | nil
+        --  buffers = "  Buffers ", -- string | nil
+        --  git_status = "  Git ", -- string | nil
+        --  diagnostics = " 裂Diagnostics ", -- string | nil
+        --},
         content_layout = "start", -- string
         tabs_layout = "equal", -- string
         truncation_character = "…", -- string
         tabs_min_width = nil, -- int | nil
         tabs_max_width = nil, -- int | nil
         padding = 0, -- int | { left: int, right: int }
-        separator = { left = "▏", right = "▕" }, -- string | { left: string, right: string, override: string | nil }
-        separator_active = nil, -- string | { left: string, right: string, override: string | nil } | nil
-        show_separator_on_edge = false, -- boolean
-        highlight_tab = "NeoTreeTabInactive", -- string
-        highlight_tab_active = "NeoTreeTabActive", -- string
-        highlight_background = "NeoTreeTabInactive", -- string
-        highlight_separator = "NeoTreeTabSeparatorInactive", -- string
+        separator = {
+          left = "▏",
+          right = "▕",
+        },
+        separator_active = nil,                                   -- string | { left: string, right: string, override: string | nil } | nil
+        show_separator_on_edge = false,                           -- boolean
+        highlight_tab = "NeoTreeTabInactive",                     -- string
+        highlight_tab_active = "NeoTreeTabActive",                -- string
+        highlight_background = "NeoTreeTabInactive",              -- string
+        highlight_separator = "NeoTreeTabSeparatorInactive",      -- string
         highlight_separator_active = "NeoTreeTabSeparatorActive", -- string
       },
 
@@ -520,15 +518,15 @@ return {
       },
 
       cwd_target = {
-        sidebar = "tab", -- sidebar is when position = left or right
+        sidebar = "tab",    -- sidebar is when position = left or right
         current = "window", -- current is when position = current
       },
 
       filtered_items = {
         visible = true,
-        hide_dotfiles = true,
-        hide_gitignored = true,
-        hide_hidden = true,
+        hide_dotfiles = false,
+        hide_gitignored = false,
+        hide_hidden = false,
         hide_by_name = {
           ".DS_Store",
           "thumbs.db",
@@ -540,7 +538,6 @@ return {
         },
         always_show = { -- remains visible even if other settings would normally hide it
           ".gitignore",
-          "vendor",
           "target",
         },
         never_show = { -- remains hidden even if visible is toggled to true, this overrides always_show
@@ -555,8 +552,7 @@ return {
   },
   { -- fast, minimal fuzzy finder for.. everything.
     "nvim-telescope/telescope.nvim",
-    event = "VeryLazy",
-    lazy = true,
+    event = "UiEnter",
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
@@ -627,7 +623,6 @@ return {
   {
     "stevearc/oil.nvim",
     cmd = "Oil",
-    config = true,
     opts = {
       -- Id is automatically added at the beginning, and name at the end
       -- See :help oil-columns
@@ -712,6 +707,12 @@ return {
   },
   {
     "simrat39/symbols-outline.nvim",
+    lazy = true,
+    cmd = {
+      "SymbolsOutline",
+      "SymbolsOutlineOpen",
+      "SymbolsOutlineClose",
+    },
     opts = {
       highlight_hovered_item = true,
       show_guides = true,
@@ -777,10 +778,9 @@ return {
   {
     "folke/which-key.nvim",
     event = "UiEnter",
-    config = true,
     opts = {
       plugins = {
-        marks = true, -- shows a list of your marks on ' and `
+        marks = true,     -- shows a list of your marks on ' and `
         registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
         spelling = {
           -- select spelling suggestions when pressing z=
@@ -790,13 +790,13 @@ return {
         -- the presets plugin, adds help for a bunch of default keybindings in Neovim
         -- No actual key bindings are created
         presets = {
-          operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
-          motions = true, -- adds help for motions
+          operators = true,    -- adds help for operators like d, y, ... and registers them for motion / text object completion
+          motions = true,      -- adds help for motions
           text_objects = true, -- help for text objects triggered after entering an operator
-          windows = true, -- default bindings on <c-w>
-          nav = true, -- misc bindings to work with windows
-          z = true, -- bindings for folds, spelling and others prefixed with z
-          g = true, -- bindings for prefixed with g
+          windows = true,      -- default bindings on <c-w>
+          nav = true,          -- misc bindings to work with windows
+          z = true,            -- bindings for folds, spelling and others prefixed with z
+          g = true,            -- bindings for prefixed with g
         },
       },
       -- add operators that will trigger motion and text object completion
@@ -815,22 +815,22 @@ return {
       },
       popup_mappings = {
         scroll_down = "<c-d>", -- binding to scroll down inside the popup
-        scroll_up = "<c-u>", -- binding to scroll up inside the popup
+        scroll_up = "<c-u>",   -- binding to scroll up inside the popup
       },
       window = {
-        border = "single", -- none, single, double, shadow
-        position = "top", -- bottom, top
-        margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+        border = "single",        -- none, single, double, shadow
+        position = "top",         -- bottom, top
+        margin = { 1, 0, 1, 0 },  -- extra window margin [top, right, bottom, left]
         padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
         winblend = 0,
       },
       layout = {
         height = { min = 4, max = 25 }, -- min and max height of the columns
         width = { min = 20, max = 50 }, -- min and max width of the columns
-        spacing = 3, -- spacing between columns
-        align = "center", -- align columns left, center or right
+        spacing = 3,                    -- spacing between columns
+        align = "center",               -- align columns left, center or right
       },
-      ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+      ignore_missing = false,           -- enable this to hide mappings for which you didn't specify a label
       hidden = {
         "<silent>",
         "<cmd>",
@@ -840,9 +840,9 @@ return {
         "lua",
         "^:",
         "^ ",
-      }, -- hide mapping boilerplate
-      show_help = true, -- show help message on the command line when the popup is visible
-      show_keys = true, -- show the currently pressed key and its label as a message in the command line
+      },                 -- hide mapping boilerplate
+      show_help = true,  -- show help message on the command line when the popup is visible
+      show_keys = true,  -- show the currently pressed key and its label as a message in the command line
       triggers = "auto", -- automatically setup triggers
       -- triggers = {"<leader>"} -- or specify a list manually
       triggers_blacklist = {
@@ -863,7 +863,6 @@ return {
   {
     "akinsho/bufferline.nvim",
     lazy = false,
-    config = true,
     opts = {
       options = {
         show_buffer_close_icons = false,
@@ -878,12 +877,18 @@ return {
   {
     "echasnovski/mini.nvim",
     lazy = false,
-    init = function() require("mini.surround").setup {} end,
+    init = function()
+      require("mini.surround").setup {}
+    end,
   },
   {
     "pwntester/octo.nvim",
-    lazy = false,
-    config = true,
+    cmd = { "Octo" },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
   },
   {
     "folke/noice.nvim",
@@ -892,39 +897,72 @@ return {
       "echasnovski/mini.nvim",
     },
     event = "UiEnter",
-    config = function()
-      require("noice").setup {
-        routes = {
-          -- {
-          --   view = "notify",
-          --   filter = { event = "msg_showmode" },
-          -- },
-        },
-        cmdline = {
-          format = {
-            search_down = {
-              view = "cmdline",
-            },
-            search_up = {
-              view = "cmdline",
-            },
+    opts = {
+      routes = {
+        -- {
+        --   view = "notify",
+        --   filter = { event = "msg_showmode" },
+        -- },
+      },
+      cmdline = {
+        format = {
+          search_down = {
+            view = "cmdline",
+          },
+          search_up = {
+            view = "cmdline",
           },
         },
-      }
-    end,
+      },
+    },
   },
   -- generic plugins with no configuration are enumerated below.
-  { "sindrets/diffview.nvim", event = "VeryLazy" },
-  { "tjdevries/colorbuddy.nvim", config = true, event = "UiEnter" },
-  { "aarondiel/spread.nvim", event = "VeryLazy", dependencies = { "nvim-treesitter" } },
-  { "folke/neoconf.nvim", cmd = "Neoconf" },
-  { "lewis6991/impatient.nvim", lazy = true },
-  { "github/copilot.vim", cmd = "Copilot" },
-  { "b0o/SchemaStore.nvim", event = "VeryLazy", module = "schemastore" },
-  { "folke/persistence.nvim", event = "BufReadPre", module = "persistence", config = true },
-  { "folke/neodev.nvim", config = true },
-  { "stevearc/dressing.nvim", event = "VeryLazy" },
-  { "L3MON4D3/LuaSnip", lazy = true },
-  { "dstein64/vim-startuptime", cmd = "StartupTime" },
-  { "saadparwaiz1/cmp_luasnip", lazy = true },
+  {
+    "sindrets/diffview.nvim",
+    event = "VeryLazy",
+  },
+  {
+    "tjdevries/colorbuddy.nvim",
+    event = "UiEnter",
+  },
+  {
+    "aarondiel/spread.nvim",
+    event = "VeryLazy",
+    dependencies = { "nvim-treesitter" },
+  },
+  {
+    "folke/neoconf.nvim",
+    cmd = "Neoconf",
+  },
+  {
+    "lewis6991/impatient.nvim",
+    lazy = true,
+  },
+  {
+    "b0o/SchemaStore.nvim",
+    event = "VeryLazy",
+    module = "schemastore",
+  },
+  {
+    "folke/persistence.nvim",
+    event = "BufReadPre",
+    module = "persistence",
+  },
+  { "folke/neodev.nvim" },
+  {
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
+  },
+  {
+    "L3MON4D3/LuaSnip",
+    lazy = true,
+  },
+  {
+    "dstein64/vim-startuptime",
+    cmd = "StartupTime",
+  },
+  {
+    "saadparwaiz1/cmp_luasnip",
+    lazy = true,
+  },
 }
