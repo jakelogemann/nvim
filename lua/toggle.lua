@@ -10,21 +10,13 @@ toggler.relativenumber = function()
   vim.wo.number = true
 end
 
-toggler.wrap = function()
-  vim.wo.wrap = not vim.wo.wrap
-end
+toggler.wrap = function() vim.wo.wrap = not vim.wo.wrap end
 
-toggler.spell = function()
-  vim.wo.spell = not vim.wo.spell
-end
+toggler.spell = function() vim.wo.spell = not vim.wo.spell end
 
-toggler.cursorline = function()
-  vim.opt.cursorline = not vim.opt.cursorline
-end
+toggler.cursorline = function() vim.opt.cursorline = not vim.opt.cursorline end
 
-toggler.list = function()
-  vim.wo.list = not vim.wo.list
-end
+toggler.list = function() vim.wo.list = not vim.wo.list end
 
 local user_command = function(args)
   local cmd = vim.trim(args.args or "")

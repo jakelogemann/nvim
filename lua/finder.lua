@@ -1,5 +1,5 @@
 -- start with all builtin telescope finders.
-local finder = require("telescope.builtin")
+local finder = require "telescope.builtin"
 
 -- add a few handy aliases for easier use.
 finder.qf = finder.quickfix
@@ -11,10 +11,10 @@ finder.command = finder.commands
 finder.buffer = finder.buffers
 
 finder.buffer = function()
-  require("telescope.builtin").buffers({
+  require("telescope.builtin").buffers {
     ignore_current_buffer = true,
     sort_lastused = true,
-  })
+  }
 end
 
 local finder_names = vim.tbl_keys(finder)

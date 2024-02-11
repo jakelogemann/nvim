@@ -5,58 +5,58 @@ if ok then profiler.enable_profile() end
 -- NeoVim Application Options {{{1
 vim.opt.autoread = true
 vim.opt.backspace = vim.opt.backspace + { "nostop" } -- Don't stop backspace at insert
-vim.opt.clipboard = "unnamedplus"                    -- Connection to the system clipboard
-vim.opt.cmdheight = 0                                -- hide command line unless needed
-vim.opt.completeopt = { "menuone", "noselect" }      -- Options for insert mode completion
-vim.opt.conceallevel = 2                             -- enable conceal
-vim.opt.copyindent = true                            -- Copy the previous indentation on autoindenting
-vim.opt.cursorline = true                            -- Highlight the text line of the cursor
-vim.opt.expandtab = true                             -- Enable the use of space in tab
-vim.opt.fileencoding = "utf-8"                       -- File content encoding for the buffer
-vim.opt.fillchars = { eob = " " }                    -- Disable `~` on nonexistent lines
+vim.opt.clipboard = "unnamedplus" -- Connection to the system clipboard
+vim.opt.cmdheight = 0 -- hide command line unless needed
+vim.opt.completeopt = { "menuone", "noselect" } -- Options for insert mode completion
+vim.opt.conceallevel = 2 -- enable conceal
+vim.opt.copyindent = true -- Copy the previous indentation on autoindenting
+vim.opt.cursorline = true -- Highlight the text line of the cursor
+vim.opt.expandtab = true -- Enable the use of space in tab
+vim.opt.fileencoding = "utf-8" -- File content encoding for the buffer
+vim.opt.fillchars = { eob = " " } -- Disable `~` on nonexistent lines
 vim.opt.foldenable = false
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"      -- set Treesitter based folding
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- set Treesitter based folding
 vim.opt.foldlevel = 0
 vim.opt.foldmethod = "expr"
-vim.opt.history = 100     -- Number of commands to remember in a history table
+vim.opt.history = 100 -- Number of commands to remember in a history table
 vim.opt.ignorecase = true -- Case insensitive searching
-vim.opt.laststatus = 3    -- globalstatus
-vim.opt.linebreak = true  -- linebreak soft wrap at words
-vim.opt.list = true       -- show whitespace characters
+vim.opt.laststatus = 3 -- globalstatus
+vim.opt.linebreak = true -- linebreak soft wrap at words
+vim.opt.list = true -- show whitespace characters
 vim.opt.listchars.nbsp = "␣"
 vim.opt.listchars.trail = "·"
 vim.opt.listchars.precedes = "⟨"
-vim.opt.listchars.tab = nil   -- "│→"
+vim.opt.listchars.tab = nil -- "│→"
 vim.opt.listchars.extends = "⟩"
-vim.opt.mouse = "a"           -- Enable mouse support
-vim.opt.number = true         -- Show numberline
+vim.opt.mouse = "a" -- Enable mouse support
+vim.opt.number = true -- Show numberline
 vim.opt.relativenumber = false
 vim.opt.preserveindent = true -- Preserve indent structure as much as possible
-vim.opt.pyxversion = 3        -- only use python3.
-vim.opt.pumheight = 10        -- Height of the pop up menu
-vim.opt.scrolloff = 8         -- Number of lines to keep above and below the cursor
-vim.opt.shiftwidth = 2        -- Number of space inserted for indentation
+vim.opt.pyxversion = 3 -- only use python3.
+vim.opt.pumheight = 10 -- Height of the pop up menu
+vim.opt.scrolloff = 8 -- Number of lines to keep above and below the cursor
+vim.opt.shiftwidth = 2 -- Number of space inserted for indentation
 vim.opt.shortmess.I = true
 vim.opt.shortmess.s = true
 vim.opt.showbreak = "↪ "
-vim.opt.showmode = false     -- Disable showing modes in command line
-vim.opt.showtabline = 2      -- always display tabline
-vim.opt.sidescrolloff = 8    -- Number of columns to keep at the sides of the cursor
-vim.opt.signcolumn = "auto"  -- sets vim.opt.signcolumn to auto
-vim.opt.smartcase = true     -- Case sensitivie searching
-vim.opt.spell = false        -- sets vim.opt.spell
+vim.opt.showmode = false -- Disable showing modes in command line
+vim.opt.showtabline = 2 -- always display tabline
+vim.opt.sidescrolloff = 8 -- Number of columns to keep at the sides of the cursor
+vim.opt.signcolumn = "auto" -- sets vim.opt.signcolumn to auto
+vim.opt.smartcase = true -- Case sensitivie searching
+vim.opt.spell = false -- sets vim.opt.spell
 vim.opt.spellfile = vim.fn.stdpath "config" .. "/spell/en.utf-8.add"
-vim.opt.splitbelow = true    -- Splitting a new window below the current one
-vim.opt.splitright = true    -- Splitting a new window at the right of the current one
-vim.opt.tabstop = 2          -- Number of space in a tab
+vim.opt.splitbelow = true -- Splitting a new window below the current one
+vim.opt.splitright = true -- Splitting a new window at the right of the current one
+vim.opt.tabstop = 2 -- Number of space in a tab
 vim.opt.termguicolors = true -- Enable 24-bit RGB color in the TUI
 vim.opt.scrolljump = 1
 vim.opt.thesaurus = vim.fn.stdpath "config" .. "/spell/thesaurus.txt"
 vim.opt.timeout = true
-vim.opt.timeoutlen = 300    -- Length of time to wait for a mapped sequence
-vim.opt.undofile = true     -- Enable persistent undo
-vim.opt.updatetime = 300    -- Length of time to wait before triggering the plugin
-vim.opt.wrap = false        -- wrap long lines?
+vim.opt.timeoutlen = 300 -- Length of time to wait for a mapped sequence
+vim.opt.undofile = true -- Enable persistent undo
+vim.opt.updatetime = 300 -- Length of time to wait before triggering the plugin
+vim.opt.wrap = false -- wrap long lines?
 vim.opt.writebackup = false -- Disable making a backup before overwriting a file
 vim.opt.guifont = "DaddyTimeMono NerdFont:h13"
 --vim.opt.wildchar = "<Tab>"
@@ -64,8 +64,8 @@ vim.opt.wildmenu = true
 -- End of NeoVim Options 1}}}
 -- Global NeoVim Variables {{{1
 -- ad-hoc configuration not tied to specific plugins.
-if vim.fn.has("neovide") == 1 then
-  vim.print("detected this is NeoVide")
+if vim.fn.has "neovide" == 1 then
+  vim.print "detected this is NeoVide"
   vim.g.neovide_cursor_animation_length = 0.025
   vim.g.neovide_cursor_trail_size = 0.05
   vim.g.neovide_transparency = 0.95
@@ -74,12 +74,12 @@ if vim.fn.has("neovide") == 1 then
 end
 
 vim.g.treesitter_parsers_dir = vim.fn.stdpath "data" .. "/parsers"
-vim.g.mapleader = vim.keycode(" ")
-vim.g.maplocalleader = vim.keycode(" ")
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 vim.g.autoformat_enabled = false -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
-vim.g.cmp_enabled = true         -- enable completion at start
+vim.g.cmp_enabled = true -- enable completion at start
 vim.g.matchup_matchparen_deferred = 1
-vim.g.autopairs_enabled = true   -- enable autopairs at start
+vim.g.autopairs_enabled = true -- enable autopairs at start
 vim.g.diagnostics_enabled = true -- enable diagnostics at start
 vim.g.loaded_ruby_provider = false
 vim.g.loaded_perl_provider = false
@@ -93,7 +93,6 @@ end, {
   desc = "toggle line numbers in the current buffer",
 })
 -- End of User-defined Commands 1}}}
-require "plugins"
 -- User-defined autocommands {{{1
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight yanked text",
@@ -154,7 +153,60 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 -- End of User-defined Autocommands 1}}}
+-- Plugin Manager {{{1
+-- plugin manager configuration.
+vim.g.plugin_root = vim.fn.stdpath "config" .. "/vendor"
+vim.g.plugin_manager = vim.fn.stdpath "config" .. "/vendor/lazy.nvim"
+vim.g.plugin_manager_branch = "stable"
+vim.g.plugin_manager_repo = "https://github.com/folke/lazy.nvim.git"
+
+if not vim.loop.fs_stat(vim.g.plugin_manager) then
+  -- install plugin manager if not already installed.
+  vim.fn.system {
+    "git",
+    "clone",
+    "--filter=blob:none",
+    vim.g.plugin_manager_repo,
+    "--branch=" .. vim.g.plugin_manager_branch,
+    vim.g.plugin_manager,
+  }
+end
+
+if not vim.g.lazy_did_setup then
+  -- lazy.nvim can not be setup multiple times (which sucks).
+
+  -- prepend the plugin manager to our runtime path.
+  vim.opt.rtp:prepend(vim.g.plugin_manager)
+
+  -- load the plugin manager with our plugin configurations.
+  require("lazy").setup(require "plugins", plugin_manager_options)
+end
+
+-- Options passed to the plugin manager.
+--  available options can be found in the README file:
+--  https://github.com/folke/lazy.nvim/tree/main#%EF%B8%8F-configuration
+local plugin_manager_options = {
+  defaults = {
+    lazy = false,
+    version = "*",
+  },
+  root = vim.g.plugin_root,
+  diff = { cmd = "diffview.nvim" },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        "tutor",
+        "tohtml",
+        "matchparen",
+        "matchit",
+      },
+    },
+  },
+}
+require "plugins"
+-- End of Plugin Manager }}}1
 require "toggle"
+require "finder"
 require "mappings"
 
 -- vim: fdm=marker fen

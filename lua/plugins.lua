@@ -1,40 +1,14 @@
--- plugin manager configuration.
-vim.g.plugin_root = vim.fn.stdpath "config" .. "/vendor"
-vim.g.plugin_manager = vim.fn.stdpath "config" .. "/vendor/lazy.nvim"
-vim.g.plugin_manager_branch = "stable"
-vim.g.plugin_manager_repo = "https://github.com/folke/lazy.nvim.git"
-
--- Options passed to the plugin manager.
---  available options can be found in the README file:
---  https://github.com/folke/lazy.nvim/tree/main#%EF%B8%8F-configuration
-local plugin_manager_options = {
-  defaults = {
-    lazy = false,
-    version = "*",
-  },
-  root = vim.g.plugin_root,
-  diff = { cmd = "diffview.nvim" },
-  performance = {
-    rtp = {
-      disabled_plugins = {
-        "tutor",
-        "tohtml",
-        "matchparen",
-        "matchit",
-      },
-    },
-  },
-}
-
-local plugins = {
+return {
   { -- Emac's ORG-mode; reimplemented for Neovim
     "nvim-orgmode/orgmode",
+    lazy = true,
     ft = { "org" },
     config = true,
     opts = {},
   },
   {
     "tpope/vim-fugitive",
+    lazy = true,
     cmd = {
       "Git",
       "Gedit",
@@ -48,18 +22,20 @@ local plugins = {
   },
   {
     "tpope/vim-eunuch",
+    lazy = true,
     cmd = {
-      "Remove",           -- Delete a file on disk without E211: File no longer available.
-      "Delete",           -- Delete a file on disk and the buffer too.
-      "Move",             -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
-      "Chmod",            -- Change the permissions of the current file.
-      "Mkdir",            -- Create a directory, defaulting to the parent of the current file.
-      "Cfind",            -- Run find and load the results into the quickfix list.
-      "Clocate",          -- Run locate and load the results into the quickfix list.
-      "Lfind", "Llocate", -- Like above, but use the location list.
-      "Wall",             -- Write every open window. Handy for kicking off tools like guard.
-      "SudoWrite",        -- Write a privileged file with sudo.
-      "SudoEdit",         -- Edit a privileged file with sudo.
+      "Remove", -- Delete a file on disk without E211: File no longer available.
+      "Delete", -- Delete a file on disk and the buffer too.
+      "Move", -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
+      "Chmod", -- Change the permissions of the current file.
+      "Mkdir", -- Create a directory, defaulting to the parent of the current file.
+      "Cfind", -- Run find and load the results into the quickfix list.
+      "Clocate", -- Run locate and load the results into the quickfix list.
+      "Lfind",
+      "Llocate", -- Like above, but use the location list.
+      "Wall", -- Write every open window. Handy for kicking off tools like guard.
+      "SudoWrite", -- Write a privileged file with sudo.
+      "SudoEdit", -- Edit a privileged file with sudo.
     },
   },
   { -- my current colorscheme of choice.
@@ -92,9 +68,7 @@ local plugins = {
     "zbirenbaum/copilot.lua",
     event = "InsertEnter",
     cmd = "Copilot",
-    config = function()
-      require('copilot').setup({})
-    end
+    config = function() require("copilot").setup {} end,
   },
   { -- install/configure treesitter (syntax highlighting but.. better)
     "nvim-treesitter/nvim-treesitter",
@@ -209,7 +183,7 @@ local plugins = {
   },
   {
     "fatih/vim-go",
-    event = "VeryLazy"
+    event = "VeryLazy",
   },
   { -- Language Server Configuration
     "neovim/nvim-lspconfig",
@@ -546,7 +520,7 @@ local plugins = {
       },
 
       cwd_target = {
-        sidebar = "tab",    -- sidebar is when position = left or right
+        sidebar = "tab", -- sidebar is when position = left or right
         current = "window", -- current is when position = current
       },
 
@@ -587,9 +561,9 @@ local plugins = {
       "nvim-lua/plenary.nvim",
     },
     init = function()
-      local builtin = require("telescope.builtin")
+      local builtin = require "telescope.builtin"
       local user_command = function(n, d, f) vim.api.nvim_create_user_command(n, f, { desc = d }) end
-      user_command("FindFiles", "Interactively find files", function() builtin.find_files({}) end)
+      user_command("FindFiles", "Interactively find files", function() builtin.find_files {} end)
       user_command("GrepByWord", "Interactively grep by word", function() builtin.grep_string {} end)
       user_command("Symbols", "Interactively find symbols", function() builtin.symbols {} end)
       user_command("FindCommands", "Interactively find commands", function() builtin.commands {} end)
@@ -597,12 +571,16 @@ local plugins = {
       user_command("QF", "Interactively find quickfix", function() builtin.quickfix {} end)
       user_command("LOC", "Interactively find loclist", function() builtin.loclist {} end)
       user_command("FindHelp", "Interactively find help tags", function() builtin.help_tags {} end)
-      user_command("Buffers", "Find an open buffer", function()
-        builtin.buffers {
-          ignore_current_buffer = true,
-          sort_lastused = true,
-        }
-      end)
+      user_command(
+        "Buffers",
+        "Find an open buffer",
+        function()
+          builtin.buffers {
+            ignore_current_buffer = true,
+            sort_lastused = true,
+          }
+        end
+      )
     end,
     opts = {
       defaults = {
@@ -802,7 +780,7 @@ local plugins = {
     config = true,
     opts = {
       plugins = {
-        marks = true,     -- shows a list of your marks on ' and `
+        marks = true, -- shows a list of your marks on ' and `
         registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
         spelling = {
           -- select spelling suggestions when pressing z=
@@ -812,13 +790,13 @@ local plugins = {
         -- the presets plugin, adds help for a bunch of default keybindings in Neovim
         -- No actual key bindings are created
         presets = {
-          operators = true,    -- adds help for operators like d, y, ... and registers them for motion / text object completion
-          motions = true,      -- adds help for motions
+          operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+          motions = true, -- adds help for motions
           text_objects = true, -- help for text objects triggered after entering an operator
-          windows = true,      -- default bindings on <c-w>
-          nav = true,          -- misc bindings to work with windows
-          z = true,            -- bindings for folds, spelling and others prefixed with z
-          g = true,            -- bindings for prefixed with g
+          windows = true, -- default bindings on <c-w>
+          nav = true, -- misc bindings to work with windows
+          z = true, -- bindings for folds, spelling and others prefixed with z
+          g = true, -- bindings for prefixed with g
         },
       },
       -- add operators that will trigger motion and text object completion
@@ -837,22 +815,22 @@ local plugins = {
       },
       popup_mappings = {
         scroll_down = "<c-d>", -- binding to scroll down inside the popup
-        scroll_up = "<c-u>",   -- binding to scroll up inside the popup
+        scroll_up = "<c-u>", -- binding to scroll up inside the popup
       },
       window = {
-        border = "single",        -- none, single, double, shadow
-        position = "top",         -- bottom, top
-        margin = { 1, 0, 1, 0 },  -- extra window margin [top, right, bottom, left]
+        border = "single", -- none, single, double, shadow
+        position = "top", -- bottom, top
+        margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
         padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
         winblend = 0,
       },
       layout = {
         height = { min = 4, max = 25 }, -- min and max height of the columns
         width = { min = 20, max = 50 }, -- min and max width of the columns
-        spacing = 3,                    -- spacing between columns
-        align = "center",               -- align columns left, center or right
+        spacing = 3, -- spacing between columns
+        align = "center", -- align columns left, center or right
       },
-      ignore_missing = false,           -- enable this to hide mappings for which you didn't specify a label
+      ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
       hidden = {
         "<silent>",
         "<cmd>",
@@ -862,9 +840,9 @@ local plugins = {
         "lua",
         "^:",
         "^ ",
-      },                 -- hide mapping boilerplate
-      show_help = true,  -- show help message on the command line when the popup is visible
-      show_keys = true,  -- show the currently pressed key and its label as a message in the command line
+      }, -- hide mapping boilerplate
+      show_help = true, -- show help message on the command line when the popup is visible
+      show_keys = true, -- show the currently pressed key and its label as a message in the command line
       triggers = "auto", -- automatically setup triggers
       -- triggers = {"<leader>"} -- or specify a list manually
       triggers_blacklist = {
@@ -936,39 +914,17 @@ local plugins = {
     end,
   },
   -- generic plugins with no configuration are enumerated below.
-  { "sindrets/diffview.nvim",    event = "VeryLazy" },
-  { "tjdevries/colorbuddy.nvim", config = true,        event = "UiEnter" },
-  { "aarondiel/spread.nvim",     event = "VeryLazy",   dependencies = { "nvim-treesitter" } },
-  { "folke/neoconf.nvim",        cmd = "Neoconf" },
-  { "lewis6991/impatient.nvim",  lazy = true },
-  { "github/copilot.vim",        cmd = "Copilot" },
-  { "b0o/SchemaStore.nvim",      event = "VeryLazy",   module = "schemastore" },
-  { "folke/persistence.nvim",    event = "BufReadPre", module = "persistence",              config = true },
-  { "folke/neodev.nvim",         config = true },
-  { "stevearc/dressing.nvim",    event = "VeryLazy" },
-  { "L3MON4D3/LuaSnip",          lazy = true },
-  { "dstein64/vim-startuptime",  cmd = "StartupTime" },
-  { "saadparwaiz1/cmp_luasnip",  lazy = true },
+  { "sindrets/diffview.nvim", event = "VeryLazy" },
+  { "tjdevries/colorbuddy.nvim", config = true, event = "UiEnter" },
+  { "aarondiel/spread.nvim", event = "VeryLazy", dependencies = { "nvim-treesitter" } },
+  { "folke/neoconf.nvim", cmd = "Neoconf" },
+  { "lewis6991/impatient.nvim", lazy = true },
+  { "github/copilot.vim", cmd = "Copilot" },
+  { "b0o/SchemaStore.nvim", event = "VeryLazy", module = "schemastore" },
+  { "folke/persistence.nvim", event = "BufReadPre", module = "persistence", config = true },
+  { "folke/neodev.nvim", config = true },
+  { "stevearc/dressing.nvim", event = "VeryLazy" },
+  { "L3MON4D3/LuaSnip", lazy = true },
+  { "dstein64/vim-startuptime", cmd = "StartupTime" },
+  { "saadparwaiz1/cmp_luasnip", lazy = true },
 }
-
-if not vim.loop.fs_stat(vim.g.plugin_manager) then
-  -- install plugin manager if not already installed.
-  vim.fn.system {
-    "git",
-    "clone",
-    "--filter=blob:none",
-    vim.g.plugin_manager_repo,
-    "--branch=" .. vim.g.plugin_manager_branch,
-    vim.g.plugin_manager,
-  }
-end
-
-if not vim.g.lazy_did_setup then
-  -- lazy.nvim can not be setup multiple times (which sucks).
-
-  -- prepend the plugin manager to our runtime path.
-  vim.opt.rtp:prepend(vim.g.plugin_manager)
-
-  -- load the plugin manager with our plugin configurations.
-  require("lazy").setup(plugins, plugin_manager_options)
-end
