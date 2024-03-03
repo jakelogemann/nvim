@@ -1,11 +1,5 @@
+local user_command = function(n, d, f) vim.api.nvim_create_user_command(n, f, { desc = d }) end
 return {
-  { -- Emac's ORG-mode; reimplemented for Neovim
-    "nvim-orgmode/orgmode",
-    lazy = true,
-    ft = { "org" },
-    config = true,
-    opts = {},
-  },
   {
     "tpope/vim-fugitive",
     lazy = true,
@@ -41,14 +35,24 @@ return {
   { -- my current colorscheme of choice.
     "catppuccin/nvim",
     lazy = false,
-    config = function()
+    priority = 1000,
+    init = function()
       vim.cmd.colorscheme "catppuccin-macchiato"
     end,
   },
   {
     "akinsho/toggleterm.nvim",
-    event = "VeryLazy",
-    cmd = "ToggleTerm",
+    lazy = true,
+    cmd = {
+      "ToggleTerm",
+      "ToggleTermSendCurrentLine",
+      "ToggleTermSendVisualSelection",
+      "ToggleTermSetName",
+      "ToggleTermToggleAll",
+    },
+    keys = {
+      { "<leader>`", "<cmd>ToggleTerm direction=float<cr>", "Toggle Terminal" }
+    },
     opts = {
       size = 10,
       open_mapping = [[<C-Space>]],
@@ -67,6 +71,7 @@ return {
   },
   {
     "zbirenbaum/copilot.lua",
+    lazy = true,
     event = "InsertEnter",
     cmd = "Copilot",
     opts = {
@@ -185,7 +190,9 @@ return {
   },
   {
     "fatih/vim-go",
-    event = "VeryLazy",
+    lazy = true,
+    ft = { "go", "gomod", "gosum", "gowork", "godoc" },
+    cmd = { "GoInstallBinaries" },
   },
   { -- Language Server Configuration
     "neovim/nvim-lspconfig",
@@ -199,21 +206,29 @@ return {
     "j-hui/fidget.nvim",
   },
   { -- Automatically installs LSPs to stdpath for neovim
-    "williamboman/mason.nvim",
-    --lazy = true,
-    dependencies = {
-      "williamboman/mason-lspconfig.nvim",
+    "williamboman/mason-lspconfig.nvim",
+    dependencies = { "williamboman/mason.nvim" },
+    opts = {
+      ensure_installed = require("lsp").ensure_installed,
     },
     init = function()
-      require("mason").setup()
-      local mason_lspconfig = require "mason-lspconfig"
-      mason_lspconfig.setup { ensure_installed = require("lsp").ensure_installed }
-      mason_lspconfig.setup_handlers { require("lsp").setup_server }
+      require("mason-lspconfig").setup_handlers({ require("lsp").setup_server })
     end,
+  },
+  { -- Automatically installs LSPs to stdpath for neovim
+    "williamboman/mason.nvim",
+
+    --lazy = true,
+    opts = {
+    },
   },
   {
     "TimUntersberger/neogit",
-    cmd = { "Neogit", "NeogitResetState" },
+    lazy = true,
+    cmd = {
+      "Neogit",
+      "NeogitResetState",
+    },
     opts = {
       disable_signs = false,
       disable_hint = false,
@@ -307,76 +322,74 @@ return {
       "tjdevries/colorbuddy.nvim",
       "folke/lazy.nvim",
     },
-    config = function()
-      require("lualine").setup {
-        options = {
-          icons_enabled = true,
-          theme = "auto",
-          extensions = {
-            "fugitive",
-            "fzf",
-            "man",
-            "neo-tree",
-            "quickfix",
-            "symbols-outline",
-            "toggleterm",
-          },
-          section_separators = {
-            left = "",
-            right = "",
-          },
-          component_separators = {
-            left = "",
-            right = "",
-          },
-          disabled_filetypes = {
-            statusline = {},
-            winbar = {},
-          },
-          ignore_focus = {},
-          always_divide_middle = true,
-          globalstatus = false,
-          refresh = {
-            statusline = 1000,
-            tabline = 1000,
-            winbar = 1000,
+    opts = {
+      options = {
+        icons_enabled = true,
+        theme = "auto",
+        extensions = {
+          "fugitive",
+          "fzf",
+          "man",
+          "neo-tree",
+          "quickfix",
+          "symbols-outline",
+          "toggleterm",
+        },
+        section_separators = {
+          left = "",
+          right = "",
+        },
+        component_separators = {
+          left = "",
+          right = "",
+        },
+        disabled_filetypes = {
+          statusline = {},
+          winbar = {},
+        },
+        ignore_focus = {},
+        always_divide_middle = true,
+        globalstatus = false,
+        refresh = {
+          statusline = 1000,
+          tabline = 1000,
+          winbar = 1000,
+        },
+      },
+      sections = {
+        lualine_a = { "mode" },
+        lualine_b = {
+          "branch",
+          "diff",
+          "diagnostics",
+        },
+        lualine_c = { "filename" },
+        lualine_x = {
+          "encoding",
+          "fileformat",
+          "filetype",
+          {
+            require("lazy.status").updates,
+            cond = require("lazy.status").has_updates,
+            color = { fg = "ff9e64" },
           },
         },
-        sections = {
-          lualine_a = { "mode" },
-          lualine_b = {
-            "branch",
-            "diff",
-            "diagnostics",
-          },
-          lualine_c = { "filename" },
-          lualine_x = {
-            "encoding",
-            "fileformat",
-            "filetype",
-            {
-              require("lazy.status").updates,
-              cond = require("lazy.status").has_updates,
-              color = { fg = "ff9e64" },
-            },
-          },
-          lualine_y = { "progress" },
-          lualine_z = { "location" },
-        },
-        inactive_sections = {
-          lualine_a = {},
-          lualine_b = {},
-          lualine_c = { "filename" },
-          lualine_x = { "location" },
-          lualine_y = {},
-          lualine_z = {},
-        },
-        tabline = {},
-        winbar = {},
-        inactive_winbar = {},
-        extensions = {},
-      }
-    end,
+        lualine_y = { "progress" },
+        lualine_z = { "location" },
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { "filename" },
+        lualine_x = { "location" },
+        lualine_y = {},
+        lualine_z = {},
+      },
+      tabline = {},
+      winbar = {},
+      inactive_winbar = {},
+      extensions = {},
+    },
   },
   { -- Add indentation guides even on blank lines
     "lukas-reineke/indent-blankline.nvim",
@@ -473,6 +486,9 @@ return {
       "MunifTanjim/nui.nvim",
       "nvim-tree/nvim-web-devicons",
     },
+    keys = {
+      { "<leader>e", "<cmd>Neotree focus toggle<cr>", "Neotree" }
+    },
     opts = {
       mappings = {
         ["<F5>"] = "refresh",
@@ -495,16 +511,13 @@ return {
         tabs_min_width = nil, -- int | nil
         tabs_max_width = nil, -- int | nil
         padding = 0, -- int | { left: int, right: int }
-        separator = {
-          left = "▏",
-          right = "▕",
-        },
-        separator_active = nil,                                   -- string | { left: string, right: string, override: string | nil } | nil
-        show_separator_on_edge = false,                           -- boolean
-        highlight_tab = "NeoTreeTabInactive",                     -- string
-        highlight_tab_active = "NeoTreeTabActive",                -- string
-        highlight_background = "NeoTreeTabInactive",              -- string
-        highlight_separator = "NeoTreeTabSeparatorInactive",      -- string
+        separator = { left = "▏", right = "▕" },
+        separator_active = nil, -- string | { left: string, right: string, override: string | nil } | nil
+        show_separator_on_edge = false, -- boolean
+        highlight_tab = "NeoTreeTabInactive", -- string
+        highlight_tab_active = "NeoTreeTabActive", -- string
+        highlight_background = "NeoTreeTabInactive", -- string
+        highlight_separator = "NeoTreeTabSeparatorInactive", -- string
         highlight_separator_active = "NeoTreeTabSeparatorActive", -- string
       },
 
@@ -558,7 +571,6 @@ return {
     },
     init = function()
       local builtin = require "telescope.builtin"
-      local user_command = function(n, d, f) vim.api.nvim_create_user_command(n, f, { desc = d }) end
       user_command("FindFiles", "Interactively find files", function() builtin.find_files {} end)
       user_command("GrepByWord", "Interactively grep by word", function() builtin.grep_string {} end)
       user_command("Symbols", "Interactively find symbols", function() builtin.symbols {} end)
@@ -777,7 +789,27 @@ return {
   },
   {
     "folke/which-key.nvim",
-    event = "UiEnter",
+    lazy = false,
+    cmd = { "WhichKey" },
+    init = function()
+      local wk = require("which-key")
+      wk.register({
+        a = { name = "Actions" },
+        b = { name = "Buffer" },
+        f = { name = "File" },
+        g = { name = "Git" },
+        h = { name = "Help" },
+        i = { name = "Insert" },
+        o = { name = "Open" },
+        p = { name = "Project" },
+        s = { name = "Search" },
+        t = { name = "Tab" },
+        u = { name = "UI" },
+        U = { name = "User" },
+        w = { name = "Window" },
+        z = { name = "Toggle" },
+      }, { prefix = "<leader>" })
+    end,
     opts = {
       plugins = {
         marks = true,     -- shows a list of your marks on ' and `
@@ -892,12 +924,30 @@ return {
   },
   {
     "folke/noice.nvim",
+    lazy = true,
+    event = "VeryLazy",
+    cmd = { "Noice" },
+    main = "noice",
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "echasnovski/mini.nvim",
+      "rcarriga/nvim-notify",
+      "hrsh7th/nvim-cmp",
     },
-    event = "UiEnter",
     opts = {
+      lsp = {
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+          ["cmp.entry.get_documentation"] = true,
+        },
+      },
+      presets = {
+        bottom_search = true,
+        command_palette = true,
+        long_message_to_split = true,
+        inc_rename = false,
+        lsp_doc_border = false,
+      },
       routes = {
         -- {
         --   view = "notify",
@@ -948,7 +998,7 @@ return {
     event = "BufReadPre",
     module = "persistence",
   },
-  { "folke/neodev.nvim" },
+  { "folke/neodev.nvim", opts = {} },
   {
     "stevearc/dressing.nvim",
     event = "VeryLazy",

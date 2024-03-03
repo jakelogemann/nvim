@@ -1,26 +1,7 @@
 local nmap = function(keys, desc, fn) vim.keymap.set("n", keys, fn, { desc = desc }) end
 
-require("which-key").register({
-  a = { name = "Actions" },
-  b = { name = "Buffer" },
-  f = { name = "File" },
-  g = { name = "Git" },
-  h = { name = "Help" },
-  i = { name = "Insert" },
-  o = { name = "Open" },
-  p = { name = "Project" },
-  s = { name = "Search" },
-  t = { name = "Tab" },
-  u = { name = "UI" },
-  U = { name = "User" },
-  w = { name = "Window" },
-  z = { name = "Toggle" },
-}, { prefix = "<leader>" })
-
 nmap("<C-s>", "Save current buffer", "<cmd>write<cr>")
 nmap("<f1>", "Find help", "<cmd>FindHelp<cr>")
-nmap("<leader>e", "Browse project", "<cmd>Neotree focus toggle<cr>")
-nmap("<leader>`", "Toggle Terminal", "<cmd>ToggleTerm direction=float<cr>")
 nmap("<leader>ac", "Combine arguments", function() require("spread").combine() end)
 nmap("<leader>as", "Spread arguments", function() require("spread").out() end)
 nmap("<leader>b/", "Search Buffers", "<cmd>Buffers<cr>")

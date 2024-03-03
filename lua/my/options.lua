@@ -1,8 +1,4 @@
--- install profiling, if available.
-local ok, profiler = pcall(require, "impatient")
-if ok then profiler.enable_profile() end
-
--- NeoVim Application Options {{{1
+-- NeoVim Application Options
 vim.opt.autoread = true
 vim.opt.backspace = vim.opt.backspace + { "nostop" } -- Don't stop backspace at insert
 vim.opt.clipboard = "unnamedplus"                    -- Connection to the system clipboard
@@ -61,8 +57,7 @@ vim.opt.writebackup = false -- Disable making a backup before overwriting a file
 vim.opt.guifont = "DaddyTimeMono NerdFont:h13"
 --vim.opt.wildchar = "<Tab>"
 vim.opt.wildmenu = true
--- End of NeoVim Options 1}}}
--- Global NeoVim Variables {{{1
+
 -- ad-hoc configuration not tied to specific plugins.
 if vim.fn.has "neovide" == 1 then
   vim.print "detected this is NeoVide"
@@ -83,55 +78,3 @@ vim.g.autopairs_enabled = true   -- enable autopairs at start
 vim.g.diagnostics_enabled = true -- enable diagnostics at start
 vim.g.loaded_ruby_provider = false
 vim.g.loaded_perl_provider = false
--- End of Global NeoVim Variables 1}}}
--- Plugin Manager {{{1
--- plugin manager configuration.
-vim.g.plugin_root = vim.fn.stdpath "config" .. "/vendor"
-vim.g.plugin_manager = vim.fn.stdpath "config" .. "/vendor/lazy.nvim"
-vim.g.plugin_manager_branch = "stable"
-vim.g.plugin_manager_repo = "https://github.com/folke/lazy.nvim.git"
-
-if not vim.loop.fs_stat(vim.g.plugin_manager) then
-  -- install plugin manager if not already installed.
-  vim.fn.system {
-    "git",
-    "clone",
-    "--filter=blob:none",
-    vim.g.plugin_manager_repo,
-    "--branch=" .. vim.g.plugin_manager_branch,
-    vim.g.plugin_manager,
-  }
-end
-
-if not vim.g.lazy_did_setup then
-  -- lazy.nvim can not be setup multiple times (which sucks).
-
-  -- prepend the plugin manager to our runtime path.
-  vim.opt.rtp:prepend(vim.g.plugin_manager)
-
-  -- load the plugin manager with our plugin configurations.
-  require("lazy").setup(require "my.plugins", {
-    diff = {
-      cmd = "diffview.nvim",
-    },
-    performance = {
-      rtp = {
-        disabled_plugins = {
-          "tutor",
-          "tohtml",
-          "matchparen",
-          "matchit",
-        },
-      },
-    },
-  })
-end
-
--- End of Plugin Manager }}}1
-require "my.autocmds"
-require "my.commands"
-require "my.toggle"
-require "my.finder"
-require "my.mappings"
-
--- vim: fdm=marker fen

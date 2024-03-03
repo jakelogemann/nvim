@@ -1,15 +1,18 @@
-local groups = {}
+-- User-defined autocommands 
+local my_autocmds = vim.api.nvim_create_augroup("my-autocmds", { clear = true })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight yanked text",
-  group = vim.api.nvim_create_augroup("yank", { clear = true }),
+  group = my_autocmds,
   pattern = "*",
-  callback = function() vim.highlight.on_yank() end,
+  callback = function()
+    vim.highlight.on_yank()
+  end,
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
   desc = "Reorder golang imports",
-  group = vim.api.nvim_create_augroup("golang", { clear = true }),
+  group = my_autocmds,
   pattern = "*.go",
   callback = function()
     local wait_ms = 10
@@ -27,16 +30,16 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-  desc = "Automatically Format",
-  group = vim.api.nvim_create_augroup("autoformat", { clear = true }),
-  pattern = { "*.lua", "*.json", "*.go", "*.ts", "*.js" },
-  callback = function() vim.cmd "Format" end,
-})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--  desc = "Automatically Format",
+--  group = my_autocmds,
+--  pattern = { "*.lua", "*.json", "*.go", "*.ts", "*.js" },
+--  callback = function() vim.cmd "Format" end,
+-- })
 
 vim.api.nvim_create_autocmd("TermOpen", {
   desc = "setup terminal",
-  group = vim.api.nvim_create_augroup("terminal", { clear = true }),
+  group = my_autocmds,
   pattern = "term://*",
   callback = function()
     local opts = { buffer = 0 }
@@ -51,7 +54,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
 
 vim.api.nvim_create_autocmd("BufEnter", {
   desc = "setup oil buffers",
-  group = vim.api.nvim_create_augroup("oil-buf", { clear = true }),
+  group = my_autocmds,
   pattern = "Oil://*",
   callback = function()
     vim.wo.number = false
