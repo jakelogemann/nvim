@@ -1,6 +1,6 @@
 local M = { servers = vim.empty_dict() }
 
-M.servers["sumneko_lua"] = {
+M.servers["lua"] = {
   Lua = {
     diagnostics = {
       globals = { "vim" },

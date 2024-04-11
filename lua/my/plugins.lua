@@ -67,7 +67,9 @@ return {
         },
       },
     },
-    init = function() _G.Terminal = require("toggleterm.terminal").Terminal end,
+    init = function() 
+      _G.Terminal = require("toggleterm.terminal").Terminal 
+    end,
   },
   {
     "zbirenbaum/copilot.lua",
@@ -82,10 +84,7 @@ return {
     priority = 100,
     lazy = false,
     init = function()
-      local parsers_install_dir = vim.fn.stdpath "data" .. "/parsers"
-      vim.opt.runtimepath:append(parsers_install_dir)
       require("nvim-treesitter.configs").setup {
-        parser_install_dir = parsers_install_dir,
         -- A list of parser names, or "all"
         ensure_installed = {
           "arduino",
@@ -107,7 +106,6 @@ return {
           "gowork",
           "haskell",
           "hcl",
-          "help",
           "hjson",
           "html",
           "jsonnet",
@@ -130,61 +128,61 @@ return {
           "vim",
           "yaml",
         },
-        highlight = { enable = true },
-        indent = { enable = true, disable = { "python" } },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<c-space>",
-            node_incremental = "<c-space>",
-            scope_incremental = "<c-s>",
-            node_decremental = "<c-backspace>",
-          },
-        },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-            keymaps = {
-              -- You can use the capture groups defined in textobjects.scm
-              ["aa"] = "@parameter.outer",
-              ["ia"] = "@parameter.inner",
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
-            },
-          },
-          move = {
-            enable = true,
-            set_jumps = true, -- whether to set jumps in the jumplist
-            goto_next_start = {
-              ["]m"] = "@function.outer",
-              ["]]"] = "@class.outer",
-            },
-            goto_next_end = {
-              ["]M"] = "@function.outer",
-              ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-              ["[m"] = "@function.outer",
-              ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-              ["[M"] = "@function.outer",
-              ["[]"] = "@class.outer",
-            },
-          },
-          swap = {
-            enable = true,
-            swap_next = {
-              ["<leader>a"] = "@parameter.inner",
-            },
-            swap_previous = {
-              ["<leader>A"] = "@parameter.inner",
-            },
-          },
-        },
+        -- highlight = { enable = true },
+        -- indent = { enable = true, disable = { "python" } },
+        -- incremental_selection = {
+        --   enable = true,
+        --   keymaps = {
+        --     init_selection = "<c-space>",
+        --     node_incremental = "<c-space>",
+        --     scope_incremental = "<c-s>",
+        --     node_decremental = "<c-backspace>",
+        --   },
+        -- },
+        -- textobjects = {
+        --   select = {
+        --     enable = true,
+        --     lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+        --     keymaps = {
+        --       -- You can use the capture groups defined in textobjects.scm
+        --       ["aa"] = "@parameter.outer",
+        --       ["ia"] = "@parameter.inner",
+        --       ["af"] = "@function.outer",
+        --       ["if"] = "@function.inner",
+        --       ["ac"] = "@class.outer",
+        --       ["ic"] = "@class.inner",
+        --     },
+        --   },
+        --   move = {
+        --     enable = true,
+        --     set_jumps = true, -- whether to set jumps in the jumplist
+        --     goto_next_start = {
+        --       ["]m"] = "@function.outer",
+        --       ["]]"] = "@class.outer",
+        --     },
+        --     goto_next_end = {
+        --       ["]M"] = "@function.outer",
+        --       ["]["] = "@class.outer",
+        --     },
+        --     goto_previous_start = {
+        --       ["[m"] = "@function.outer",
+        --       ["[["] = "@class.outer",
+        --     },
+        --     goto_previous_end = {
+        --       ["[M"] = "@function.outer",
+        --       ["[]"] = "@class.outer",
+        --     },
+        --   },
+        --   swap = {
+        --     enable = true,
+        --     swap_next = {
+        --       ["<leader>a"] = "@parameter.inner",
+        --     },
+        --     swap_previous = {
+        --       ["<leader>A"] = "@parameter.inner",
+        --     },
+        --   },
+        -- },
       }
     end,
   },
@@ -208,12 +206,14 @@ return {
   { -- Automatically installs LSPs to stdpath for neovim
     "williamboman/mason-lspconfig.nvim",
     dependencies = { "williamboman/mason.nvim" },
-    opts = {
-      ensure_installed = require("lsp").ensure_installed,
-    },
-    init = function()
-      require("mason-lspconfig").setup_handlers({ require("lsp").setup_server })
-    end,
+    -- opts = {
+    --   ensure_installed = require("my.lsp").ensure_installed,
+    -- },
+    -- init = function()
+    --   require("mason-lspconfig").setup_handlers({ 
+    --     require("my.lsp").setup_server 
+    --   })
+    -- end,
   },
   { -- Automatically installs LSPs to stdpath for neovim
     "williamboman/mason.nvim",
@@ -998,7 +998,11 @@ return {
     event = "BufReadPre",
     module = "persistence",
   },
-  { "folke/neodev.nvim", opts = {} },
+  { 
+    "folke/neodev.nvim", 
+    opts = {
+    },
+  },
   {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
