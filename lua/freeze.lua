@@ -145,8 +145,10 @@ end
 --- Sets up :Freeze for freezing a selection and :FreezeLine
 --- to freeze a single line.
 function freeze.setup(plugin_opts)
-	for k, v in pairs(plugin_opts) do
-		freeze.opts[k] = v
+	if plugin_opts then
+		for k, v in pairs(plugin_opts) do
+			freeze.opts[k] = v
+		end
 	end
 	vim.api.nvim_create_user_command("Freeze", function(opts)
 		if opts.count > 0 then
