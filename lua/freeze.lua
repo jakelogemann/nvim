@@ -1,4 +1,3 @@
-local loop = vim.loop
 local default_output = "freeze.png"
 
 local freeze = {
@@ -74,8 +73,8 @@ function freeze.freeze(start_line, end_line)
 	local file = vim.api.nvim_buf_get_name(0)
 	local config = freeze.opts.config
 	local dir = freeze.opts.dir
-	local stdout = loop.new_pipe(false)
-	local stderr = loop.new_pipe(false)
+	local stdout = vim.loop.new_pipe(false)
+	local stderr = vim.loop.new_pipe(false)
 	local output = freeze.opts.output
 
 	if freeze.opts.output ~= default_output then
@@ -90,7 +89,7 @@ function freeze.freeze(start_line, end_line)
 
 	freeze.output = dir .. "/" .. output
 
-	local handle = loop.spawn("freeze", {
+	local handle = vim.loop.spawn("freeze", {
 		args = {
 			"--output",
 			freeze.output,
@@ -108,10 +107,10 @@ function freeze.freeze(start_line, end_line)
 		vim.notify("Failed to spawn freeze", vim.log.levels.ERROR, { title = "Freeze" })
 	end
 	if stdout ~= nil then
-		loop.read_start(stdout, onReadStdOut)
+		vim.loop.read_start(stdout, onReadStdOut)
 	end
 	if stderr ~= nil then
-		loop.read_start(stderr, onReadStdErr)
+		vim.loop.read_start(stderr, onReadStdErr)
 	end
 end
 
@@ -123,9 +122,9 @@ function freeze.open(filename)
 		return
 	end
 
-	local stdout = loop.new_pipe(false)
-	local stderr = loop.new_pipe(false)
-	local handle = loop.spawn("open", {
+	local stdout = vim.loop.new_pipe(false)
+	local stderr = vim.loop.new_pipe(false)
+	local handle = vim.loop.spawn("open", {
 		args = {
 			filename,
 		},
@@ -135,10 +134,10 @@ function freeze.open(filename)
 		vim.notify("Failed to spawn freeze", vim.log.levels.ERROR, { title = "Freeze" })
 	end
 	if stdout ~= nil then
-		loop.read_start(stdout, onReadStdOut)
+		vim.loop.read_start(stdout, onReadStdOut)
 	end
 	if stderr ~= nil then
-		loop.read_start(stderr, onReadStdErr)
+		vim.loop.read_start(stderr, onReadStdErr)
 	end
 end
 
