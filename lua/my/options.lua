@@ -54,18 +54,21 @@ vim.opt.undofile = true     -- Enable persistent undo
 vim.opt.updatetime = 300    -- Length of time to wait before triggering the plugin
 vim.opt.wrap = false        -- wrap long lines?
 vim.opt.writebackup = false -- Disable making a backup before overwriting a file
-vim.opt.guifont = "DaddyTimeMono NerdFont:h13"
 --vim.opt.wildchar = "<Tab>"
 vim.opt.wildmenu = true
+vim.opt.guifont = "DaddyTimeMono Nerd Font Mono:h13"
 
 -- ad-hoc configuration not tied to specific plugins.
-if vim.fn.has "neovide" == 1 then
-  vim.print "detected this is NeoVide"
+if vim.g.neovide then
+  vim.g.neovide_cursor_animate_in_insert_mode = false
   vim.g.neovide_cursor_animation_length = 0.025
-  vim.g.neovide_cursor_trail_size = 0.05
-  vim.g.neovide_transparency = 0.95
+  vim.g.neovide_cursor_antialiasing = true
+  vim.g.neovide_cursor_trail_size = 0.01
   vim.g.neovide_cursor_vfx_mode = "wireframe"
   vim.g.neovide_hide_mouse_when_typing = true
+  vim.g.neovide_show_border = true
+  vim.g.neovide_transparency = 0.95
+  vim.g.neovide_window_blurred = true
 end
 
 vim.g.treesitter_parsers_dir = vim.fn.stdpath "data" .. "/parsers"
@@ -78,3 +81,4 @@ vim.g.autopairs_enabled = true   -- enable autopairs at start
 vim.g.diagnostics_enabled = true -- enable diagnostics at start
 vim.g.loaded_ruby_provider = false
 vim.g.loaded_perl_provider = false
+vim.g.icons = true

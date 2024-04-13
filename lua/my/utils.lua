@@ -1,4 +1,4 @@
-local utils = vim.empty_dict()
+local utils = { ui = {} }
 
 -- Merge extended options with a default table of options
 -- @param opts the new options that should be merged with the default table
@@ -109,5 +109,4 @@ function utils.on_or_off(bool) return bool and "on" or "off" end
 function utils.ui.toggle_conceal() vim.opt.conceallevel = vim.opt.conceallevel:get() == 0 and 2 or 0 end
 
 -- export as a global and as module for imports
-_G.utils = utils
 return utils

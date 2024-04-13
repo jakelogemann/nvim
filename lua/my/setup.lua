@@ -1,4 +1,20 @@
-local setup = {}
+local setup = {
+  plugin_manager_options = {
+    diff = {
+      cmd = "diffview.nvim",
+    },
+    performance = {
+      rtp = {
+        disabled_plugins = {
+          "tutor",
+          "tohtml",
+          "matchparen",
+          "matchit",
+        },
+      },
+    },
+  }
+}
 
 function setup.ensure_plugin_manager_installed()
   local plugin_root = vim.fn.stdpath "config" .. "/vendor"
@@ -26,21 +42,7 @@ function setup.plugin_manager()
   if vim.g.lazy_did_setup then return end
 
   -- load the plugin manager with our plugin configurations.
-  require("lazy").setup(require "my.plugins", {
-    diff = {
-      cmd = "diffview.nvim",
-    },
-    performance = {
-      rtp = {
-        disabled_plugins = {
-          "tutor",
-          "tohtml",
-          "matchparen",
-          "matchit",
-        },
-      },
-    },
-  })
+  require("lazy").setup(require "my.plugins", setup.plugin_manager_options)
 end
 
 function setup.try_to_enable_profiler()
@@ -51,8 +53,10 @@ end
 
 function setup.init()
   setup.ensure_plugin_manager_installed()
-  setup.plugin_manager()
   setup.try_to_enable_profiler()
+
+  _G.utils = require("my.utils")
+  setup.plugin_manager()
 
   require "my.options"
   require "my.autocmds"

@@ -51,7 +51,8 @@ return {
       "ToggleTermToggleAll",
     },
     keys = {
-      { "<leader>`", "<cmd>ToggleTerm direction=float<cr>", "Toggle Terminal" }
+      { "<leader>`", "<cmd>ToggleTerm direction=float<cr>", "Toggle Terminal" },
+      { "<leader>zt", "<cmd>ToggleTerm direction=float<cr>", "Toggle Terminal" }
     },
     opts = {
       size = 10,
@@ -77,6 +78,8 @@ return {
     event = "InsertEnter",
     cmd = "Copilot",
     opts = {
+      javascript = true,
+      ["*"] = true,
     },
   },
   { -- install/configure treesitter (syntax highlighting but.. better)
@@ -128,8 +131,8 @@ return {
           "vim",
           "yaml",
         },
-        -- highlight = { enable = true },
-        -- indent = { enable = true, disable = { "python" } },
+        highlight = { enable = true },
+        indent = { enable = true, disable = { "python" } },
         -- incremental_selection = {
         --   enable = true,
         --   keymaps = {
@@ -192,19 +195,31 @@ return {
     ft = { "go", "gomod", "gosum", "gowork", "godoc" },
     cmd = { "GoInstallBinaries" },
   },
-  { -- Language Server Configuration
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "williamboman/mason.nvim",
-      "j-hui/fidget.nvim",
-      "onsails/lspkind.nvim",
-    },
+  { 
+    "neovim/nvim-lspconfig", 
+    lazy = false,
+    init = function()
+      local lspconfig = require("lspconfig")
+      lspconfig.lua_ls.setup({
+        settings = {
+          Lua = {
+            diagnostics = {
+              -- Get the language server to recognize the `vim` global
+              globals = {'vim'},
+            },
+          },
+        },
+      })
+      
+    end,
   },
   { -- Useful status updates for LSP
     "j-hui/fidget.nvim",
   },
   { -- Automatically installs LSPs to stdpath for neovim
     "williamboman/mason-lspconfig.nvim",
+    lazy = true,
+    enabled = false,
     dependencies = { "williamboman/mason.nvim" },
     -- opts = {
     --   ensure_installed = require("my.lsp").ensure_installed,
@@ -217,9 +232,15 @@ return {
   },
   { -- Automatically installs LSPs to stdpath for neovim
     "williamboman/mason.nvim",
-
-    --lazy = true,
-    opts = {
+    lazy = true,
+    enabled = true,
+    cmd = {
+      "Mason",
+      "MasonInstall",
+      "MasonLog",
+      "MasonUninstall",
+      "MasonUninstallAll",
+      "MasonUpdate",
     },
   },
   {
@@ -569,27 +590,6 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
-    init = function()
-      local builtin = require "telescope.builtin"
-      user_command("FindFiles", "Interactively find files", function() builtin.find_files {} end)
-      user_command("GrepByWord", "Interactively grep by word", function() builtin.grep_string {} end)
-      user_command("Symbols", "Interactively find symbols", function() builtin.symbols {} end)
-      user_command("FindCommands", "Interactively find commands", function() builtin.commands {} end)
-      user_command("ManPages", "Interactively find man pages", function() builtin.man_pages {} end)
-      user_command("QF", "Interactively find quickfix", function() builtin.quickfix {} end)
-      user_command("LOC", "Interactively find loclist", function() builtin.loclist {} end)
-      user_command("FindHelp", "Interactively find help tags", function() builtin.help_tags {} end)
-      user_command(
-        "Buffers",
-        "Find an open buffer",
-        function()
-          builtin.buffers {
-            ignore_current_buffer = true,
-            sort_lastused = true,
-          }
-        end
-      )
-    end,
     opts = {
       defaults = {
         layout_strategy = "flex",
@@ -915,6 +915,7 @@ return {
   },
   {
     "pwntester/octo.nvim",
+    lazy = true,
     cmd = { "Octo" },
     dependencies = {
       'nvim-lua/plenary.nvim',
