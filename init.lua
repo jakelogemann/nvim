@@ -1,2 +1,2 @@
-require("my.setup").init()
+require("my.setup")()
 require("freeze").setup()

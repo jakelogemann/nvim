@@ -1,13 +1,11 @@
--- User-defined autocommands 
+-- User-defined autocommands
 local my_autocmds = vim.api.nvim_create_augroup("my-autocmds", { clear = true })
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight yanked text",
   group = my_autocmds,
   pattern = "*",
-  callback = function()
-    vim.highlight.on_yank()
-  end,
+  callback = function() vim.highlight.on_yank() end,
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
@@ -49,15 +47,5 @@ vim.api.nvim_create_autocmd("TermOpen", {
     vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
     vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
     vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
-  end,
-})
-
-vim.api.nvim_create_autocmd("BufEnter", {
-  desc = "setup oil buffers",
-  group = my_autocmds,
-  pattern = "Oil://*",
-  callback = function()
-    vim.wo.number = false
-    vim.wo.relativenumber = false
   end,
 })

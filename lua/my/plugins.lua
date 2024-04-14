@@ -17,25 +17,26 @@ return {
     "tpope/vim-eunuch",
     lazy = true,
     cmd = {
-      "Remove",    -- Delete a file on disk without E211: File no longer available.
-      "Delete",    -- Delete a file on disk and the buffer too.
-      "Move",      -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
-      "Chmod",     -- Change the permissions of the current file.
-      "Mkdir",     -- Create a directory, defaulting to the parent of the current file.
-      "Cfind",     -- Run find and load the results into the quickfix list.
-      "Clocate",   -- Run locate and load the results into the quickfix list.
+      "Remove", -- Delete a file on disk without E211: File no longer available.
+      "Delete", -- Delete a file on disk and the buffer too.
+      "Move", -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
+      "Chmod", -- Change the permissions of the current file.
+      "Mkdir", -- Create a directory, defaulting to the parent of the current file.
+      "Cfind", -- Run find and load the results into the quickfix list.
+      "Clocate", -- Run locate and load the results into the quickfix list.
       "Lfind",
-      "Llocate",   -- Like above, but use the location list.
-      "Wall",      -- Write every open window. Handy for kicking off tools like guard.
+      "Llocate", -- Like above, but use the location list.
+      "Wall", -- Write every open window. Handy for kicking off tools like guard.
       "SudoWrite", -- Write a privileged file with sudo.
-      "SudoEdit",  -- Edit a privileged file with sudo.
+      "SudoEdit", -- Edit a privileged file with sudo.
     },
   },
-  { -- my current colorscheme of choice.
+  {
     "catppuccin/nvim",
     lazy = false,
     priority = 1000,
-    init = function()
+    config = function()
+      -- my current colorscheme of choice.
       vim.cmd.colorscheme "catppuccin-macchiato"
     end,
   },
@@ -51,7 +52,7 @@ return {
     },
     keys = {
       { "<leader>`", "<cmd>ToggleTerm direction=float<cr>", "Toggle Terminal" },
-      { "<leader>zt", "<cmd>ToggleTerm direction=float<cr>", "Toggle Terminal" }
+      { "<leader>zt", "<cmd>ToggleTerm direction=float<cr>", "Toggle Terminal" },
     },
     opts = {
       size = 10,
@@ -67,9 +68,7 @@ return {
         },
       },
     },
-    init = function() 
-      _G.Terminal = require("toggleterm.terminal").Terminal 
-    end,
+    init = function() _G.Terminal = require("toggleterm.terminal").Terminal end,
   },
   {
     "zbirenbaum/copilot.lua",
@@ -128,6 +127,7 @@ return {
           "tsx",
           "typescript",
           "vim",
+          "vimdoc",
           "yaml",
         },
         highlight = { enable = true },
@@ -194,22 +194,21 @@ return {
     ft = { "go", "gomod", "gosum", "gowork", "godoc" },
     cmd = { "GoInstallBinaries" },
   },
-  { 
-    "neovim/nvim-lspconfig", 
+  {
+    "neovim/nvim-lspconfig",
     lazy = false,
     init = function()
-      local lspconfig = require("lspconfig")
-      lspconfig.lua_ls.setup({
+      local lspconfig = require "lspconfig"
+      lspconfig.lua_ls.setup {
         settings = {
           Lua = {
             diagnostics = {
               -- Get the language server to recognize the `vim` global
-              globals = {'vim'},
+              globals = { "vim" },
             },
           },
         },
-      })
-      
+      }
     end,
   },
   { -- Useful status updates for LSP
@@ -224,15 +223,15 @@ return {
     --   ensure_installed = require("my.lsp").ensure_installed,
     -- },
     -- init = function()
-    --   require("mason-lspconfig").setup_handlers({ 
-    --     require("my.lsp").setup_server 
+    --   require("mason-lspconfig").setup_handlers({
+    --     require("my.lsp").setup_server
     --   })
     -- end,
   },
   { -- Automatically installs LSPs to stdpath for neovim
     "williamboman/mason.nvim",
     lazy = true,
-    enabled = true,
+    enabled = false,
     cmd = {
       "Mason",
       "MasonInstall",
@@ -446,6 +445,8 @@ return {
 
   {
     "hrsh7th/nvim-cmp",
+    lazy = true,
+    enabled = true,
     -- lazy-load cmp on InsertEnter
     event = "InsertEnter",
     -- these dependencies will only be loaded when cmp loads
@@ -501,13 +502,16 @@ return {
   },
   {
     "nvim-neo-tree/neo-tree.nvim",
-    event = "UiEnter",
+    lazy = true,
+    enabled = true,
+    cmd = { "Neotree" },
+    event = "VeryLazy",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-tree/nvim-web-devicons",
     },
     keys = {
-      { "<leader>e", "<cmd>Neotree focus toggle<cr>", "Neotree" }
+      { "<leader>e", "<cmd>Neotree focus toggle<cr>", "Neotree" },
     },
     opts = {
       mappings = {
@@ -516,8 +520,8 @@ return {
       },
 
       source_selector = {
-        winbar = false,                        -- toggle to show selector on winbar
-        statusline = false,                    -- toggle to show selector on statusline
+        winbar = false, -- toggle to show selector on winbar
+        statusline = false, -- toggle to show selector on statusline
         show_scrolled_off_parent_node = false, -- boolean
         --tab_labels = { -- table
         --  filesystem = "  Files ", -- string | nil
@@ -551,7 +555,7 @@ return {
       },
 
       cwd_target = {
-        sidebar = "tab",    -- sidebar is when position = left or right
+        sidebar = "tab", -- sidebar is when position = left or right
         current = "window", -- current is when position = current
       },
 
@@ -585,10 +589,28 @@ return {
   },
   { -- fast, minimal fuzzy finder for.. everything.
     "nvim-telescope/telescope.nvim",
+    lazy = true,
+    enabled = true,
     event = "UiEnter",
+    keys = {
+      { "<f1>", "<cmd>Telescope help_tags<cr>", desc = "Search help topics" },
+      { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "help tags" },
+      { "<leader>s/", "<cmd>Telescope builtin<cr>", desc = "available" },
+      { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "diagnostics" },
+      { "<leader>st", "<cmd>Telescope treesitter<cr>", desc = "treesitter" },
+      { "<leader>sm", "<cmd>Telescope man_pages<cr>", desc = "man pages" },
+      { "<leader>sf", "<cmd>Telescope find_files<cr>", desc = "find files" },
+      { "<leader>sq", "<cmd>Telescope quickfix<cr>", desc = "quickfix" },
+      { "<leader>sl", "<cmd>Telescope loclist<cr>", desc = "loclist" },
+      { "<leader>s`", "<cmd>Telescope marks<cr>", desc = "marks" },
+      { "<leader>sb", "<cmd>Telescope buffer<cr>", desc = "buffers" },
+      { "<leader>sc", "<cmd>Telescope commands<cr>", desc = "commands" },
+    },
+
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
+
     opts = {
       defaults = {
         layout_strategy = "flex",
@@ -789,29 +811,111 @@ return {
   {
     "folke/which-key.nvim",
     lazy = false,
+    enabled = true,
     cmd = { "WhichKey" },
     init = function()
-      local wk = require("which-key")
-      wk.register({
-        a = { name = "Actions" },
-        b = { name = "Buffer" },
-        f = { name = "File" },
-        g = { name = "Git" },
-        h = { name = "Help" },
-        i = { name = "Insert" },
-        o = { name = "Open" },
-        p = { name = "Project" },
-        s = { name = "Search" },
-        t = { name = "Tab" },
-        u = { name = "UI" },
-        U = { name = "User" },
-        w = { name = "Window" },
-        z = { name = "Toggle" },
-      }, { prefix = "<leader>" })
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      require("which-key").register {
+        ["-"] = { "<cmd>Oil<cr>", "explore directory" },
+        ["<C-s>"] = { "<cmd>write<cr>", "write buffer" },
+        ["<leader>"] = {
+          a = { name = "Actions" },
+          b = {
+            name = "buffer",
+            ["/"] = { "<cmd>Telescope buffers<cr>", "find buffer" },
+            n = { "<cmd>bNext<cr>", "next buffer" },
+            p = { "<cmd>bprev<cr>", "prev buffer" },
+            w = { "<cmd>write<cr>", "write buffer" },
+            d = { "<cmd>bdelete<cr>", "delete buffer" },
+            N = { "<cmd>bnew<cr>", "new buffer" },
+            e = { "<cmd>enew<cr>", "new scratch" },
+          },
+          f = {
+            name = "file",
+            ["/"] = { "<cmd>Telescope live_grep<cr>", "live grep" },
+          },
+          g = {
+            name = "git",
+            g = { "<cmd>Neogit kind=tab<cr>", "git ui" },
+            s = { "<cmd>Telescope git_status<cr>", "git status" },
+            ["]"] = { "<cmd>Gitsigns next_hunk<cr>", "next hunk" },
+            ["["] = { "<cmd>Gitsigns prev_hunk<cr>", "prev hunk" },
+          },
+          h = {
+            name = "help",
+            ["/"] = { "<cmd>Telescope help_tags<cr>", "help tags" },
+            M = { "<cmd>Telescope man_pages<cr>", "man pages" },
+            N = { "<cmd>help nvim.txt<cr>", "NVIM Reference" },
+            P = { "<cmd>help lazy.nvim.txt<cr>", "Plugin Manager" },
+            l = { "<cmd>help lua.vim<cr>", "Lua Guide" },
+            L = { "<cmd>help luaref-Lib<cr>", "Lua Reference" },
+          },
+          i = {
+            name = "insert",
+            d = { function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date()), "n", true) end, "date" },
+            t = { function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%R"), "n", true) end, "time" },
+            y = { function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%Y"), "n", true) end, "year" },
+          },
+          p = {
+            name = "project",
+            ["/"] = { "<cmd>Telescope find_files<cr>", "find file" },
+            c = { "<cmd>Neoconf<cr>", "project config" },
+          },
+          s = { name = "search" },
+          t = {
+            name = "tab",
+            n = { "<cmd>tabNext<cr>", "next tab" },
+            p = { "<cmd>tabprev<cr>", "prev tab" },
+            N = { "<cmd>tabnew<cr>", "new tab" },
+          },
+          u = {
+            name = "ui",
+            w = {
+              function()
+                vim.ui.input(
+                  { prompt = "set shiftwidth " },
+                  function(input) vim.o.shiftwidth = tonumber(input) or vim.o.shiftwidth end
+                )
+              end,
+              "shiftwidth",
+            },
+          },
+          U = { name = "User" },
+          w = { name = "Window" },
+          z = {
+            name = "toggle",
+            ["gs"] = { "<cmd>Gitsigns toggle_signs<cr>", "git signs" },
+            o = { "<cmd>SymbolsOutline<cr>", "symbols" },
+            c = { function() vim.opt.conceallevel = vim.opt.conceallevel == 0 and 2 or 0 end, "conceal" },
+            l = { function() vim.bo.list = not vim.opt.list end, "list" },
+            p = { function() vim.bo.paste = not vim.opt.paste:get() end, "paste" },
+            s = { function() vim.bo.spell = not vim.opt.spell end, "spell" },
+            r = { function() vim.wo.ruler = not vim.opt.ruler:get() end, "ruler" },
+            w = { function() vim.wo.wrap = not vim.opt.wrap end, "wrap" },
+            ["<tab>"] = {
+              function()
+                vim.ui.select({ "tabs", "spaces" }, {
+                  prompt = "Select tabs or spaces:",
+                  format_item = function(item) return "I'd like to use " .. item end,
+                }, function(choice)
+                  if choice == "spaces" then
+                    vim.bo.expandtab = true
+                  else
+                    vim.bo.expandtab = false
+                  end
+                end)
+              end,
+              "tabs/spaces",
+            },
+          },
+        },
+      }
     end,
+    -- options for which-key.nvim
     opts = {
       plugins = {
-        marks = true,     -- shows a list of your marks on ' and `
+        marks = true, -- shows a list of your marks on ' and `
         registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
         spelling = {
           -- select spelling suggestions when pressing z=
@@ -821,13 +925,13 @@ return {
         -- the presets plugin, adds help for a bunch of default keybindings in Neovim
         -- No actual key bindings are created
         presets = {
-          operators = true,    -- adds help for operators like d, y, ... and registers them for motion / text object completion
-          motions = true,      -- adds help for motions
+          operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+          motions = true, -- adds help for motions
           text_objects = true, -- help for text objects triggered after entering an operator
-          windows = true,      -- default bindings on <c-w>
-          nav = true,          -- misc bindings to work with windows
-          z = true,            -- bindings for folds, spelling and others prefixed with z
-          g = true,            -- bindings for prefixed with g
+          windows = true, -- default bindings on <c-w>
+          nav = true, -- misc bindings to work with windows
+          z = true, -- bindings for folds, spelling and others prefixed with z
+          g = true, -- bindings for prefixed with g
         },
       },
       -- add operators that will trigger motion and text object completion
@@ -846,22 +950,22 @@ return {
       },
       popup_mappings = {
         scroll_down = "<c-d>", -- binding to scroll down inside the popup
-        scroll_up = "<c-u>",   -- binding to scroll up inside the popup
+        scroll_up = "<c-u>", -- binding to scroll up inside the popup
       },
       window = {
-        border = "single",        -- none, single, double, shadow
-        position = "top",         -- bottom, top
-        margin = { 1, 0, 1, 0 },  -- extra window margin [top, right, bottom, left]
+        border = "single", -- none, single, double, shadow
+        position = "bottom", -- bottom, top
+        margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
         padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
         winblend = 0,
       },
       layout = {
         height = { min = 4, max = 25 }, -- min and max height of the columns
         width = { min = 20, max = 50 }, -- min and max width of the columns
-        spacing = 3,                    -- spacing between columns
-        align = "center",               -- align columns left, center or right
+        spacing = 3, -- spacing between columns
+        align = "center", -- align columns left, center or right
       },
-      ignore_missing = false,           -- enable this to hide mappings for which you didn't specify a label
+      ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
       hidden = {
         "<silent>",
         "<cmd>",
@@ -871,9 +975,9 @@ return {
         "lua",
         "^:",
         "^ ",
-      },                 -- hide mapping boilerplate
-      show_help = true,  -- show help message on the command line when the popup is visible
-      show_keys = true,  -- show the currently pressed key and its label as a message in the command line
+      }, -- hide mapping boilerplate
+      show_help = true, -- show help message on the command line when the popup is visible
+      show_keys = true, -- show the currently pressed key and its label as a message in the command line
       triggers = "auto", -- automatically setup triggers
       -- triggers = {"<leader>"} -- or specify a list manually
       triggers_blacklist = {
@@ -908,19 +1012,7 @@ return {
   {
     "echasnovski/mini.nvim",
     lazy = false,
-    init = function()
-      require("mini.surround").setup {}
-    end,
-  },
-  {
-    "pwntester/octo.nvim",
-    lazy = true,
-    cmd = { "Octo" },
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-      'nvim-tree/nvim-web-devicons',
-    },
+    init = function() require("mini.surround").setup {} end,
   },
   {
     "folke/noice.nvim",
@@ -979,6 +1071,10 @@ return {
     "aarondiel/spread.nvim",
     event = "VeryLazy",
     dependencies = { "nvim-treesitter" },
+    keys = {
+      { "<leader>ac", '<cmd>lua require("spread").combine()<cr>', desc = "combine arguments" },
+      { "<leader>as", '<cmd>lua require("spread").out()<cr>', desc = "spread arguments" },
+    },
   },
   {
     "folke/neoconf.nvim",
@@ -998,25 +1094,17 @@ return {
     event = "BufReadPre",
     module = "persistence",
   },
-  { 
-    "folke/neodev.nvim", 
-    opts = {
-    },
+  {
+    "folke/neodev.nvim",
+    opts = {},
   },
   {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
   },
   {
-    "L3MON4D3/LuaSnip",
-    lazy = true,
-  },
-  {
     "dstein64/vim-startuptime",
     cmd = "StartupTime",
   },
-  {
-    "saadparwaiz1/cmp_luasnip",
-    lazy = true,
-  },
 }
+-- vim: fdl=1 fen fdm=expr

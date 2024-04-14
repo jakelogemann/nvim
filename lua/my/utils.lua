@@ -1,5 +1,7 @@
 local utils = { ui = {} }
 
+utils.nmap = function(keys, desc, fn) vim.keymap.set("n", keys, fn, { desc = desc }) end
+
 -- Merge extended options with a default table of options
 -- @param opts the new options that should be merged with the default table
 -- @param default the default table that you want to merge into
