@@ -1,4 +1,3 @@
-local user_command = function(n, d, f) vim.api.nvim_create_user_command(n, f, { desc = d }) end
 return {
   {
     "tpope/vim-fugitive",

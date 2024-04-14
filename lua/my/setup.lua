@@ -60,7 +60,6 @@ function setup.init()
 
   require "my.options"
   require "my.autocmds"
-  require "my.commands"
   require "my.toggle"
   require "my.finder"
   require "my.mappings"
