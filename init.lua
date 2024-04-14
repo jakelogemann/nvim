@@ -18,17 +18,12 @@ local function ensure_plugin_manager_installed()
   vim.opt.rtp:prepend(plugin_manager)
 end
 
-local function try_to_enable_profiler()
-  -- use profiling, if available.
-  local ok, profiler = pcall(require, "impatient")
-  if ok then profiler.enable_profile() end
-end
 
 ensure_plugin_manager_installed()
 utils.try_to_enable_profiler()
 
 -- lazy.nvim can not be setup multiple times (which sucks).
-if not vim.g.lazy_did_setup then 
+if not vim.g.lazy_did_setup then
   require("lazy").setup(require("my.plugins"), {
     diff = {
       cmd = "diffview.nvim",
