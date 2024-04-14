@@ -1,5 +1,11 @@
 local utils = { ui = {} }
 
+function utils.try_to_enable_profiler()
+  -- use profiling, if available.
+  local ok, profiler = pcall(require, "impatient")
+  if ok then profiler.enable_profile() end
+end
+
 utils.nmap = function(keys, desc, fn) vim.keymap.set("n", keys, fn, { desc = desc }) end
 
 -- Merge extended options with a default table of options
