@@ -24,7 +24,7 @@ utils.try_to_enable_profiler()
 
 -- lazy.nvim can not be setup multiple times (which sucks).
 if not vim.g.lazy_did_setup then
-  require("lazy").setup(require("my.plugins"), {
+  require("lazy").setup("plugins", {
     diff = {
       cmd = "diffview.nvim",
     },
