@@ -1,5 +1,3 @@
-local utils = require "my.utils"
-
 local function ensure_plugin_manager_installed()
   local plugin_manager = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
   if not vim.loop.fs_stat(plugin_manager) then
@@ -20,9 +18,8 @@ end
 
 
 ensure_plugin_manager_installed()
-utils.try_to_enable_profiler()
+require("my.utils").try_to_enable_profiler()
 
--- lazy.nvim can not be setup multiple times (which sucks).
 if not vim.g.lazy_did_setup then
   require("lazy").setup("plugins", {
     diff = {
