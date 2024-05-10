@@ -4,6 +4,7 @@ return {
     lazy = true,
     enabled = true,
     event = "UiEnter",
+    dependencies = {"nvim-lua/plenary.nvim"},
     keys = {
       { "<f1>", "<cmd>Telescope help_tags<cr>", desc = "Search help topics" },
       { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "help tags" },
@@ -18,11 +19,6 @@ return {
       { "<leader>sb", "<cmd>Telescope buffer<cr>", desc = "buffers" },
       { "<leader>sc", "<cmd>Telescope commands<cr>", desc = "commands" },
     },
-
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-
     opts = {
       defaults = {
         layout_strategy = "flex",

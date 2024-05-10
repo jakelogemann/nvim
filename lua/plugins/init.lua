@@ -59,9 +59,7 @@ return {
     ft = { "go", "gomod", "gosum", "gowork", "godoc" },
     cmd = { "GoInstallBinaries" },
   },
-  { -- Useful status updates for LSP
-    "j-hui/fidget.nvim",
-  },
+  {"j-hui/fidget.nvim"},
   { -- Automatically installs LSPs to stdpath for neovim
     "williamboman/mason.nvim",
     lazy = true,

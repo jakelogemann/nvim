@@ -1,15 +1,20 @@
-local M = {}
+local health = vim.health
 
-M.check = function()
-  vim.health.report_start "my neovim health report"
-  -- make sure setup function parameters are ok
-  if true then
-    vim.health.report_ok "Setup is correct"
-  else
-    vim.health.report_error "Setup is incorrect"
-  end
-  -- do some more checking
-  -- ...
-end
+return {
+  check = function()
+    health.start("my neovim")
+    health.info("config dir: " .. vim.fn.stdpath("config"))
+    health.info("data dir: " .. vim.fn.stdpath("data"))
+    health.info("cache dir: " .. vim.fn.stdpath("cache"))
 
-return M
+    if vim.g.neovide then
+      health.ok("running in neovide")
+    end
+
+    if true then
+      health.ok("setup is correct")
+    else
+      health.error("setup is incorrect")
+    end
+  end,
+}

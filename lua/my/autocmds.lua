@@ -8,6 +8,15 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   callback = function() vim.highlight.on_yank() end,
 })
 
+vim.api.nvim_create_autocmd({"BufRead", "BufEnter"}, {
+  desc = "things for go source code.",
+  group = my_autocmds,
+  pattern = "*.go",
+  callback = function()
+    return
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufWritePre", {
   desc = "Reorder golang imports",
   group = my_autocmds,

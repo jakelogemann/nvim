@@ -22,7 +22,7 @@ vim.opt.list = true -- show whitespace characters
 vim.opt.listchars.nbsp = "␣"
 vim.opt.listchars.trail = "·"
 vim.opt.listchars.precedes = "⟨"
-vim.opt.listchars.tab = nil -- "│→"
+vim.opt.listchars.tab = "│→"
 vim.opt.listchars.extends = "⟩"
 vim.opt.mouse = "a" -- Enable mouse support
 vim.opt.number = true -- Show numberline
@@ -56,17 +56,33 @@ vim.opt.wrap = false -- wrap long lines?
 vim.opt.writebackup = false -- Disable making a backup before overwriting a file
 --vim.opt.wildchar = "<Tab>"
 vim.opt.wildmenu = true
-vim.opt.guifont = "DaddyTimeMono Nerd Font Mono:h13"
 
 -- ad-hoc configuration not tied to specific plugins.
 if vim.g.neovide then
+  vim.opt.guifont = "DaddyTimeMono Nerd Font:h13"
   vim.g.neovide_cursor_animate_in_insert_mode = false
+  vim.g.neovide_refresh_rate_idle = 5
+  vim.g.neovide_scale_factor = 0.98
   vim.g.neovide_cursor_animation_length = 0.025
   vim.g.neovide_cursor_antialiasing = true
   vim.g.neovide_cursor_trail_size = 0.01
   vim.g.neovide_cursor_vfx_mode = "wireframe"
   vim.g.neovide_hide_mouse_when_typing = true
-  vim.g.neovide_show_border = true
+  vim.g.neovide_padding_bottom = 0
+  vim.g.neovide_padding_left = 1
+  vim.g.neovide_padding_right = 0
+  vim.g.neovide_remember_window_size = true
+  vim.g.neovide_scale_factor = 1.0
+  -- vim.keymap.set("n", "<C-=>", function()
+  --   vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * 1.25
+  -- end)
+  -- vim.keymap.set("n", "<C-->", function()
+  --   vim.g.neovide_scale_factor = vim.g.neovide_scale_factor * (1/1.25)
+  -- end)
+  vim.g.neovide_profiler = false
+  vim.g.neovide_cursor_smooth_blink = true
+  vim.g.neovide_padding_top = 1
+  vim.g.neovide_show_border = false
   vim.g.neovide_transparency = 0.95
   vim.g.neovide_window_blurred = true
 end
