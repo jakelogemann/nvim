@@ -1,13 +1,17 @@
 -- NeoVim Application Options
+--vim.opt.wildchar = "<Tab>"
 vim.opt.autoread = true
 vim.opt.backspace = vim.opt.backspace + { "nostop" } -- Don't stop backspace at insert
+vim.opt.backupdir:remove('.') -- keep backups out of the current directory
 vim.opt.clipboard = "unnamedplus" -- Connection to the system clipboard
 vim.opt.cmdheight = 0 -- hide command line unless needed
 vim.opt.completeopt = { "menuone", "noselect" } -- Options for insert mode completion
 vim.opt.conceallevel = 2 -- enable conceal
+vim.opt.confirm = true -- ask for confirmation instead of erroring
 vim.opt.copyindent = true -- Copy the previous indentation on autoindenting
 vim.opt.cursorline = true -- Highlight the text line of the cursor
 vim.opt.expandtab = true -- Enable the use of space in tab
+vim.opt.exrc = true
 vim.opt.fileencoding = "utf-8" -- File content encoding for the buffer
 vim.opt.fillchars = { eob = " " } -- Disable `~` on nonexistent lines
 vim.opt.foldenable = false
@@ -19,26 +23,30 @@ vim.opt.ignorecase = true -- Case insensitive searching
 vim.opt.laststatus = 3 -- globalstatus
 vim.opt.linebreak = true -- linebreak soft wrap at words
 vim.opt.list = true -- show whitespace characters
+vim.opt.listchars.extends = "⟩"
 vim.opt.listchars.nbsp = "␣"
-vim.opt.listchars.trail = "·"
 vim.opt.listchars.precedes = "⟨"
 vim.opt.listchars.tab = "│→"
-vim.opt.listchars.extends = "⟩"
+vim.opt.listchars.trail = "·"
 vim.opt.mouse = "a" -- Enable mouse support
+vim.opt.mousemoveevent = true -- Allow hovering in bufferline
 vim.opt.number = true -- Show numberline
-vim.opt.relativenumber = false
 vim.opt.preserveindent = true -- Preserve indent structure as much as possible
-vim.opt.pyxversion = 3 -- only use python3.
 vim.opt.pumheight = 10 -- Height of the pop up menu
+vim.opt.pyxversion = 3 -- only use python3.
+vim.opt.relativenumber = false
+vim.opt.scrolljump = 1
 vim.opt.scrolloff = 8 -- Number of lines to keep above and below the cursor
+vim.opt.secure = true
 vim.opt.shiftwidth = 2 -- Number of space inserted for indentation
-vim.opt.shortmess.I = true
+vim.opt.shortmess.I = true -- disables the splash screen on startup
 vim.opt.shortmess.s = true
 vim.opt.showbreak = "↪ "
+vim.opt.showmode = false
 vim.opt.showmode = false -- Disable showing modes in command line
 vim.opt.showtabline = 2 -- always display tabline
 vim.opt.sidescrolloff = 8 -- Number of columns to keep at the sides of the cursor
-vim.opt.signcolumn = "auto" -- sets vim.opt.signcolumn to auto
+vim.opt.signcolumn = "yes:2" -- sets vim.opt.signcolumn to auto
 vim.opt.smartcase = true -- Case sensitivie searching
 vim.opt.spell = false -- sets vim.opt.spell
 vim.opt.spellfile = vim.fn.stdpath "config" .. "/spell/en.utf-8.add"
@@ -46,16 +54,16 @@ vim.opt.splitbelow = false -- Splitting a new window below the current one
 vim.opt.splitright = true -- Splitting a new window at the right of the current one
 vim.opt.tabstop = 2 -- Number of space in a tab
 vim.opt.termguicolors = true -- Enable 24-bit RGB color in the TUI
-vim.opt.scrolljump = 1
 vim.opt.thesaurus = vim.fn.stdpath "config" .. "/spell/thesaurus.txt"
 vim.opt.timeout = true
 vim.opt.timeoutlen = 300 -- Length of time to wait for a mapped sequence
+vim.opt.title = true
+vim.opt.titlestring = '%f // nvim'
 vim.opt.undofile = true -- Enable persistent undo
 vim.opt.updatetime = 300 -- Length of time to wait before triggering the plugin
+vim.opt.wildmenu = true
 vim.opt.wrap = false -- wrap long lines?
 vim.opt.writebackup = false -- Disable making a backup before overwriting a file
---vim.opt.wildchar = "<Tab>"
-vim.opt.wildmenu = true
 
 -- ad-hoc configuration not tied to specific plugins.
 if vim.g.neovide then
