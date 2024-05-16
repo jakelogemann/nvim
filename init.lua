@@ -1,21 +1,19 @@
-local function ensure_plugin_manager_installed()
-  if not vim.loop.fs_stat(vim.fn.stdpath("data") .. "/lazy/lazy.nvim") then
-    -- install plugin manager if not already installed.
-    vim.fn.system({
-      "git",
-      "clone",
-      "--filter=blob:none",
-      "https://github.com/folke/lazy.nvim.git",
-      "--branch=stable",
-      vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
-    })
-  end
+if not vim.loop.fs_stat(vim.fn.stdpath("data") .. "/lazy/lazy.nvim") then
+  -- installs the "lazy" plugin manager if its not already installed.
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable",
+    vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
+  })
 end
 
-
-
-ensure_plugin_manager_installed()
 if not vim.g.lazy_did_setup then
+  -- since lazy can bind keys, we need to set the leader key before we load it.
+  vim.g.mapleader = " "
+  vim.g.maplocalleader = " "
   -- prepend the plugin manager to our runtime path.
   vim.opt.rtp:prepend(vim.fn.stdpath("data") .. "/lazy/lazy.nvim")
 
