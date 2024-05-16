@@ -6,7 +6,7 @@ return {
     event = "UiEnter",
     dependencies = {"nvim-lua/plenary.nvim"},
     keys = {
-      { "<f1>", "<cmd>Telescope help_tags<cr>", desc = "Search help topics" },
+      { "<f1>", "<cmd>Telescope help_tags<cr>", desc = "help tags" },
       { "<leader>sh", "<cmd>Telescope help_tags<cr>", desc = "help tags" },
       { "<leader>s/", "<cmd>Telescope builtin<cr>", desc = "available" },
       { "<leader>sd", "<cmd>Telescope diagnostics<cr>", desc = "diagnostics" },

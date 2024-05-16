@@ -1,7 +1,17 @@
 return {
   {
     "stevearc/oil.nvim",
+    enabled = true,
+    lazy = true,
     cmd = "Oil",
+    keys = {
+      { "-", "<cmd>Oil<cr>", desc = "explore" },
+      { "<leader>e", "<cmd>Oil<cr>", desc = "explore" },
+    },
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+
+    },
     opts = {
       -- Id is automatically added at the beginning, and name at the end
       -- See :help oil-columns
@@ -38,7 +48,8 @@ return {
       keymaps = {
         ["g?"] = "actions.show_help",
         ["<CR>"] = "actions.select",
-        ["<C-s>"] = "actions.select_vsplit",
+        ["<C-s>"] = false,
+        ["<M-v>"] = "actions.select_vsplit",
         ["<C-h>"] = false,
         ["<M-h>"] = "actions.select_split",
         ["<C-p>"] = "actions.preview",

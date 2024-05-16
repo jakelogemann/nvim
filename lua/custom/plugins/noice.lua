@@ -25,15 +25,15 @@ return {
         bottom_search = true,
         command_palette = true,
         long_message_to_split = true,
-        cmdline_output_to_split = true,
-        inc_rename = false,
+        cmdline_output_to_split = false,
+        inc_rename = true,
         lsp_doc_border = false,
       },
       routes = {
-        -- {
-        --   view = "notify",
-        --   filter = { event = "msg_showmode" },
-        -- },
+        {
+          view = "notify",
+          filter = { event = "msg_showmode" },
+        },
       },
       cmdline = {
         format = {

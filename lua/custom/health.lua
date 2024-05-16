@@ -2,7 +2,7 @@ local health = vim.health
 
 return {
   check = function()
-    health.start("my neovim")
+    health.start("neovim custom")
     health.info("config dir: " .. vim.fn.stdpath("config"))
     health.info("data dir: " .. vim.fn.stdpath("data"))
     health.info("cache dir: " .. vim.fn.stdpath("cache"))

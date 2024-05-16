@@ -1,6 +1,8 @@
 -- NeoVim Application Options
 --vim.opt.wildchar = "<Tab>"
 vim.opt.autoread = true
+vim.opt.inccommand = "split"
+vim.opt.shada = { "'10", "<0", "s10", "h" }
 vim.opt.backspace = vim.opt.backspace + { "nostop" } -- Don't stop backspace at insert
 vim.opt.backupdir:remove('.') -- keep backups out of the current directory
 vim.opt.clipboard = "unnamedplus" -- Connection to the system clipboard
@@ -18,6 +20,7 @@ vim.opt.foldenable = false
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- set Treesitter based folding
 vim.opt.foldlevel = 0
 vim.opt.foldmethod = "expr"
+vim.opt.formatoptions:remove {"o"}
 vim.opt.history = 100 -- Number of commands to remember in a history table
 vim.opt.ignorecase = true -- Case insensitive searching
 vim.opt.laststatus = 3 -- globalstatus

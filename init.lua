@@ -1,6 +1,5 @@
 local function ensure_plugin_manager_installed()
-  local plugin_manager = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
-  if not vim.loop.fs_stat(plugin_manager) then
+  if not vim.loop.fs_stat(vim.fn.stdpath("data") .. "/lazy/lazy.nvim") then
     -- install plugin manager if not already installed.
     vim.fn.system({
       "git",
@@ -8,20 +7,19 @@ local function ensure_plugin_manager_installed()
       "--filter=blob:none",
       "https://github.com/folke/lazy.nvim.git",
       "--branch=stable",
-      plugin_manager,
+      vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
     })
   end
-
-  -- prepend the plugin manager to our runtime path.
-  vim.opt.rtp:prepend(plugin_manager)
 end
 
 
-ensure_plugin_manager_installed()
-require("my.utils").try_to_enable_profiler()
 
+ensure_plugin_manager_installed()
 if not vim.g.lazy_did_setup then
-  require("lazy").setup("plugins", {
+  -- prepend the plugin manager to our runtime path.
+  vim.opt.rtp:prepend(vim.fn.stdpath("data") .. "/lazy/lazy.nvim")
+
+  require("lazy").setup("custom/plugins", {
     diff = {
       cmd = "diffview.nvim",
     },
@@ -38,7 +36,5 @@ if not vim.g.lazy_did_setup then
   })
 end
 
-require("my.options")
-require("my.autocmds")
-require("my.finder")
+require("custom.utils").try_to_enable_profiler()
 require("freeze").setup()

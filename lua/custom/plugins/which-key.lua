@@ -8,7 +8,6 @@ return {
       vim.o.timeout = true
       vim.o.timeoutlen = 300
       require("which-key").register {
-        ["-"] = { "<cmd>Oil<cr>", "explore directory" },
         ["<C-s>"] = { "<cmd>write<cr>", "write buffer" },
         ["<leader>"] = {
           a = { name = "Actions" },

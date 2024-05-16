@@ -2,7 +2,7 @@ return {
   {
     "nvim-neo-tree/neo-tree.nvim",
     lazy = true,
-    enabled = true,
+    enabled = false,
     cmd = { "Neotree" },
     event = "VeryLazy",
     dependencies = {

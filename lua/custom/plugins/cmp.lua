@@ -59,13 +59,12 @@ return {
   },
 
   {
-    "zbirenbaum/copilot.lua",
+    "github/copilot.vim",
     lazy = true,
     event = "InsertEnter",
-    cmd = "Copilot",
-    opts = {
-      javascript = true,
-      ["*"] = true,
-    },
+    config = function ()
+      vim.cmd [[ imap <silent><script><expr> <M-CR> copilot#Accept("\<CR>") ]]
+      vim.g.copilot_no_tab_map = true
+    end
   },
 }
