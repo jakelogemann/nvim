@@ -1,4 +1,6 @@
-if not vim.loop.fs_stat(vim.fn.stdpath("data") .. "/lazy/lazy.nvim") then
+local lazy_plugin_root = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+if not vim.loop.fs_stat(lazy_plugin_root) then
   -- installs the "lazy" plugin manager if its not already installed.
   vim.fn.system({
     "git",
@@ -6,7 +8,7 @@ if not vim.loop.fs_stat(vim.fn.stdpath("data") .. "/lazy/lazy.nvim") then
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable",
-    vim.fn.stdpath("data") .. "/lazy/lazy.nvim",
+    lazy_plugin_root,
   })
 end
 
@@ -15,7 +17,7 @@ if not vim.g.lazy_did_setup then
   vim.g.mapleader = " "
   vim.g.maplocalleader = " "
   -- prepend the plugin manager to our runtime path.
-  vim.opt.rtp:prepend(vim.fn.stdpath("data") .. "/lazy/lazy.nvim")
+  vim.opt.rtp:prepend(lazy_plugin_root)
 
   require("lazy").setup("custom/plugins", {
     diff = {
