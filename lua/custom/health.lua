@@ -1,20 +1,21 @@
-local health = vim.health
+local info, ok, error = vim.health.info, vim.health.ok, vim.health.error
 
 return {
   check = function()
-    health.start("neovim custom")
-    health.info("config dir: " .. vim.fn.stdpath("config"))
-    health.info("data dir: " .. vim.fn.stdpath("data"))
-    health.info("cache dir: " .. vim.fn.stdpath("cache"))
+    vim.health.start("neovim custom")
+
+    info("config dir: " .. vim.fn.stdpath("config"))
+    info("data dir: " .. vim.fn.stdpath("data"))
+    info("cache dir: " .. vim.fn.stdpath("cache"))
 
     if vim.g.neovide then
-      health.ok("running in neovide")
+      ok("running in neovide")
     end
 
     if true then
-      health.ok("setup is correct")
+      ok("setup is correct")
     else
-      health.error("setup is incorrect")
+      error("setup is incorrect")
     end
   end,
 }

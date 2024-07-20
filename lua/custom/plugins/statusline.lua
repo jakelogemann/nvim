@@ -46,11 +46,28 @@ return {
         lualine_a = { "mode" },
         lualine_b = { "branch", "diff", "diagnostics" },
         lualine_c = { "filename" },
-        lualine_x = { "encoding", "fileformat", "filetype", {
+        lualine_x = { 
+          "encoding", 
+          "fileformat",
+          "filetype",
+          {
             require("lazy.status").updates,
             cond = require("lazy.status").has_updates,
             color = { fg = "ff9e64" },
           },
+          {
+            function()
+              local status = require("ollama").status()
+              if status == "IDLE" then
+                return "󱙺" -- nf-md-robot-outline
+              elseif status == "WORKING" then
+                return "󰚩" -- nf-md-robot
+              end
+            end,
+            cond = function()
+              return package.loaded["ollama"] and require("ollama").status() ~= nil
+            end,
+          }
         },
         lualine_y = { "progress" },
         lualine_z = { "location" },

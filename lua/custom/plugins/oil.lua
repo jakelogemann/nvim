@@ -4,13 +4,13 @@ return {
     enabled = true,
     lazy = true,
     cmd = "Oil",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
     keys = {
       { "-", "<cmd>Oil<cr>", desc = "explore" },
       { "<leader>e", "<cmd>Oil<cr>", desc = "explore" },
-    },
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-
+      { "<leader>,", "<cmd>Oil ~/.config/nvim<cr>", desc = "config" },
     },
     opts = {
       -- Id is automatically added at the beginning, and name at the end

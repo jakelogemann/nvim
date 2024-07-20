@@ -1,4 +1,4 @@
-local lazy_plugin_root = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazy_plugin_root = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
 if not vim.loop.fs_stat(lazy_plugin_root) then
   -- installs the "lazy" plugin manager if its not already installed.

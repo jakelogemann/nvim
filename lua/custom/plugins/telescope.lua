@@ -61,4 +61,13 @@ return {
       },
     },
   },
+
+  {
+    "jeetsukumaran/telescope-rtp",
+    dependencies = {"nvim-telescope/telescope.nvim"},
+    init = function()
+      require('telescope').load_extension('vim_rtp')
+      require('telescope').load_extension('vim_docs')
+    end
+  },
 }

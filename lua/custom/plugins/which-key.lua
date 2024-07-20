@@ -47,6 +47,7 @@ return {
             t = { function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%R"), "n", true) end, "time" },
             y = { function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%Y"), "n", true) end, "year" },
           },
+          o = { name = "ollama" },
           p = {
             name = "project",
             ["/"] = { "<cmd>Telescope find_files<cr>", "find file" },
