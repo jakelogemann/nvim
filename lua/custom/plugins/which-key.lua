@@ -7,7 +7,7 @@ return {
     init = function()
       vim.o.timeout = true
       vim.o.timeoutlen = 300
-      require("which-key").register {
+      require("which-key").register({
         ["<C-s>"] = { "<cmd>write<cr>", "write buffer" },
         ["<leader>"] = {
           a = { name = "Actions" },
@@ -47,7 +47,7 @@ return {
             t = { function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%R"), "n", true) end, "time" },
             y = { function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%Y"), "n", true) end, "year" },
           },
-          o = { name = "ollama" },
+          o = { group = "ollama" },
           p = {
             name = "project",
             ["/"] = { "<cmd>Telescope find_files<cr>", "find file" },
@@ -101,7 +101,7 @@ return {
             },
           },
         },
-      }
+      })
     end,
     -- options for which-key.nvim
     opts = {
