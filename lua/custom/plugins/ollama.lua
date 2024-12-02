@@ -48,4 +48,27 @@ return {
       return opts -- finally, be sure to return the opts value.
     end,
   },
+  {
+    "David-Kunz/gen.nvim",
+    lazy = true,
+
+    cmd = {
+      "Gen",
+    },
+
+    opts = function(_, opts)
+      opts.model = "llama3.2:3b"
+      opts.prompts = require("gen").prompts
+      opts.prompts['Elaborate_Text'] = {
+        prompt = "Elaborate the following text:\n$text",
+        replace = true
+      }
+      opts.prompts['Fix_Code'] = {
+        prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+        replace = true,
+        extract = "```$filetype\n(.-)```"
+      }
+      return opts
+    end,
+  }
 }

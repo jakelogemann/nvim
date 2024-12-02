@@ -1,15 +1,40 @@
+local stdio = { stdout = "", stderr = "" }
 local default_output = "freeze.png"
+
+-- Determine the user's download folder in a cross-platform way
+local function get_download_folder()
+    -- Unix-like systems (Linux/Mac)
+    local xdg_dir = os.getenv("XDG_DOWNLOAD_DIR")
+    if xdg_dir and xdg_dir ~= "" then
+        return xdg_dir
+    end
+
+    -- Windows
+    local userprofile = os.getenv("USERPROFILE")
+    if userprofile then
+        return userprofile .. "\\Downloads"
+    end
+
+    -- Fallback to ~/Downloads on Unix-like systems
+    local home = os.getenv("HOME")
+    if home then
+        return home .. "/Downloads"
+    end
+
+    -- Fallback to nil if no reasonable default
+    return nil
+end
+
 
 local freeze = {
   opts = {
-    dir = ".",
+    dir = get_download_folder(),
     output = default_output,
     config = "base",
     open = false,
   },
   output = nil,
 }
-local stdio = { stdout = "", stderr = "" }
 
 ---The callback for reading stdout.
 ---@param err any the possible err we received
