@@ -116,5 +116,23 @@ function utils.on_or_off(bool) return bool and "on" or "off" end
 --- Toggle conceal=2|0
 function utils.ui.toggle_conceal() vim.opt.conceallevel = vim.opt.conceallevel:get() == 0 and 2 or 0 end
 
+-- Determine the user's download folder in a cross-platform way
+function utils.get_download_folder()
+  -- Unix-like systems (Linux/Mac)
+  local xdg_dir = os.getenv "XDG_DOWNLOAD_DIR"
+  if xdg_dir and xdg_dir ~= "" then return xdg_dir end
+
+  -- Windows
+  local userprofile = os.getenv "USERPROFILE"
+  if userprofile then return userprofile .. "\\Downloads" end
+
+  -- Fallback to ~/Downloads on Unix-like systems
+  local home = os.getenv "HOME"
+  if home then return home .. "/Downloads" end
+
+  -- Fallback to nil if no reasonable default
+  return nil
+end
+
 -- export as a global and as module for imports
 return utils

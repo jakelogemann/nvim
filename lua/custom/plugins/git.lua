@@ -1,19 +1,5 @@
 return {
   {
-    "tpope/vim-fugitive",
-    lazy = true,
-    cmd = {
-      "Git",
-      "Gedit",
-      "Gread",
-      "Gwrite",
-      "Ggrep",
-      "GMove",
-      "GDelete",
-      "GBrowse",
-    },
-  },
-  {
     "TimUntersberger/neogit",
     lazy = true,
     cmd = {
@@ -94,6 +80,14 @@ return {
   },
   { -- add modifications to buffers "gutter" (by line numbers).
     "lewis6991/gitsigns.nvim",
+    lazy = true,
+    enabled = true,
+    event = "UiEnter",
+    keys = {
+      { "<leader>g[", "<cmd>Gitsigns prev_hunk<cr>", "prev hunk" },
+      { "<leader>g]", "<cmd>Gitsigns next_hunk<cr>", "next hunk" },
+      { "<leader>zgs", "<cmd>Gitsigns toggle_signs<cr>", "Toggle git signs" },
+    },
     opts = {
       signs = {
         add = { text = "+" },
@@ -102,6 +96,20 @@ return {
         topdelete = { text = "‾" },
         changedelete = { text = "~" },
       },
+    },
+  },
+  {
+    "tpope/vim-fugitive",
+    lazy = true,
+    cmd = {
+      "Git",
+      "Gedit",
+      "Gread",
+      "Gwrite",
+      "Ggrep",
+      "GMove",
+      "GDelete",
+      "GBrowse",
     },
   },
 }

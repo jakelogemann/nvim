@@ -84,10 +84,10 @@ M.servers["gopls"] = {
     },
     analyses = {
       unusedparams = true,
-      -- unusedvariable = true,
-      -- unusedwrite = true,
-      -- nilness = true,
-      -- shadow = true,
+      unusedvariable = true,
+      unusedwrite = true,
+      nilness = true,
+      shadow = true,
     },
     staticcheck = true,
     hints = {

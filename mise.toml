@@ -1,0 +1,2 @@
+[tasks.clean]
+run = "rm -vrf freeze.png"

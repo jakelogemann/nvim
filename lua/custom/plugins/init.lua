@@ -18,6 +18,25 @@ return {
     },
   },
   {
+    "David-Kunz/gen.nvim",
+    lazy = true,
+    cmd = "Gen",
+    opts = function(_, opts)
+      opts.model = "llama3.2:3b"
+      opts.prompts = require("gen").prompts
+      opts.prompts['Elaborate_Text'] = {
+        prompt = "Elaborate the following text:\n$text",
+        replace = true
+      }
+      opts.prompts['Fix_Code'] = {
+        prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+        replace = true,
+        extract = "```$filetype\n(.-)```"
+      }
+      return opts
+    end,
+  },
+  {
     "catppuccin/nvim",
     lazy = false,
     priority = 1000,
@@ -224,6 +243,214 @@ return {
   {
     "dstein64/vim-startuptime",
     cmd = "StartupTime",
+  },
+  {
+    "nvzone/typr",
+    cmd = {"Typr", "TyprStats" },
+    dependencies = { "nvzone/volt" },
+    opts = {},
+  },
+
+  {
+    "stevearc/oil.nvim",
+    enabled = true,
+    lazy = false,
+    cmd = "Oil",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    keys = {
+      { "-", "<cmd>Oil<cr>", desc = "explore" },
+      { "<leader>e", "<cmd>Oil<cr>", desc = "explore" },
+      { "<leader>,", "<cmd>Oil ~/.config/nvim<cr>", desc = "config" },
+    },
+    opts = {
+      default_file_explorer = true,
+      -- Id is automatically added at the beginning, and name at the end
+      -- See :help oil-columns
+      columns = {
+        "icon",
+        -- "permissions",
+        -- "size",
+        -- "mtime",
+      },
+      -- Buffer-local options to use for oil buffers
+      buf_options = {},
+      -- Window-local options to use for oil buffers
+      win_options = {
+        wrap = false,
+        signcolumn = "no",
+        cursorcolumn = false,
+        foldcolumn = "0",
+        spell = false,
+        list = false,
+        number = false,
+        relativenumber = false,
+        conceallevel = 3,
+        concealcursor = "n",
+      },
+      -- Restore window options to previous values when leaving an oil buffer
+      restore_win_options = true,
+      -- Skip the confirmation popup for simple operations
+      skip_confirm_for_simple_edits = false,
+      -- Keymaps in oil buffer. Can be any value that `vim.keymap.set` accepts OR a table of keymap
+      -- options with a `callback` (e.g. { callback = function() ... end, desc = "", nowait = true })
+      -- Additionally, if it is a string that matches "action.<name>",
+      -- it will use the mapping at require("oil.action").<name>
+      -- Set to `false` to remove a keymap
+      keymaps = {
+        ["g?"] = "actions.show_help",
+        ["<CR>"] = "actions.select",
+        ["<C-s>"] = false,
+        ["<M-v>"] = "actions.select_vsplit",
+        ["<C-h>"] = false,
+        ["<M-h>"] = "actions.select_split",
+        ["<C-p>"] = "actions.preview",
+        ["<Space>-"] = { callback = function() require("oil").toggle_float() end },
+        ["<C-c>"] = "actions.close",
+        ["<C-l>"] = "actions.refresh",
+        ["-"] = "actions.parent",
+        ["_"] = "actions.open_cwd",
+        ["`"] = "actions.cd",
+        ["~"] = "actions.tcd",
+        ["g."] = "actions.toggle_hidden",
+      },
+      -- Set to false to disable all of the above keymaps
+      use_default_keymaps = true,
+      view_options = {
+        -- Show files and directories that start with "."
+        show_hidden = false,
+      },
+      -- Configuration for the floating window in oil.open_float
+      float = {
+        -- Padding around the floating window
+        padding = 2,
+        max_width = 0,
+        max_height = 0,
+        border = "rounded",
+        win_options = {
+          winblend = 10,
+        },
+      },
+    },
+  },
+
+  {
+    "neovim/nvim-lspconfig",
+    lazy = false,
+    init = function()
+      local lspconfig = require "lspconfig"
+      lspconfig.lua_ls.setup {
+        settings = {
+          Lua = {
+            diagnostics = {
+              -- Get the language server to recognize the `vim` global
+              globals = { "vim" },
+            },
+          },
+        },
+      }
+    end,
+  },
+  {
+    -- Useful status updates for LSP
+    "j-hui/fidget.nvim",
+  },
+  { -- adds icons for current signature (as defined by the LSP)
+    "onsails/lspkind.nvim",
+    lazy = true,
+    enable = not vim.g.icons,
+    dependencies = { "neovim/nvim-lspconfig" },
+  },
+  {
+    "cshuaimin/ssr.nvim",
+    opts = {
+      min_width = 50,
+      min_height = 5,
+      max_width = 120,
+      max_height = 25,
+      keymaps = {
+        close = "q",
+        next_match = "n",
+        prev_match = "N",
+        replace_confirm = "<cr>",
+        replace_all = "<leader><cr>",
+      },
+    },
+  },
+
+  {
+    "mfussenegger/nvim-dap",
+    lazy = false,
+    dependencies = {
+      "leoluz/nvim-dap-go",
+      "rcarriga/nvim-dap-ui",
+      "theHamsta/nvim-dap-virtual-text",
+      "nvim-neotest/nvim-nio",
+      -- "williamboman/mason.nvim",
+    },
+    config = function()
+      local dap = require "dap"
+      local ui = require "dapui"
+
+      require("dapui").setup()
+      require("dap-go").setup()
+
+      require("nvim-dap-virtual-text").setup {
+        -- This just tries to mitigate the chance that I leak tokens here. Probably won't stop it from happening...
+        display_callback = function(variable)
+          local name = string.lower(variable.name)
+          local value = string.lower(variable.value)
+          if name:match "secret" or name:match "api" or value:match "secret" or value:match "api" then
+            return "*****"
+          end
+
+          if #variable.value > 15 then
+            return " " .. string.sub(variable.value, 1, 15) .. "... "
+          end
+
+          return " " .. variable.value
+        end,
+      }
+
+      -- Handled by nvim-dap-go
+      -- dap.adapters.go = {
+      --   type = "server",
+      --   port = "${port}",
+      --   executable = {
+      --     command = "dlv",
+      --     args = { "dap", "-l", "127.0.0.1:${port}" },
+      --   },
+      -- }
+
+      vim.keymap.set("n", "<space>b", dap.toggle_breakpoint)
+      vim.keymap.set("n", "<space>gb", dap.run_to_cursor)
+
+      -- Eval var under cursor
+      vim.keymap.set("n", "<space>?", function()
+        require("dapui").eval(nil, { enter = true })
+      end)
+
+      vim.keymap.set("n", "<F1>", dap.continue)
+      vim.keymap.set("n", "<F2>", dap.step_into)
+      vim.keymap.set("n", "<F3>", dap.step_over)
+      vim.keymap.set("n", "<F4>", dap.step_out)
+      vim.keymap.set("n", "<F5>", dap.step_back)
+      vim.keymap.set("n", "<F13>", dap.restart)
+
+      dap.listeners.before.attach.dapui_config = function()
+        ui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        ui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        ui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        ui.close()
+      end
+    end,
   },
 }
 -- vim: fdl=1 fen fdm=expr
