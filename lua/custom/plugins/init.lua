@@ -3,38 +3,19 @@ return {
     "tpope/vim-eunuch",
     lazy = true,
     cmd = {
-      "Remove", -- Delete a file on disk without E211: File no longer available.
-      "Delete", -- Delete a file on disk and the buffer too.
-      "Move", -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
-      "Chmod", -- Change the permissions of the current file.
-      "Mkdir", -- Create a directory, defaulting to the parent of the current file.
       "Cfind", -- Run find and load the results into the quickfix list.
+      "Chmod", -- Change the permissions of the current file.
       "Clocate", -- Run locate and load the results into the quickfix list.
+      "Delete", -- Delete a file on disk and the buffer too.
       "Lfind",
       "Llocate", -- Like above, but use the location list.
-      "Wall", -- Write every open window. Handy for kicking off tools like guard.
-      "SudoWrite", -- Write a privileged file with sudo.
+      "Mkdir", -- Create a directory, defaulting to the parent of the current file.
+      "Move", -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
+      "Remove", -- Delete a file on disk without E211: File no longer available.
       "SudoEdit", -- Edit a privileged file with sudo.
+      "SudoWrite", -- Write a privileged file with sudo.
+      "Wall", -- Write every open window. Handy for kicking off tools like guard.
     },
-  },
-  {
-    "David-Kunz/gen.nvim",
-    lazy = true,
-    cmd = "Gen",
-    opts = function(_, opts)
-      opts.model = "llama3.2:3b"
-      opts.prompts = require("gen").prompts
-      opts.prompts['Elaborate_Text'] = {
-        prompt = "Elaborate the following text:\n$text",
-        replace = true
-      }
-      opts.prompts['Fix_Code'] = {
-        prompt = "Fix the following code. Only output the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
-        replace = true,
-        extract = "```$filetype\n(.-)```"
-      }
-      return opts
-    end,
   },
   {
     "catppuccin/nvim",
@@ -216,7 +197,8 @@ return {
   },
   {
     "folke/neoconf.nvim",
-    cmd = "Neoconf",
+    cmd = {"Neoconf"},
+    lazy = true,
   },
   {
     "lewis6991/impatient.nvim",

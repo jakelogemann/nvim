@@ -1,32 +1,35 @@
 local utils = require "custom.utils"
-local plugin_dir = vim.fn.stdpath "data" .. "/lazy"
-local plugin_manager_root = plugin_dir .. "/lazy.nvim"
-local plugin_manager_options = {
-  diff = {
-    cmd = "diffview.nvim",
-  },
-  performance = {
-    rtp = {
-      disabled_plugins = {
-        "tutor",
-        "tohtml",
-        "matchparen",
-        "netrw",
-        "matchit",
+local plugin_manager = {
+  name = "lazy.nvim",
+  dir = vim.fn.stdpath "data" .. "/lazy",
+  options = {
+    diff = {
+      cmd = "diffview.nvim",
+    },
+    performance = {
+      rtp = {
+        disabled_plugins = {
+          "tutor",
+          "tohtml",
+          "matchparen",
+          "netrw",
+          "matchit",
+        },
       },
     },
   },
 }
 
-local function setup_plugin_manager()
-  if not vim.loop.fs_stat(plugin_manager_root) then
+plugin_manager.setup = function()
+  local root = plugin_manager.dir .. "/" .. plugin_manager.name
+  if not vim.loop.fs_stat(root) then
     vim.fn.system {
       "git",
       "clone",
       "--filter=blob:none",
       "https://github.com/folke/lazy.nvim.git",
       "--branch=stable",
-      plugin_manager_root,
+      root,
     }
   end
 
@@ -35,15 +38,14 @@ local function setup_plugin_manager()
     vim.g.mapleader = " "
     vim.g.maplocalleader = " "
     -- prepend the plugin manager to our runtime path.
-    vim.opt.rtp:prepend(plugin_manager_root)
+    vim.opt.rtp:prepend(root)
 
-    require("lazy").setup("custom/plugins", plugin_manager_options)
+    require("lazy").setup("custom/plugins", plugin_manager.options)
   end
 end
 
 
-
-setup_plugin_manager()
+plugin_manager.setup()
 utils.try_to_enable_profiler()
 require("freeze").setup()
 require("custom.welcome").setup()
