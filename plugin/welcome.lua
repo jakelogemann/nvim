@@ -122,6 +122,4 @@ local function setup(options)
 	})
 end
 
-return {
-	setup = setup
-}
+setup()
