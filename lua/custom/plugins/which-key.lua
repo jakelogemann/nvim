@@ -71,6 +71,7 @@ return {
         { "<C-s>", "<cmd>write<cr>", desc = "write buffer" },
         { "<c-w>\\", function() require("which-key").show { keys = "<c-w>", loop = true } end, desc = "window mode" },
         { "<M-f>", group = "Find" },
+        { "<leader><leader>", "<c-^>", desc = "alternate buffer" },
         {
           "<leader><tab>",
           function()
@@ -151,6 +152,140 @@ return {
         { "<leader>ls", function() vim.lsp.buf.document_symbol() end, desc = "doc symbols" },
         { "<leader>lS", function() vim.lsp.buf.workspace_symbol() end, desc = "ws symbols" },
         { "<leader>o", group = "Ollama" },
+        -- Ollama prompt shortcuts (normal or visual)
+        {
+          "<leader>op",
+          function() vim.cmd((vim.fn.mode():match "[vV]" and "'<,'>") .. "Ollama") end,
+          desc = "Ollama prompt",
+        },
+        {
+          "<leader>oc",
+          function() vim.cmd((vim.fn.mode():match "[vV]" and "'<,'>") .. "Ollama Change_Code") end,
+          desc = "Change code",
+        },
+        {
+          "<leader>oe",
+          function() vim.cmd((vim.fn.mode():match "[vV]" and "'<,'>") .. "Ollama Enhance_Code") end,
+          desc = "Enhance code",
+        },
+        {
+          "<leader>or",
+          function() vim.cmd((vim.fn.mode():match "[vV]" and "'<,'>") .. "Ollama Review_Code") end,
+          desc = "Review code",
+        },
+        {
+          "<leader>os",
+          function() vim.cmd((vim.fn.mode():match "[vV]" and "'<,'>") .. "Ollama Summarize") end,
+          desc = "Summarize",
+        },
+        {
+          "<leader>om",
+          function()
+            local ok, o = pcall(require, "ollama")
+            if ok and o.select_model then
+              o.select_model()
+            else
+              vim.notify("No model selector", "warn")
+            end
+          end,
+          desc = "Model select",
+        },
+        { "<leader>ox", function() vim.cmd "Ollama" end, desc = "Pick prompt" },
+
+        -- Copilot group
+        { "<leader>C", group = "Copilot" },
+        { "<leader>Ce", function() vim.cmd "Copilot enable" end, desc = "enable" },
+        { "<leader>Cd", function() vim.cmd "Copilot disable" end, desc = "disable" },
+        { "<leader>Cs", function() vim.cmd "Copilot status" end, desc = "status" },
+        { "<leader>Cp", function() vim.cmd "Copilot panel" end, desc = "panel" },
+        {
+          "<leader>Ca",
+          function()
+            -- Accept suggestion (simulate <M-CR>)
+            local keys = vim.api.nvim_replace_termcodes("<M-CR>", true, false, true)
+            vim.api.nvim_feedkeys(keys, "i", false)
+          end,
+          desc = "accept suggestion",
+        },
+        {
+          "<leader>CT",
+          function()
+            if vim.g.copilot_enabled == 1 then
+              vim.cmd "Copilot disable"
+            else
+              vim.cmd "Copilot enable"
+            end
+          end,
+          desc = "toggle",
+        },
+
+        -- Rust utilities (assuming cargo project)
+        { "<leader>r", group = "Rust" },
+        { "<leader>rt", function() require("custom.utils").run_in_term "cargo test" end, desc = "cargo test" },
+        {
+          "<leader>rf",
+          function()
+            local file = vim.fn.expand "%"
+            require("custom.utils").run_in_term("cargo test -- " .. file)
+          end,
+          desc = "test file",
+        },
+        { "<leader>rr", function() require("custom.utils").run_in_term "cargo run" end, desc = "cargo run" },
+        { "<leader>rb", function() require("custom.utils").run_in_term "cargo build" end, desc = "cargo build" },
+
+        -- Go (vim-go commands)
+        { "<leader>G", group = "Go" },
+        { "<leader>Gt", function() vim.cmd "GoTest" end, desc = "test package" },
+        { "<leader>GF", function() vim.cmd "GoTestFunc" end, desc = "test func" },
+        { "<leader>Gf", function() vim.cmd "GoTestFile" end, desc = "test file" },
+        { "<leader>Gb", function() vim.cmd "GoBuild" end, desc = "build" },
+        { "<leader>Gi", function() vim.cmd "GoInstall" end, desc = "install" },
+
+        -- Execute current file (shell / script / single-file run)
+        { "<leader>x", group = "Execute" },
+        {
+          "<leader>xx",
+          function()
+            local ft = vim.bo.filetype
+            local file = vim.fn.expand "%:p"
+            local cmd
+            if ft == "go" then
+              cmd = "go run " .. file
+            elseif ft == "rust" then
+              cmd = "cargo run"
+            elseif ft == "python" then
+              cmd = "python " .. file
+            elseif ft == "sh" or ft == "bash" or ft == "zsh" or ft == "fish" then
+              cmd = file
+            else
+              cmd = file
+            end
+            local ok, u = pcall(require, "custom.utils")
+            if ok and u.run_in_term then
+              u.run_in_term(cmd)
+            else
+              vim.cmd("!" .. cmd)
+            end
+          end,
+          desc = "run file",
+        },
+
+        -- Editing utilities
+        { "<leader>y", group = "Yank/dup" },
+        { "<leader>yd", function() vim.cmd "t." end, desc = "duplicate line" },
+        {
+          "<leader>sS",
+          function()
+            local w = vim.fn.expand "<cword>"
+            vim.cmd("%%s/\\<" .. w .. "\\>//gI")
+          end,
+          desc = "substitute word",
+        },
+        { "<leader>m", group = "Move" },
+        { "<leader>mj", function() vim.cmd "move .+1 | normal ==" end, desc = "line down" },
+        { "<leader>mk", function() vim.cmd "move .-2 | normal ==" end, desc = "line up" },
+        { "<leader>sw", function() vim.cmd "set list!" end, desc = "toggle invisibles" },
+        { "<leader>sg", function() vim.cmd "Telescope grep_string" end, desc = "grep word" },
         { "<leader>p", group = "Project" },
         { "<leader>p/", "<cmd>Telescope find_files<cr>", desc = "find file" },
         { "<leader>pc", "<cmd>Neoconf<cr>", desc = "project config" },

@@ -134,5 +134,49 @@ function utils.get_download_folder()
   return nil
 end
 
+--- Run a command in an existing integrated terminal (ToggleTerm if available) or spawn a new one.
+-- Tries, in order: existing ToggleTerm hidden terminal, new ToggleTerm, then built-in :terminal split.
+-- @param cmd string shell command to execute
+-- @param opts table|nil { direction = 'float'|'horizontal'|'vertical', cwd = string }
+function utils.run_in_term(cmd, opts)
+  opts = opts or {}
+  if not cmd or cmd == '' then return end
+  -- Prefer toggleterm if installed
+  local ok_toggle, toggleterm = pcall(require, 'toggleterm.terminal')
+  if ok_toggle then
+    local direction = opts.direction or 'float'
+    -- Reuse a persistent terminal keyed by direction
+    local key = 9876 -- arbitrary id unlikely to collide
+    local Terminal = toggleterm.Terminal
+    if not utils._terminals then utils._terminals = {} end
+    if not utils._terminals[key] or utils._terminals[key].closed then
+      utils._terminals[key] = Terminal:new({
+        id = key,
+        direction = direction,
+        hidden = true,
+        cmd = nil,
+        dir = opts.cwd,
+        close_on_exit = false,
+        on_open = function(term)
+          -- ensure insert mode for immediate output readability
+          vim.api.nvim_buf_set_option(term.bufnr, 'filetype', 'term')
+        end,
+      })
+    end
+    local term = utils._terminals[key]
+    term:open()
+    -- send command (clear line first)
+    term:send(cmd, true)
+    return
+  end
+  -- Fallback: native terminal split
+  local prev_win = vim.api.nvim_get_current_win()
+  vim.cmd((opts.direction == 'vertical' and 'vsplit' or 'split'))
+  if opts.cwd then pcall(vim.cmd, 'lcd ' .. vim.fn.fnameescape(opts.cwd)) end
+  vim.cmd('terminal '..cmd)
+  -- leave in normal mode after spawning so user can choose
+  vim.api.nvim_set_current_win(prev_win)
+end
+
 -- export as a global and as module for imports
 return utils
