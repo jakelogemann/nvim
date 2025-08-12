@@ -1,64 +1,3 @@
-local lib = {}
-
-function lib.insert_date()
-  vim.api.nvim_feedkeys("i" .. tostring(require("os").date()), "n", true)
-end
-
-function lib.show_local_mappings()
-  require("which-key").show({ global = false })
-end
-
-function lib.insert_time()
-  vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%R"), "n", true)
-end
-
-function lib.insert_year()
-  vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%Y"), "n", true)
-end
-
-function lib.set_shiftwidth()
-  vim.ui.input(
-    { prompt = "set shiftwidth " },
-    function(input) vim.o.shiftwidth = tonumber(input) or vim.o.shiftwidth end
-  )
-end
-
-function lib.toggle_conceal()
-  vim.opt.conceallevel = vim.opt.conceallevel == 0 and 2 or 0
-end
-
-function lib.toggle_list()
-  vim.bo.list = not vim.opt.list
-end
-
-function lib.toggle_paste()
-  vim.bo.paste = not vim.opt.paste:get()
-end
-
-function lib.toggle_spell_check()
-  vim.bo.spell = not vim.opt.spell
-end
-
-function lib.toggle_ruler()
-  vim.wo.ruler = not vim.opt.ruler:get()
-end
-
-
-function lib.toggle_wrap() vim.wo.wrap = not vim.opt.wrap end
-
-function lib.toggle_tabs_to_spaces()
-  vim.ui.select({ "tabs", "spaces" }, {
-    prompt = "Select tabs or spaces:",
-    format_item = function(item) return "I'd like to use " .. item end,
-  }, function(choice)
-      if choice == "spaces" then
-        vim.bo.expandtab = true
-      else
-        vim.bo.expandtab = false
-      end
-    end)
-end
-
 return {
   {
     "folke/which-key.nvim",
@@ -79,9 +18,7 @@ return {
       },
       -- Delay before showing the popup. Can be a number or a function that returns a number.
       ---@type number | fun(ctx: { keys: string, mode: string, plugin?: string }):number
-      delay = function(ctx)
-        return ctx.plugin and 0 or 200
-      end,
+      delay = function(ctx) return ctx.plugin and 0 or 200 end,
       plugins = {
         marks = true, -- shows a list of your marks on ' and `
         registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
@@ -132,13 +69,28 @@ return {
       },
       spec = {
         { "<C-s>", "<cmd>write<cr>", desc = "write buffer" },
-        { "<c-w>\\", function() require("which-key").show({ keys = "<c-w>", loop = true }) end, desc = "window mode" },
-        { "<M-f>", group = "Find"},
-        { "<leader><tab>", lib.toggle_tabs_to_spaces, desc = "tabs/spaces" },
-        { "<leader>?", lib.show_local_mappings, desc = "local keymaps" },
+        { "<c-w>\\", function() require("which-key").show { keys = "<c-w>", loop = true } end, desc = "window mode" },
+        { "<M-f>", group = "Find" },
+        {
+          "<leader><tab>",
+          function()
+            vim.ui.select({ "tabs", "spaces" }, {
+              prompt = "Select tabs or spaces:",
+              format_item = function(item) return "I'd like to use " .. item end,
+            }, function(choice)
+              if choice == "spaces" then
+                vim.bo.expandtab = true
+              else
+                vim.bo.expandtab = false
+              end
+            end)
+          end,
+          desc = "tabs/spaces",
+        },
+        { "<leader>?", function() require("which-key").show { global = false } end, desc = "local keymaps" },
         { "<leader>a", group = "Action" },
         { "<leader>b", group = "Buffer" },
-        { "<leader>b?", lib.show_local_mappings, desc = "local keymaps" },
+        { "<leader>b?", function() require("which-key").show { global = false } end, desc = "local keymaps" },
         { "<leader>bN", "<cmd>bnew<cr>", desc = "new buffer" },
         { "<leader>bd", "<cmd>bdelete<cr>", desc = "delete buffer" },
         { "<leader>be", "<cmd>enew<cr>", desc = "new scratch" },
@@ -147,14 +99,14 @@ return {
         { "<leader>bw", "<cmd>write<cr>", desc = "write buffer" },
         { "<leader>c", desc = "Toggle comment (line/visual)" },
         { "<leader>d", group = "Debugger" },
-        { "<leader>db", function() require('dap').toggle_breakpoint() end, desc = "breakpoint" },
-        { "<leader>dc", function() require('dap').continue() end, desc = "continue" },
-        { "<leader>di", function() require('dap').step_into() end, desc = "step into" },
-        { "<leader>do", function() require('dap').step_out() end, desc = "step out" },
-        { "<leader>dn", function() require('dap').step_over() end, desc = "step over" },
-        { "<leader>dr", function() require('dap').restart() end, desc = "restart" },
-        { "<leader>de", function() require('dapui').eval(nil, { enter = true }) end, desc = "eval" },
-        { "<leader>du", function() require('dapui').toggle() end, desc = "ui toggle" },
+        { "<leader>db", function() require("dap").toggle_breakpoint() end, desc = "breakpoint" },
+        { "<leader>dc", function() require("dap").continue() end, desc = "continue" },
+        { "<leader>di", function() require("dap").step_into() end, desc = "step into" },
+        { "<leader>do", function() require("dap").step_out() end, desc = "step out" },
+        { "<leader>dn", function() require("dap").step_over() end, desc = "step over" },
+        { "<leader>dr", function() require("dap").restart() end, desc = "restart" },
+        { "<leader>de", function() require("dapui").eval(nil, { enter = true }) end, desc = "eval" },
+        { "<leader>du", function() require("dapui").toggle() end, desc = "ui toggle" },
         { "<leader>e", "<cmd>Oil<cr>", desc = "explore" },
         { "<leader>f", group = "Find" },
         { "<leader>ff", "<cmd>Telescope find_files<cr>", desc = "find files" },
@@ -173,13 +125,25 @@ return {
         { "<leader>hP", "<cmd>help lazy.nvim.txt<cr>", desc = "lazy.nvim" },
         { "<leader>hl", "<cmd>help lua.vim<cr>", desc = "lua.vim" },
         { "<leader>i", group = "Insert" },
-        { "<leader>id", lib.insert_date, desc = "date" },
-        { "<leader>it", lib.insert_time, desc = "time" },
-        { "<leader>iy", lib.insert_year, desc = "year" },
+        {
+          "<leader>id",
+          function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date()), "n", true) end,
+          desc = "date",
+        },
+        {
+          "<leader>it",
+          function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%R"), "n", true) end,
+          desc = "time",
+        },
+        {
+          "<leader>iy",
+          function() vim.api.nvim_feedkeys("i" .. tostring(require("os").date "%Y"), "n", true) end,
+          desc = "year",
+        },
         { "<leader>l", group = "LSP" },
         { "<leader>la", function() vim.lsp.buf.code_action() end, desc = "code action" },
         { "<leader>ld", function() vim.diagnostic.open_float() end, desc = "line diag" },
-        { "<leader>lf", function() vim.lsp.buf.format({ async = true }) end, desc = "format" },
+        { "<leader>lf", function() vim.lsp.buf.format { async = true } end, desc = "format" },
         { "<leader>lh", function() vim.lsp.buf.hover() end, desc = "hover" },
         { "<leader>li", function() vim.lsp.buf.implementation() end, desc = "impl" },
         { "<leader>lr", function() vim.lsp.buf.rename() end, desc = "rename" },
@@ -190,14 +154,22 @@ return {
         { "<leader>p", group = "Project" },
         { "<leader>p/", "<cmd>Telescope find_files<cr>", desc = "find file" },
         { "<leader>pc", "<cmd>Neoconf<cr>", desc = "project config" },
-        { "<leader>ps", function()
-          local ok, persistence = pcall(require, "persistence")
-          if ok then persistence.load() end
-        end, desc = "session load" },
-        { "<leader>pS", function()
-          local ok, persistence = pcall(require, "persistence")
-          if ok then persistence.load({ last = true }) end
-        end, desc = "last session" },
+        {
+          "<leader>ps",
+          function()
+            local ok, persistence = pcall(require, "persistence")
+            if ok then persistence.load() end
+          end,
+          desc = "session load",
+        },
+        {
+          "<leader>pS",
+          function()
+            local ok, persistence = pcall(require, "persistence")
+            if ok then persistence.load { last = true } end
+          end,
+          desc = "last session",
+        },
         { "<leader>q", group = "Quickfix" },
         { "<leader>qq", "<cmd>copen<cr>", desc = "open quickfix" },
         { "<leader>qc", "<cmd>cclose<cr>", desc = "close quickfix" },
@@ -210,17 +182,30 @@ return {
         { "<leader>T", group = "Terminal" },
         { "<leader>Tt", "<cmd>ToggleTerm direction=float<cr>", desc = "float term" },
         { "<leader>z", group = "Toggle" },
-        { "<leader>zc", lib.toggle_conceal, desc = "Toggle conceal" },
+        {
+          "<leader>zc",
+          function() vim.opt.conceallevel = vim.opt.conceallevel == 0 and 2 or 0 end,
+          desc = "Toggle conceal",
+        },
         { "<leader>zg", "<cmd>GitSignsToggle<cr>", desc = "Toggle git signs" },
-        { "<leader>zl", lib.toggle_list, desc = "Toggle list" },
+        { "<leader>zl", function() vim.bo.list = not vim.bo.list end, desc = "Toggle list" },
         { "<leader>zi", "<cmd>IndentGuidesToggle<cr>", desc = "Toggle guides" },
         { "<leader>zI", "<cmd>IndentDetect<cr>", desc = "Detect indent" },
         { "<leader>zo", "<cmd>SymbolsOutline<cr>", desc = "Toggle symbols" },
-        { "<leader>zp", lib.toggle_paste, desc = "Toggle paste" },
-        { "<leader>zr", lib.toggle_ruler, desc = "Toggle ruler" },
-        { "<leader>zs", lib.toggle_spell_check, desc = "Toggle spell" },
-        { "<leader>zw", lib.set_shiftwidth, desc = "Set shiftwidth" },
-        { "<leader>zW", lib.toggle_wrap, desc = "Toggle wrap" },
+        { "<leader>zp", function() vim.o.paste = not vim.o.paste end, desc = "Toggle paste" },
+        { "<leader>zr", function() vim.wo.ruler = not vim.wo.ruler end, desc = "Toggle ruler" },
+        { "<leader>zs", function() vim.bo.spell = not vim.bo.spell end, desc = "Toggle spell" },
+        {
+          "<leader>zw",
+          function()
+            vim.ui.input({ prompt = "set shiftwidth " }, function(input)
+              local n = tonumber(input)
+              if n then vim.o.shiftwidth = n end
+            end)
+          end,
+          desc = "Set shiftwidth",
+        },
+        { "<leader>zW", function() vim.wo.wrap = not vim.wo.wrap end, desc = "Toggle wrap" },
       },
     },
   },
