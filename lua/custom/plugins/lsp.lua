@@ -46,41 +46,41 @@ return {
         gopls = {
           memoryMode = "DegradedClosed",
           ["build.directoryFilters"] = { "-**/node_modules" },
-            ["build.buildFlags"] = { "-trimpath" },
-            ["formatting.gofumpt"] = true,
-            ["ui.diagnostic.diagnosticsDelay"] = "500ms",
-            ["build.env"] = (function()
-              local list = {
-                "github.com/polis-dev/polis.dev",
-                "polis.dev",
-              }
-              local joined = table.concat(list, ",")
-              return { GONOPROXY = joined, GONOSUMDB = joined, GOPRIVATE = joined }
-            end)(),
-            analyses = {
-              unusedparams = true,
-              unusedvariable = true,
-              unusedwrite = true,
-              nilness = true,
-              shadow = true,
-            },
-            staticcheck = true,
-            hints = {
-              assignVariableTypes = true,
-              compositeLiteralFields = true,
-              compositeLiteralTypes = true,
-              constantValues = true,
-              functionTypeParameters = true,
-              parameterNames = true,
-              rangeVariableTypes = true,
-            },
+          ["build.buildFlags"] = { "-trimpath" },
+          ["formatting.gofumpt"] = true,
+          ["ui.diagnostic.diagnosticsDelay"] = "500ms",
+          ["build.env"] = (function()
+            local list = {
+              "github.com/polis-dev/polis.dev",
+              "polis.dev",
+            }
+            local joined = table.concat(list, ",")
+            return { GONOPROXY = joined, GONOSUMDB = joined, GOPRIVATE = joined }
+          end)(),
+          analyses = {
+            unusedparams = true,
+            unusedvariable = true,
+            unusedwrite = true,
+            nilness = true,
+            shadow = true,
+          },
+          staticcheck = true,
+          hints = {
+            assignVariableTypes = true,
+            compositeLiteralFields = true,
+            compositeLiteralTypes = true,
+            constantValues = true,
+            functionTypeParameters = true,
+            parameterNames = true,
+            rangeVariableTypes = true,
+          },
         },
       }
 
-  --- LSP client attach callback to set buffer-local keymaps & inlay hints.
-  -- @param _ table unused client
-  -- @param bufnr integer buffer number
-  local function on_attach(_, bufnr)
+      --- LSP client attach callback to set buffer-local keymaps & inlay hints.
+      -- @param _ table unused client
+      -- @param bufnr integer buffer number
+      local function on_attach(_, bufnr)
         local nmap = function(keys, func, desc)
           if desc then desc = "LSP: " .. desc end
           vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
@@ -103,7 +103,11 @@ return {
         nmap("gD", vim.lsp.buf.declaration, "declaration")
         nmap("<localleader>wa", vim.lsp.buf.add_workspace_folder, "add workspace folder")
         nmap("<localleader>wr", vim.lsp.buf.remove_workspace_folder, "remove workspace folder")
-        nmap("<localleader>wl", function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, "list workspace folders")
+        nmap(
+          "<localleader>wl",
+          function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end,
+          "list workspace folders"
+        )
 
         if vim.lsp.inlay_hint then
           pcall(function()
@@ -115,14 +119,17 @@ return {
           end)
         end
 
-        vim.api.nvim_buf_create_user_command(bufnr, "Format", function() vim.lsp.buf.format() end, { desc = "Format current buffer with LSP" })
+        vim.api.nvim_buf_create_user_command(
+          bufnr,
+          "Format",
+          function() vim.lsp.buf.format() end,
+          { desc = "Format current buffer with LSP" }
+        )
       end
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       local ok_cmp, cmp_lsp = pcall(require, "cmp_nvim_lsp")
-      if ok_cmp then
-        capabilities = cmp_lsp.default_capabilities(capabilities)
-      end
+      if ok_cmp then capabilities = cmp_lsp.default_capabilities(capabilities) end
 
       require("mason").setup()
       local ensure = vim.tbl_keys(servers)
@@ -139,11 +146,11 @@ return {
     cmd = { "Trouble", "TroubleToggle" },
     keys = {
       { "<leader>xx", function() require("trouble").toggle() end, desc = "trouble: toggle" },
-      { "<leader>xw", function() require("trouble").toggle("workspace_diagnostics") end, desc = "trouble: workspace" },
-      { "<leader>xd", function() require("trouble").toggle("document_diagnostics") end, desc = "trouble: document" },
-      { "<leader>xq", function() require("trouble").toggle("quickfix") end, desc = "trouble: quickfix" },
-      { "<leader>xl", function() require("trouble").toggle("loclist") end, desc = "trouble: loclist" },
-      { "gR", function() require("trouble").toggle("lsp_references") end, desc = "trouble: references" },
+      { "<leader>xw", function() require("trouble").toggle "workspace_diagnostics" end, desc = "trouble: workspace" },
+      { "<leader>xd", function() require("trouble").toggle "document_diagnostics" end, desc = "trouble: document" },
+      { "<leader>xq", function() require("trouble").toggle "quickfix" end, desc = "trouble: quickfix" },
+      { "<leader>xl", function() require("trouble").toggle "loclist" end, desc = "trouble: loclist" },
+      { "gR", function() require("trouble").toggle "lsp_references" end, desc = "trouble: references" },
     },
     opts = { use_diagnostic_signs = true },
   },

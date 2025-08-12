@@ -46,4 +46,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 --  pattern = { "*.lua", "*.json", "*.go", "*.ts", "*.js" },
 --  callback = function() vim.cmd "Format" end,
 -- })
-

@@ -3,10 +3,10 @@ return {
     "github/copilot.vim",
     lazy = true,
     event = "InsertEnter",
-    config = function ()
+    config = function()
       vim.cmd [[ imap <silent><script><expr> <M-CR> copilot#Accept("\<CR>") ]]
       vim.g.copilot_no_tab_map = true
-    end
+    end,
   },
 
   {
@@ -35,11 +35,9 @@ return {
         { name = "path" },
       })
       opts.snippet = {
-        expand = function(args)
-          require("luasnip").lsp_expand(args.body)
-        end,
+        expand = function(args) require("luasnip").lsp_expand(args.body) end,
       }
-      opts.mapping = cmp.mapping.preset.insert({
+      opts.mapping = cmp.mapping.preset.insert {
         ["<C-d>"] = cmp.mapping.scroll_docs(-4),
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
@@ -65,7 +63,7 @@ return {
             fallback()
           end
         end, { "i", "s" }),
-      })
+      }
 
       return opts
     end,

@@ -53,7 +53,6 @@ function plugin_manager.setup()
   end
 end
 
-
 plugin_manager.setup()
 utils.try_to_enable_profiler()
 require("freeze").setup()

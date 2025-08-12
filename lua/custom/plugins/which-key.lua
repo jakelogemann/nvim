@@ -67,8 +67,8 @@ return {
         spacing = 3, -- spacing between columns
         align = "center", -- align columns left, center or right
       },
-  -- All keymaps are now defined in plugin/keymaps.lua; keep spec empty to avoid duplication.
-  spec = {},
+      -- All keymaps are now defined in plugin/keymaps.lua; keep spec empty to avoid duplication.
+      spec = {},
     },
   },
 }

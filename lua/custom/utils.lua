@@ -206,17 +206,17 @@ end
 -- @param opts table|nil { direction = 'float'|'horizontal'|'vertical', cwd = string }
 function utils.run_in_term(cmd, opts)
   opts = opts or {}
-  if not cmd or cmd == '' then return end
+  if not cmd or cmd == "" then return end
   -- Prefer toggleterm if installed
-  local ok_toggle, toggleterm = pcall(require, 'toggleterm.terminal')
+  local ok_toggle, toggleterm = pcall(require, "toggleterm.terminal")
   if ok_toggle then
-    local direction = opts.direction or 'float'
+    local direction = opts.direction or "float"
     -- Reuse a persistent terminal keyed by direction
     local key = 9876 -- arbitrary id unlikely to collide
     local Terminal = toggleterm.Terminal
     if not utils._terminals then utils._terminals = {} end
     if not utils._terminals[key] or utils._terminals[key].closed then
-      utils._terminals[key] = Terminal:new({
+      utils._terminals[key] = Terminal:new {
         id = key,
         direction = direction,
         hidden = true,
@@ -225,9 +225,9 @@ function utils.run_in_term(cmd, opts)
         close_on_exit = false,
         on_open = function(term)
           -- ensure insert mode for immediate output readability
-          vim.api.nvim_buf_set_option(term.bufnr, 'filetype', 'term')
+          vim.api.nvim_buf_set_option(term.bufnr, "filetype", "term")
         end,
-      })
+      }
     end
     local term = utils._terminals[key]
     term:open()
@@ -237,9 +237,9 @@ function utils.run_in_term(cmd, opts)
   end
   -- Fallback: native terminal split
   local prev_win = vim.api.nvim_get_current_win()
-  vim.cmd((opts.direction == 'vertical' and 'vsplit' or 'split'))
-  if opts.cwd then pcall(vim.cmd, 'lcd ' .. vim.fn.fnameescape(opts.cwd)) end
-  vim.cmd('terminal '..cmd)
+  vim.cmd((opts.direction == "vertical" and "vsplit" or "split"))
+  if opts.cwd then pcall(vim.cmd, "lcd " .. vim.fn.fnameescape(opts.cwd)) end
+  vim.cmd("terminal " .. cmd)
   -- leave in normal mode after spawning so user can choose
   vim.api.nvim_set_current_win(prev_win)
 end

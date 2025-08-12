@@ -3,7 +3,7 @@ return {
     "catppuccin/nvim",
     lazy = false,
     priority = 1000,
-    config = function() vim.cmd.colorscheme("catppuccin-macchiato") end,
+    config = function() vim.cmd.colorscheme "catppuccin-macchiato" end,
   },
   {
     "akinsho/toggleterm.nvim",
@@ -41,7 +41,7 @@ return {
     ft = { "go", "gomod", "gosum", "gowork", "godoc" },
     cmd = { "GoInstallBinaries" },
   },
-  {"j-hui/fidget.nvim"},
+  { "j-hui/fidget.nvim" },
   {
     "cshuaimin/ssr.nvim",
     opts = {
@@ -153,7 +153,7 @@ return {
   },
   {
     "folke/neoconf.nvim",
-    cmd = {"Neoconf"},
+    cmd = { "Neoconf" },
     lazy = true,
   },
   {
@@ -176,7 +176,7 @@ return {
   },
   {
     "nvzone/typr",
-    cmd = {"Typr", "TyprStats" },
+    cmd = { "Typr", "TyprStats" },
     dependencies = { "nvzone/volt" },
     opts = {},
   },
@@ -268,7 +268,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     lazy = false,
-  -- per-server setup moved to dedicated lsp plugin file (see custom/plugins/lsp.lua)
+    -- per-server setup moved to dedicated lsp plugin file (see custom/plugins/lsp.lua)
   },
   {
     -- Useful status updates for LSP
@@ -322,9 +322,7 @@ return {
             return "*****"
           end
 
-          if #variable.value > 15 then
-            return " " .. string.sub(variable.value, 1, 15) .. "... "
-          end
+          if #variable.value > 15 then return " " .. string.sub(variable.value, 1, 15) .. "... " end
 
           return " " .. variable.value
         end,
@@ -344,9 +342,7 @@ return {
       vim.keymap.set("n", "<space>gb", dap.run_to_cursor)
 
       -- Eval var under cursor
-      vim.keymap.set("n", "<space>?", function()
-        require("dapui").eval(nil, { enter = true })
-      end)
+      vim.keymap.set("n", "<space>?", function() require("dapui").eval(nil, { enter = true }) end)
 
       vim.keymap.set("n", "<F1>", dap.continue)
       vim.keymap.set("n", "<F2>", dap.step_into)
@@ -355,18 +351,10 @@ return {
       vim.keymap.set("n", "<F5>", dap.step_back)
       vim.keymap.set("n", "<F13>", dap.restart)
 
-      dap.listeners.before.attach.dapui_config = function()
-        ui.open()
-      end
-      dap.listeners.before.launch.dapui_config = function()
-        ui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        ui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        ui.close()
-      end
+      dap.listeners.before.attach.dapui_config = function() ui.open() end
+      dap.listeners.before.launch.dapui_config = function() ui.open() end
+      dap.listeners.before.event_terminated.dapui_config = function() ui.close() end
+      dap.listeners.before.event_exited.dapui_config = function() ui.close() end
     end,
   },
 }

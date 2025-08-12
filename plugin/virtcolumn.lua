@@ -5,7 +5,7 @@ vim.opt.colorcolumn = { 100 }
 
 local api, fn = vim.api, vim.fn
 
-local NS = api.nvim_create_namespace('virtcolumn')
+local NS = api.nvim_create_namespace "virtcolumn"
 
 ---@class WinContext
 ---@field textoff integer
@@ -22,7 +22,7 @@ local NS = api.nvim_create_namespace('virtcolumn')
 local function get_win_context()
   local info = fn.getwininfo(api.nvim_get_current_win())[1]
   local view = fn.winsaveview()
-  return vim.tbl_extend('force', info, view)
+  return vim.tbl_extend("force", info, view)
 end
 
 ---@param cc string
@@ -35,12 +35,12 @@ local function parse_items(cc)
   local textwidth = vim.bo.textwidth
   ---@type number[]
   local items = {}
-  for _, c in ipairs(vim.split(cc, ',')) do
+  for _, c in ipairs(vim.split(cc, ",")) do
     local item
-    if c and c ~= '' then
-      if vim.startswith(c, '+') then
+    if c and c ~= "" then
+      if vim.startswith(c, "+") then
         if textwidth ~= 0 then item = textwidth + tonumber(c:sub(2)) end
-      elseif vim.startswith(cc, '-') then
+      elseif vim.startswith(cc, "-") then
         if textwidth ~= 0 then item = textwidth - tonumber(c:sub(2)) end
       else
         item = tonumber(c)
@@ -48,9 +48,7 @@ local function parse_items(cc)
     end
     if item and item > 0 then table.insert(items, item) end
   end
-  table.sort(items, function(a, b)
-    return a > b
-  end)
+  table.sort(items, function(a, b) return a > b end)
   return items
 end
 
@@ -63,7 +61,7 @@ end
 -- @return boolean
 local function is_empty_at_col(line, col)
   local ok, char = pcall(fn.strpart, line, col, 1)
-  return ok and char == ' '
+  return ok and char == " "
 end
 
 --- Fetch buffer lines expanding tabs and inlining inline virtual text extmarks.
@@ -72,15 +70,13 @@ end
 -- @param end_ integer end row (0-indexed, exclusive)
 -- @return string[] processed lines
 local function get_buf_lines(buf, start, end_)
-  local rep = string.rep(' ', vim.opt.tabstop:get())
+  local rep = string.rep(" ", vim.opt.tabstop:get())
   local lines = api.nvim_buf_get_lines(buf, start, end_, false)
   local marks = vim.tbl_filter(
-    function(v)
-      return v[4].virt_text_pos == 'inline'
-    end,
+    function(v) return v[4].virt_text_pos == "inline" end,
     api.nvim_buf_get_extmarks(buf, -1, { start, 0 }, { end_, 0 }, {
       details = true,
-      type = 'virt_text',
+      type = "virt_text",
     })
   )
 
@@ -91,15 +87,10 @@ local function get_buf_lines(buf, start, end_)
     line_idx = row - start + 1
     line = lines[line_idx]
     if line then
-      line = line:gsub('\t', rep)
+      line = line:gsub("\t", rep)
       offset = lines_offset[row] or 0
       col = mark[3] + offset
-      text = table.concat(
-        vim.tbl_map(function(v)
-          return v[1]
-        end, mark[4].virt_text),
-        ''
-      )
+      text = table.concat(vim.tbl_map(function(v) return v[1] end, mark[4].virt_text), "")
       line = line:sub(1, col) .. text .. line:sub(col + 1)
       lines[line_idx] = line
       lines_offset[row] = offset + #text
@@ -115,12 +106,12 @@ local function _refresh()
   if not api.nvim_buf_is_loaded(curbuf) then return end
 
   local items = vim.b.virtcolumn_items or vim.w.virtcolumn_items
-  local local_cc = api.nvim_get_option_value('cc', { scope = 'local' })
-  if not items or local_cc ~= '' then
+  local local_cc = api.nvim_get_option_value("cc", { scope = "local" })
+  if not items or local_cc ~= "" then
     items = parse_items(local_cc)
     vim.b.virtcolumn_last_cc = local_cc
     vim.w.virtcolumn_last_cc = local_cc
-    api.nvim_set_option_value('cc', '', { scope = 'local' })
+    api.nvim_set_option_value("cc", "", { scope = "local" })
   end
   vim.b.virtcolumn_items = items
   vim.w.virtcolumn_items = items
@@ -143,7 +134,7 @@ local function _refresh()
   local offset = math.max(0, ctx.topline - extend)
   local lines = get_buf_lines(curbuf, offset, ctx.botline + extend)
 
-  local virt_char = vim.g.virtcolumn_char or '▕'
+  local virt_char = vim.g.virtcolumn_char or "▕"
   local virt_priority = vim.g.virtcolumn_priority or 10
 
   local leftcol = ctx.leftcol
@@ -155,8 +146,8 @@ local function _refresh()
     for _, item in ipairs(items) do
       if #line < item or is_empty_at_col(line, item - 1) then
         api.nvim_buf_set_extmark(curbuf, NS, lnum, 0, {
-          virt_text = { { virt_char, 'VirtColumn' } },
-          hl_mode = 'combine',
+          virt_text = { { virt_char, "VirtColumn" } },
+          hl_mode = "combine",
           virt_text_win_col = item - 1 - leftcol,
           priority = virt_priority,
         })
@@ -173,14 +164,14 @@ local textchanged_timer
 -- @param args table autocmd callback args (must contain event)
 local function refresh(args)
   ---@type string
-  local event = args.event or ''
-  if event == 'WinScrolled' then
+  local event = args.event or ""
+  if event == "WinScrolled" then
     if winscrolled_timer and winscrolled_timer:is_active() then
       winscrolled_timer:stop()
       winscrolled_timer:close()
     end
     winscrolled_timer = vim.defer_fn(_refresh, 20)
-  elseif event:match('TextChanged') then
+  elseif event:match "TextChanged" then
     if textchanged_timer and textchanged_timer:is_active() then
       textchanged_timer:stop()
       textchanged_timer:close()
@@ -202,45 +193,45 @@ end
 --- Ensure VirtColumn highlight group exists (linked to NonText/ColorColumn bg).
 local function set_hl()
   ---@diagnostic disable-next-line: deprecated
-  local cc_bg = api.nvim_get_hl_by_name('ColorColumn', true).background
+  local cc_bg = api.nvim_get_hl_by_name("ColorColumn", true).background
   if cc_bg then
-    api.nvim_set_hl(0, 'VirtColumn', { fg = cc_bg, default = true })
+    api.nvim_set_hl(0, "VirtColumn", { fg = cc_bg, default = true })
   else
-    vim.cmd([[hi default link VirtColumn NonText]])
+    vim.cmd [[hi default link VirtColumn NonText]]
   end
 end
 
-local group = api.nvim_create_augroup('virtcolumn', {})
+local group = api.nvim_create_augroup("virtcolumn", {})
 api.nvim_create_autocmd({
-  'CursorHold',
-  'FileType',
-  'WinScrolled',
-  'WinResized',
-  'TextChanged',
-  'TextChangedI',
-  'WinEnter',
-  'BufWinEnter',
-  'BufRead',
-  'InsertLeave',
-  'InsertEnter',
-  'FileChangedShellPost',
+  "CursorHold",
+  "FileType",
+  "WinScrolled",
+  "WinResized",
+  "TextChanged",
+  "TextChangedI",
+  "WinEnter",
+  "BufWinEnter",
+  "BufRead",
+  "InsertLeave",
+  "InsertEnter",
+  "FileChangedShellPost",
 }, { group = group, callback = refresh })
-api.nvim_create_autocmd('OptionSet', {
+api.nvim_create_autocmd("OptionSet", {
   group = group,
   callback = function(ev)
-    if ev.match == 'textwidth' then
-      local curr_cc = api.nvim_get_option_value('cc', { scope = 'local' })
+    if ev.match == "textwidth" then
+      local curr_cc = api.nvim_get_option_value("cc", { scope = "local" })
       local last_cc = vim.b.virtcolumn_last_cc or vim.w.virtcolumn_last_cc
-      local cc = curr_cc ~= '' and curr_cc or last_cc
-      if cc then api.nvim_set_option_value('cc', cc, { scope = 'local' }) end
+      local cc = curr_cc ~= "" and curr_cc or last_cc
+      if cc then api.nvim_set_option_value("cc", cc, { scope = "local" }) end
     end
     vim.b.virtcolumn_items = nil
     vim.w.virtcolumn_items = nil
     _refresh()
   end,
-  pattern = 'colorcolumn,textwidth',
+  pattern = "colorcolumn,textwidth",
 })
-api.nvim_create_autocmd('ColorScheme', { group = group, callback = set_hl })
+api.nvim_create_autocmd("ColorScheme", { group = group, callback = set_hl })
 
 pcall(set_hl)
 pcall(_refresh)

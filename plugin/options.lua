@@ -9,7 +9,7 @@ vim.opt.autoread = true
 vim.opt.inccommand = "split"
 vim.opt.shada = { "'10", "<0", "s10", "h" }
 vim.opt.backspace = vim.opt.backspace + { "nostop" } -- Don't stop backspace at insert
-vim.opt.backupdir:remove('.') -- keep backups out of the current directory
+vim.opt.backupdir:remove "." -- keep backups out of the current directory
 vim.opt.clipboard = "unnamedplus" -- Connection to the system clipboard
 vim.opt.cmdheight = 0 -- hide command line unless needed
 vim.opt.completeopt = { "menuone", "noselect" } -- Options for insert mode completion
@@ -26,7 +26,7 @@ vim.opt.foldenable = false
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- set Treesitter based folding
 vim.opt.foldlevel = 0
 vim.opt.foldmethod = "expr"
-vim.opt.formatoptions:remove {"o"}
+vim.opt.formatoptions:remove { "o" }
 vim.opt.history = 100 -- Number of commands to remember in a history table
 vim.opt.ignorecase = true -- Case insensitive searching
 vim.opt.laststatus = 3 -- globalstatus
@@ -67,7 +67,7 @@ vim.opt.thesaurus = vim.fn.stdpath "config" .. "/spell/thesaurus.txt"
 vim.opt.timeout = true
 vim.opt.timeoutlen = 300 -- Length of time to wait for a mapped sequence
 vim.opt.title = true
-vim.opt.titlestring = '%f // nvim'
+vim.opt.titlestring = "%f // nvim"
 vim.opt.undofile = true -- Enable persistent undo
 vim.opt.updatetime = 300 -- Length of time to wait before triggering the plugin
 vim.opt.wildmenu = true
@@ -90,7 +90,7 @@ if vim.g.neovide then
   vim.g.neovide_scroll_animation_length = 0.0
   vim.g.neovide_position_animation_length = 0.0
   vim.g.neovide_hide_mouse_when_typing = true
-  vim.g.neovide_refresh_rate = 60 
+  vim.g.neovide_refresh_rate = 60
   vim.g.neovide_refresh_rate_idle = 5
   vim.g.neovide_padding_bottom = 0
   vim.g.neovide_padding_left = 1
