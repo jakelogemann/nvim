@@ -11,6 +11,11 @@ local function n(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { silent = true, 
 -- @param rhs string|function
 -- @param desc string
 local function v(lhs, rhs, desc) vim.keymap.set("v", lhs, rhs, { silent = true, desc = desc }) end
+--- Define a terminal-mode keymap with silent + description.
+-- @param lhs string
+-- @param rhs string|function
+-- @param desc string
+local function t(lhs, rhs, desc) vim.keymap.set("t", lhs, rhs, { silent = true, desc = desc }) end
 
 -- General
 n("<C-s>", "<cmd>write<cr>", "write buffer")
@@ -238,6 +243,14 @@ n("<leader>tp", "<cmd>tabprev<cr>", "prev tab")
 
 -- Terminal
 n("<leader>Tt", "<cmd>ToggleTerm direction=float<cr>", "float term")
+
+-- Terminal mode navigation / escape
+t("<esc><esc>", [[<C-\><C-n>]], "term: normal mode")
+t("jk", [[<C-\><C-n>]], "term: normal mode")
+t("<C-h>", [[<Cmd>wincmd h<CR>]], "term: left")
+t("<C-j>", [[<Cmd>wincmd j<CR>]], "term: down")
+t("<C-k>", [[<Cmd>wincmd k<CR>]], "term: up")
+t("<C-l>", [[<Cmd>wincmd l<CR>]], "term: right")
 
 -- Groups for which-key (register all at end if available)
 pcall(function()

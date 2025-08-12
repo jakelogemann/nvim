@@ -46,3 +46,27 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 --  pattern = { "*.lua", "*.json", "*.go", "*.ts", "*.js" },
 --  callback = function() vim.cmd "Format" end,
 -- })
+
+-- Terminal buffer local options
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+  desc = "Terminal local opts",
+  group = my_autocmds,
+  pattern = "term://*",
+  callback = function()
+    local o = vim.opt_local
+    o.number = false
+    o.relativenumber = false
+    o.spell = false
+  end,
+})
+
+vim.api.nvim_create_autocmd({ "TermEnter" }, {
+  desc = "Reapply terminal opts",
+  group = my_autocmds,
+  pattern = "term://*",
+  callback = function()
+    local o = vim.opt_local
+    o.number = false
+    o.relativenumber = false
+  end,
+})
