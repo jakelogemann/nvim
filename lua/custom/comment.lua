@@ -1,12 +1,7 @@
--- plugin/comment.lua
--- Minimal native commenting utility replacing Comment.nvim.
--- Features:
---  - <leader>c toggles current line (normal) or selection (visual)
---  - gc{motion} operator like original plugin
---  - Respects 'commentstring'
---  - Simple prepend/strip logic; no nested block awareness
---
--- You can extend with block comment logic if needed.
+-- lua/custom/comment.lua
+-- Lightweight commenting utility module
+-- Provides functions: setup(), toggle_line(), toggle_selection(), operator()
+-- Designed to be required by plugin/comment.lua and keymaps.
 local M = {}
 
 local function get_comment_parts()
@@ -82,21 +77,17 @@ function M.operator()
   comment_lines(start_l, end_l)
 end
 
-local function map(mode, lhs, rhs, opts)
-  opts = opts or {}
-  opts.desc = opts.desc or 'comment'
-  vim.keymap.set(mode, lhs, rhs, opts)
+local function map(mode, lhs, rhs, desc)
+  vim.keymap.set(mode, lhs, rhs, { desc = desc or 'comment', silent = true })
 end
 
 function M.setup()
-  map('n', '<leader>c', M.toggle_line, { desc = 'Toggle comment (line)' })
-  map('v', '<leader>c', M.toggle_selection, { desc = 'Toggle comment (visual)' })
+  map('n', '<leader>c', M.toggle_line, 'Toggle comment (line)')
+  map('v', '<leader>c', M.toggle_selection, 'Toggle comment (visual)')
   map('n', 'gc', function()
-    vim.o.operatorfunc = 'v:lua.require"plugin.comment".operator'
+    vim.o.operatorfunc = 'v:lua.require"custom.comment".operator'
     return 'g@'
-  end, { expr = true, desc = 'Comment operator' })
+  end, 'Comment operator')
 end
-
-M.setup()
 
 return M
