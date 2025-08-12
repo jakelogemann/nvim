@@ -112,6 +112,7 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "lua local opts",
   callback = function()
     local o = vim.opt_local
-    o.listchars = vim.tbl_extend("force", o.listchars:get(), { tab = "" })
+  -- listchars 'tab' field must be at least two chars; use blanks to visually hide
+  o.listchars = vim.tbl_extend("force", o.listchars:get(), { tab = "  " })
   end,
 })
