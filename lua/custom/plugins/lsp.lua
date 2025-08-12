@@ -51,9 +51,8 @@ return {
             ["ui.diagnostic.diagnosticsDelay"] = "500ms",
             ["build.env"] = (function()
               local list = {
-                "github.internal.digitalocean.com",
-                "github.com/polis-dev/sol",
-                "github.com/digitalocean",
+                "github.com/polis-dev/polis.dev",
+                "polis.dev",
               }
               local joined = table.concat(list, ",")
               return { GONOPROXY = joined, GONOSUMDB = joined, GOPRIVATE = joined }
