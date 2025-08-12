@@ -55,9 +55,7 @@ return {
       "MasonUpdate",
     },
   },
-  { -- Detect tabstop and shiftwidth automatically
-    "tpope/vim-sleuth",
-  },
+  -- Removed vim-sleuth; native heuristic implementation in plugin/indent_detect.lua
   {
     "cshuaimin/ssr.nvim",
     opts = {
