@@ -1,4 +1,7 @@
 -- NeoVim Application Options
+-- Prevent double application (lazy may re-source this when new plugins load)
+if vim.g._core_options_applied then return end
+vim.g._core_options_applied = true
 --vim.opt.wildchar = "<Tab>"
 vim.opt.autoread = true
 vim.opt.inccommand = "split"
@@ -14,7 +17,8 @@ vim.opt.copyindent = true -- Copy the previous indentation on autoindenting
 vim.opt.cursorline = true -- Highlight the text line of the cursor
 vim.opt.expandtab = true -- Enable the use of space in tab
 vim.opt.exrc = true
-vim.opt.fileencoding = "utf-8" -- File content encoding for the buffer
+-- Use global variant to avoid errors when current buffer is unmodifiable (welcome screen / special bufs)
+vim.o.fileencoding = "utf-8" -- Default file content encoding
 vim.opt.fillchars = { eob = " " } -- Disable `~` on nonexistent lines
 vim.opt.foldenable = false
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()" -- set Treesitter based folding

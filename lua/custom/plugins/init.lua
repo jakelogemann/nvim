@@ -268,19 +268,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     lazy = false,
-    init = function()
-      local lspconfig = require "lspconfig"
-      lspconfig.lua_ls.setup {
-        settings = {
-          Lua = {
-            diagnostics = {
-              -- Get the language server to recognize the `vim` global
-              globals = { "vim" },
-            },
-          },
-        },
-      }
-    end,
+  -- per-server setup moved to dedicated lsp plugin file (see custom/plugins/lsp.lua)
   },
   {
     -- Useful status updates for LSP
