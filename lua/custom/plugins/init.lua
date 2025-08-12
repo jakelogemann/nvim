@@ -1,21 +1,5 @@
 return {
-  {
-    "tpope/vim-eunuch",
-    lazy = true,
-    cmd = {
-      "Cfind", -- Run find and load the results into the quickfix list.
-      "Chmod", -- Change the permissions of the current file.
-      "Clocate", -- Run locate and load the results into the quickfix list.
-      "Delete", -- Delete a file on disk and the buffer too.
-      "Lfind",
-      "Llocate", -- Like above, but use the location list.
-      "Mkdir", -- Create a directory, defaulting to the parent of the current file.
-      "Move", -- Rename a buffer and the file on disk simultaneously. See also :Rename, :Copy, and :Duplicate.
-      "Remove", -- Delete a file on disk without E211: File no longer available.
-      "SudoEdit", -- Edit a privileged file with sudo.
-      "SudoWrite", -- Write a privileged file with sudo.
-      "Wall", -- Write every open window. Handy for kicking off tools like guard.
-    },
+  { -- Replaced vim-eunuch with native implementations in plugin/eunuch.lua
   },
   {
     "catppuccin/nvim",
@@ -77,11 +61,7 @@ return {
     "lukas-reineke/indent-blankline.nvim",
   },
   { -- "gc" to comment visual regions/lines
-    "numToStr/Comment.nvim",
-    opts = {
-      ignore = "^$",
-      mappings = false,
-    },
+  -- Removed external dependency (numToStr/Comment.nvim); native implementation lives in plugin/comment.lua
   },
   { -- Detect tabstop and shiftwidth automatically
     "tpope/vim-sleuth",
@@ -201,10 +181,6 @@ return {
     lazy = true,
   },
   {
-    "lewis6991/impatient.nvim",
-    lazy = true,
-  },
-  {
     "b0o/SchemaStore.nvim",
     event = "VeryLazy",
     module = "schemastore",
@@ -221,10 +197,6 @@ return {
   {
     "stevearc/dressing.nvim",
     event = "VeryLazy",
-  },
-  {
-    "dstein64/vim-startuptime",
-    cmd = "StartupTime",
   },
   {
     "nvzone/typr",
