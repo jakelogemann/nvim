@@ -42,20 +42,6 @@ return {
     cmd = { "GoInstallBinaries" },
   },
   {"j-hui/fidget.nvim"},
-  { -- Automatically installs LSPs to stdpath for neovim
-    "williamboman/mason.nvim",
-    lazy = true,
-    enabled = false,
-    cmd = {
-      "Mason",
-      "MasonInstall",
-      "MasonLog",
-      "MasonUninstall",
-      "MasonUninstallAll",
-      "MasonUpdate",
-    },
-  },
-  -- Removed vim-sleuth; native heuristic implementation in plugin/indent_detect.lua
   {
     "cshuaimin/ssr.nvim",
     opts = {
@@ -331,7 +317,6 @@ return {
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",
       "nvim-neotest/nvim-nio",
-      -- "williamboman/mason.nvim",
     },
     config = function()
       local dap = require "dap"
