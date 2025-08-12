@@ -166,7 +166,6 @@ pcall(function()
   { '<leader>c', desc = 'comment toggle' },
     { '<leader>b', group = 'Buffer' },
     { '<leader>d', group = 'Debugger' },
-    { '<leader>e', desc = 'explore' },
     { '<leader>f', group = 'Find' },
     { '<leader>g', group = 'Git' },
     { '<leader>h', group = 'Help' },
