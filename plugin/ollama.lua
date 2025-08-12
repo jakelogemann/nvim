@@ -43,7 +43,7 @@ local function trim_table(tbl)
 end
 
 local default_options = {
-  model = "llama3.2:latest",
+  model = "default:latest",
   host = "localhost",
   port = "11434",
   file = false,
