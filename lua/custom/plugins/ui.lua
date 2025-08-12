@@ -206,17 +206,5 @@ return {
       },
     },
   },
-
-  {
-    "jeetsukumaran/telescope-rtp",
-    lazy = true,
-    enabled = true,
-    event = "UiEnter",
-    dependencies = {"nvim-telescope/telescope.nvim"},
-    init = function()
-      require('telescope').load_extension('vim_rtp')
-      require('telescope').load_extension('vim_docs')
-    end
-  },
 }
 -- vim: fdl=1 fen fdm=expr
