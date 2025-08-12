@@ -32,6 +32,7 @@ local max_lines_threshold = 100000
 
 -- Define sign types once
 local defined = false
+--- Define sign types once (idempotent).
 local function define_signs()
   if defined then return end
   fn.sign_define('MiniGitSignAdd',    { text = '+', texthl = 'DiffAdd',    numhl = '' })
@@ -40,6 +41,9 @@ local function define_signs()
   defined = true
 end
 
+--- Check whether buffer path is inside a git working tree.
+-- @param buf integer buffer handle
+-- @return boolean
 local function in_git_repo(buf)
   local dir = fn.fnamemodify(api.nvim_buf_get_name(buf), ':p:h')
   if dir == '' then return false end
@@ -48,20 +52,32 @@ local function in_git_repo(buf)
   return out[1] == 'true'
 end
 
+--- Determine if path is untracked (missing from index).
+-- @param path string relative path
+-- @return boolean
 local function is_untracked(path)
   local out = fn.systemlist({ 'git', 'ls-files', '--error-unmatch', path })
   return #out == 0 -- error-unmatch returns error; systemlist captures empty + sets v:shell_error
 end
 
+--- Clear all signs & extmarks for a buffer.
+-- @param buf integer
 local function clear(buf)
   fn.sign_unplace('MiniGitSigns', { buffer = buf })
   api.nvim_buf_clear_namespace(buf, ns, 0, -1)
 end
 
+--- Place a diff sign (protected call ignores duplicate issues).
+-- @param buf integer
+-- @param sign string defined sign name
+-- @param lnum integer line number (1-indexed)
 local function place(buf, sign, lnum)
   pcall(fn.sign_place, 0, 'MiniGitSigns', sign, buf, { lnum = lnum, priority = 6 })
 end
 
+--- Parse zero-context git diff output into simplified hunk meta.
+-- @param output string[] raw lines from `git diff -U0`
+-- @return table[] hunks with counts
 local function parse_diff(output)
   -- Returns list of hunks: { added_lines = {lnum,...}, deleted_spot = lnum_or_nil, changed = bool }
   local hunks = {}
@@ -93,6 +109,9 @@ local function parse_diff(output)
   return hunks
 end
 
+--- Convert parsed hunks to placed signs.
+-- @param buf integer
+-- @param hunks table[] from parse_diff
 local function apply_signs(buf, hunks)
   for _, h in ipairs(hunks) do
     local added_cnt = #h.added
@@ -118,6 +137,7 @@ local function apply_signs(buf, hunks)
   end
 end
 
+--- Recompute & re-render signs for current buffer (debounced externally).
 local function refresh()
   if not enabled then return end
   local buf = api.nvim_get_current_buf()
@@ -145,6 +165,7 @@ local function refresh()
   apply_signs(buf, hunks)
 end
 
+--- Debounce wrapper scheduling a refresh on a libuv timer.
 local function schedule_refresh()
   if timer then timer:stop(); timer:close() end
   timer = vim.loop.new_timer()
@@ -154,6 +175,7 @@ local function schedule_refresh()
 end
 
 -- Public toggle
+--- Toggle git sign rendering on/off for the current buffer.
 function M.toggle()
   enabled = not enabled
   if not enabled then clear(0) else schedule_refresh() end

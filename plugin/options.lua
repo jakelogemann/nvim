@@ -1,4 +1,6 @@
--- NeoVim Application Options
+--- Core Neovim option initialization.
+-- Guarded to run only once; sets UI, editing, performance, and provider flags.
+-- Adjust values here for global behavior tweaks.
 -- Prevent double application (lazy may re-source this when new plugins load)
 if vim.g._core_options_applied then return end
 vim.g._core_options_applied = true

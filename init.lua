@@ -1,4 +1,11 @@
 local utils = require "custom.utils"
+
+--- Lazy plugin manager bootstrap descriptor.
+-- Ensures lazy.nvim is cloned then initializes with provided performance options.
+-- @class PluginManager
+-- @field name string repository folder name
+-- @field dir string base install path (stdpath('data') .. '/lazy')
+-- @field options table passed to require('lazy').setup
 local plugin_manager = {
   name = "lazy.nvim",
   dir = vim.fn.stdpath "data" .. "/lazy",
@@ -20,7 +27,9 @@ local plugin_manager = {
   },
 }
 
-plugin_manager.setup = function()
+--- Bootstrap and configure lazy.nvim if not already initialized.
+-- Safe to call multiple times; subsequent calls are no-ops once `lazy_did_setup` is set.
+function plugin_manager.setup()
   local root = plugin_manager.dir .. "/" .. plugin_manager.name
   if not vim.loop.fs_stat(root) then
     vim.fn.system {

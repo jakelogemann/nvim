@@ -17,6 +17,8 @@ local NS = api.nvim_create_namespace('virtcolumn')
 ---@field winnr integer
 
 ---@return WinContext
+--- Collect relevant window metrics (top/bottom line, width, offsets).
+-- @return WinContext
 local function get_win_context()
   local info = fn.getwininfo(api.nvim_get_current_win())[1]
   local view = fn.winsaveview()
@@ -25,6 +27,10 @@ end
 
 ---@param cc string
 ---@return number[]
+--- Parse a colorcolumn string into numeric target columns.
+-- Supports +N / -N relative to 'textwidth'.
+-- @param cc string colorcolumn option
+-- @return number[] columns (descending order)
 local function parse_items(cc)
   local textwidth = vim.bo.textwidth
   ---@type number[]
@@ -51,11 +57,20 @@ end
 ---@param line string
 ---@param col integer byte 0-indexed
 ---@return boolean
+--- Check if a given 0-indexed byte column is a space or beyond EOL.
+-- @param line string
+-- @param col integer 0-based byte index
+-- @return boolean
 local function is_empty_at_col(line, col)
   local ok, char = pcall(fn.strpart, line, col, 1)
   return ok and char == ' '
 end
 
+--- Fetch buffer lines expanding tabs and inlining inline virtual text extmarks.
+-- @param buf integer
+-- @param start integer start row (0-indexed, inclusive)
+-- @param end_ integer end row (0-indexed, exclusive)
+-- @return string[] processed lines
 local function get_buf_lines(buf, start, end_)
   local rep = string.rep(' ', vim.opt.tabstop:get())
   local lines = api.nvim_buf_get_lines(buf, start, end_, false)
@@ -93,6 +108,7 @@ local function get_buf_lines(buf, start, end_)
   return lines
 end
 
+--- Core refresh routine (recomputes and places virtual column extmarks).
 local function _refresh()
   -- local start = vim.loop.hrtime()
   local curbuf = api.nvim_get_current_buf()
@@ -153,6 +169,8 @@ end
 -- Avoid unnecessary refreshing as much as possible lcoallfdafffadf
 local winscrolled_timer
 local textchanged_timer
+--- Debounced event entrypoint dispatching to _refresh.
+-- @param args table autocmd callback args (must contain event)
 local function refresh(args)
   ---@type string
   local event = args.event or ''
@@ -181,6 +199,7 @@ local function refresh(args)
   end
 end
 
+--- Ensure VirtColumn highlight group exists (linked to NonText/ColorColumn bg).
 local function set_hl()
   ---@diagnostic disable-next-line: deprecated
   local cc_bg = api.nvim_get_hl_by_name('ColorColumn', true).background

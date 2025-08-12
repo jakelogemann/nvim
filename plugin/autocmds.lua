@@ -1,5 +1,9 @@
 -- User-defined autocommands
 local my_autocmds = vim.api.nvim_create_augroup("my-autocmds", { clear = true })
+--- Buffer-local keymap helper (unused placeholder for future mappings).
+-- @param mode string|table
+-- @param lhs string
+-- @param rhs string|function
 local bufmap = function(mode, lhs, rhs) vim.keymap.set(mode, lhs, rhs, { buffer = 0 }) end
 
 vim.api.nvim_create_autocmd("TextYankPost", {

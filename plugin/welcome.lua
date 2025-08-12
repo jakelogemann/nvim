@@ -30,6 +30,10 @@ local plugin = {
 local LOGO_WIDTH = 37
 local welcome_buff = -1
 
+--- Center and render the ASCII logo inside the welcome buffer.
+-- @param buf integer buffer handle
+-- @param logo_width integer expected logo width
+-- @param logo_height integer number of lines in logo
 local function draw_welcome(buf, logo_width, logo_height)
 	local window = vim.fn.bufwinid(buf)
 	local start_col = math.floor((plugin.screen_width(window) - logo_width) / 2)
@@ -59,6 +63,9 @@ local function draw_welcome(buf, logo_width, logo_height)
 	})
 end
 
+--- Create scratch welcome buffer & make it current, deleting the default.
+-- @param default_buff integer previous buffer handle
+-- @return integer new buffer handle
 local function create_and_set_welcome_buf(default_buff)
 	local buf = vim.api.nvim_create_buf("nobuflisted", "unlisted")
 	vim.api.nvim_buf_set_name(buf, plugin.name)
@@ -73,6 +80,7 @@ local function create_and_set_welcome_buf(default_buff)
 	return buf
 end
 
+--- Apply window-local options suitable for a splash screen.
 local function set_options()
 	vim.opt_local.number = false         -- disable line numbers
 	vim.opt_local.relativenumber = false -- disable relative line numbers
@@ -81,6 +89,7 @@ local function set_options()
 	vim.opt_local.colorcolumn = "0"      -- disable colorcolumn
 end
 
+--- Redraw handler for resize events (clears and re-centers logo).
 local function redraw()
 	plugin.unlock_buf(welcome_buff)
 	vim.api.nvim_buf_set_lines(welcome_buff, 0, -1, true, {})
@@ -88,6 +97,9 @@ local function redraw()
 	draw_welcome(welcome_buff, LOGO_WIDTH, #plugin.logo)
 end
 
+--- Autocmd callback to display welcome buffer on startup when appropriate.
+-- Skips when opening a real file (non-directory) directly.
+-- @param payload table VimEnter event data
 local function display_welcome(payload)
 	local is_dir = vim.fn.isdirectory(payload.file) == 1
 
@@ -110,6 +122,8 @@ local function display_welcome(payload)
 	})
 end
 
+--- Initialize highlight + VimEnter autocommand.
+-- @param options table|nil { color = '#rrggbb' }
 local function setup(options)
 	options = options or {}
 	vim.api.nvim_set_hl(plugin.namespace, "Default", { fg = options.color or plugin.default_color })

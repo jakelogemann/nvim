@@ -1,4 +1,7 @@
+--- Terminal convenience keymaps & autocmds.
+-- Provides consistent navigation (<C-hjkl>) and quick escape sequences.
 local set = vim.keymap.set
+--- Autocommand group for terminal buffer events.
 local augroup = vim.api.nvim_create_augroup("my-terminal", { clear = true })
 local o = vim.opt_local
 

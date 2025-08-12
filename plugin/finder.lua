@@ -1,4 +1,5 @@
--- start with all builtin telescope finders.
+--- Lightweight umbrella :Find {subcommand} dispatcher over telescope builtins.
+-- Extend the `subcommands` table to add new aliases. Provides custom completion.
 local subcommands = {}
 local builtins = require "telescope.builtin"
 

@@ -1,6 +1,8 @@
 local M = {}
 local globals = {}
 
+--- Reset transient state (buffers, windows, job, context).
+-- @param keep_selection boolean when true preserves selection marks for retry
 local function reset(keep_selection)
   if not keep_selection then
     globals.curr_buffer = nil
@@ -23,6 +25,9 @@ local function reset(keep_selection)
 end
 reset()
 
+--- Trim leading/trailing blank or whitespace-only strings from an array.
+-- @param tbl string[]
+-- @return string[] same table (mutated)
 local function trim_table(tbl)
   local function is_whitespace(str) return str:match "^%s*$" ~= nil end
 
@@ -75,12 +80,16 @@ for k, v in pairs(default_options) do
   M[k] = v
 end
 
+--- Setup global defaults (shallow merge) for the Ollama integration.
+-- @param opts table user overrides
 M.setup = function(opts)
   for k, v in pairs(opts) do
     M[k] = v
   end
 end
 
+--- Finalize generation: optionally extract substring & replace selection.
+-- @param opts table execution options (extract, no_auto_close, replace)
 local function close_window(opts)
   local lines = {}
   if opts.extract then
@@ -116,6 +125,9 @@ local function close_window(opts)
   end
 end
 
+--- Derive floating window configuration anchored near cursor position.
+-- @param opts table module options
+-- @return table winopts
 local function get_window_options(opts)
   local cursor = vim.api.nvim_win_get_cursor(0)
   local new_win_width = vim.api.nvim_win_get_width(0)
@@ -147,6 +159,8 @@ local function get_window_options(opts)
   return result
 end
 
+--- Append streamed lines to the result buffer (maintains cursor near end).
+-- @param lines string[]
 local function write_to_buffer(lines)
   if not globals.result_buffer or not vim.api.nvim_buf_is_valid(globals.result_buffer) then return end
 
@@ -181,6 +195,10 @@ local function write_to_buffer(lines)
   vim.api.nvim_set_option_value("modifiable", false, { buf = globals.result_buffer })
 end
 
+--- Create / reuse display buffer based on display_mode (float / split / vsplit).
+-- Sets keymaps for quit/accept/retry.
+-- @param cmd string shell command to execute
+-- @param opts table execution options
 local function create_window(cmd, opts)
   local function setup_split()
     globals.result_buffer = vim.fn.bufnr "%"
@@ -226,6 +244,8 @@ local function create_window(cmd, opts)
   end, { buffer = globals.result_buffer })
 end
 
+--- High-level entry: gather (visual) content, build prompt, and start job.
+-- @param options table prompt/model overrides
 M.exec = function(options)
   local opts = vim.tbl_deep_extend("force", M, options)
   if opts.hidden then
@@ -366,6 +386,10 @@ M.exec = function(options)
   M.run_command(cmd, opts)
 end
 
+--- Launch external curl job and stream JSON chat/completion responses.
+-- Handles window setup, streaming dispatch, and lifecycle autocmds.
+-- @param cmd string shell command (curl)
+-- @param opts table execution options
 M.run_command = function(cmd, opts)
   -- vim.print('run_command', cmd, opts)
   if globals.result_buffer == nil or globals.float_win == nil or not vim.api.nvim_win_is_valid(globals.float_win) then
@@ -555,6 +579,10 @@ end, {
   end,
 })
 
+--- Process a single line/chunk of streaming response JSON or plain text.
+-- Updates global context and writes incremental output.
+-- @param str string raw line
+-- @param json_response boolean whether to JSON decode
 function Process_response(str, json_response)
   if string.len(str) == 0 then return end
   local text
@@ -624,6 +652,7 @@ function Process_response(str, json_response)
   write_to_buffer(lines)
 end
 
+--- Interactive model selector (updates M.model) using ui.select.
 M.select_model = function()
   local models = M.list_models(M)
   vim.ui.select(models, { prompt = "Model:" }, function(item)

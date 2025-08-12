@@ -1,3 +1,5 @@
+--- Health check configuration listing external tool & LSP server executables.
+-- Extend the `tools` and `lsp_servers` arrays to include additional checks.
 local config = {
   -- Define the list of tools to check for on the system.
   tools = {
@@ -26,6 +28,8 @@ local config = {
   },
 }
 
+--- Report presence/absence of a generic CLI tool.
+-- @param tool string executable name
 local function check_tool(tool)
   if vim.fn.executable(tool) == 1 then
     vim.health.ok(tool .. " is installed")
@@ -34,6 +38,8 @@ local function check_tool(tool)
   end
 end
 
+--- Report presence/absence of a language server binary.
+-- @param lsp string executable name
 local function check_lsp(lsp)
   if vim.fn.executable(lsp) == 1 then
     vim.health.ok(lsp .. " is installed")
@@ -42,7 +48,11 @@ local function check_lsp(lsp)
   end
 end
 
+--- Run all configured health checks (invoked by :checkhealth).
+-- Uses vim.health API (Neovim >=0.10 style). Intended to be required from a
+-- health.lua provider: `:checkhealth custom` etc.
 return {
+  --- Execute aggregated health checks, emitting categorized sections.
   check = function()
 
     if vim.g.neovide then

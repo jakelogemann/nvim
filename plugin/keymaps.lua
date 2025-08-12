@@ -1,9 +1,17 @@
 -- Centralized keymaps (moved from which-key spec)
 local config_root = vim.fn.stdpath('config')
 
+--- Define a normal-mode keymap with silent + description.
+-- @param lhs string
+-- @param rhs string|function
+-- @param desc string
 local function n(lhs, rhs, desc)
   vim.keymap.set('n', lhs, rhs, { silent = true, desc = desc })
 end
+--- Define a visual-mode keymap with silent + description.
+-- @param lhs string
+-- @param rhs string|function
+-- @param desc string
 local function v(lhs, rhs, desc)
   vim.keymap.set('v', lhs, rhs, { silent = true, desc = desc })
 end

@@ -58,6 +58,8 @@ return {
             color = { fg = "ff9e64" },
           },
           {
+            --- Show an Ollama status glyph (idle/working) if plugin loaded.
+            -- @return string|nil icon text
             function()
               local status = require("ollama").status()
               if status == "IDLE" then

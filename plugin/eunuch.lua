@@ -8,15 +8,23 @@ local api = vim.api
 local fn = vim.fn
 local M = {}
 
+--- Show a namespaced notification for eunuch-lite commands.
+-- @param msg string
+-- @param level integer|nil vim.log.levels.*
 local function notify(msg, level)
   vim.notify(msg, level or vim.log.levels.INFO, { title = 'eunuch-lite' })
 end
 
+--- Prompt user to confirm a destructive action.
+-- @param prompt string message
+-- @return boolean confirmed
 local function confirm(prompt)
   return 1 == fn.confirm(prompt .. ' (y to confirm)', '&y\n&n', 2)
 end
 
 -- Helper to resolve current file path (absolute)
+--- Resolve absolute path of current buffer (nil if unnamed).
+-- @return string|nil path
 local function current_path()
   local name = api.nvim_buf_get_name(0)
   if name == '' then return nil end

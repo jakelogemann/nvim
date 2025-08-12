@@ -77,7 +77,10 @@ return {
         },
       }
 
-      local function on_attach(_, bufnr)
+  --- LSP client attach callback to set buffer-local keymaps & inlay hints.
+  -- @param _ table unused client
+  -- @param bufnr integer buffer number
+  local function on_attach(_, bufnr)
         local nmap = function(keys, func, desc)
           if desc then desc = "LSP: " .. desc end
           vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })

@@ -1,7 +1,12 @@
+--- Minimal wrapper around the external `freeze` CLI to capture code snippets as images.
+-- Provides :Freeze and :FreezeLine commands and an `open` helper for macOS.
+-- @module freeze
 local stdio = { stdout = "", stderr = "" }
 local default_output = "freeze.png"
 
 -- Determine the user's download folder in a cross-platform way
+--- Determine a downloads directory path (cross-platform best effort).
+-- @return string|nil absolute path or nil when not resolvable
 local function get_download_folder()
     -- Unix-like systems (Linux/Mac)
     local xdg_dir = os.getenv("XDG_DOWNLOAD_DIR")
@@ -26,11 +31,19 @@ local function get_download_folder()
 end
 
 
+--- Module table.
+-- @class FreezeModule
+-- @field opts table runtime options (dir, output template, config, open)
+-- @field output string|nil last generated image path
 local freeze = {
   opts = {
+    ---@type string|nil output directory (default: detected downloads folder)
     dir = get_download_folder(),
+    ---@type string output filename or template (supports placeholders: {timestamp},{filename},{start_line},{end_line})
     output = default_output,
+    ---@type string name of freeze config profile to pass as --config
     config = "base",
+    ---@type boolean open resulting image automatically (macOS only via `open`)
     open = false,
   },
   output = nil,
@@ -39,6 +52,9 @@ local freeze = {
 ---The callback for reading stdout.
 ---@param err any the possible err we received
 ---@param data any the possible data we received in stdout
+--- Collect stdout chunks and optionally auto-open on completion.
+-- @param err any error object (if any)
+-- @param data string|nil partial data
 local function onReadStdOut(err, data)
   if err then vim.notify(err, vim.log.levels.ERROR, { title = "Freeze" }) end
   if data then stdio.stdout = stdio.stdout .. data end
@@ -51,6 +67,9 @@ end
 ---The callback for reading stderr.
 ---@param err any the possible err we received
 ---@param data any the possible data we received in stderr
+--- Collect stderr chunks.
+-- @param err any error object
+-- @param data string|nil partial data
 local function onReadStdErr(err, data)
   if err then vim.notify(err, vim.log.levels.ERROR, { title = "Freeze" }) end
   if data then stdio.stderr = stdio.stderr .. data end
@@ -60,6 +79,10 @@ end
 ---@param stdout any the stdout pipe used by vim.loop
 ---@param stderr any the stderr pipe used by vim.loop
 ---@return function cb the wrapped schedule function callback
+--- Create an on-exit handler to finalize resources & notify user.
+-- @param stdout uv_pipe_t stdout pipe
+-- @param stderr uv_pipe_t stderr pipe
+-- @return function callback scheduled on exit
 local function onExit(stdout, stderr)
   return vim.schedule_wrap(function(code, _)
     if code == 0 then
@@ -80,6 +103,10 @@ end
 --- to `freeze --language <vim filetype> --lines <start_line>,<end_line> <file>`
 --- @param start_line number the starting line to pass to freeze
 --- @param end_line number the ending line to pass to freeze
+--- Generate an image for the current buffer between two (inclusive) line numbers.
+-- Resolves output filename template and spawns the `freeze` CLI.
+-- @param start_line integer starting line (1-indexed)
+-- @param end_line integer ending line (1-indexed)
 function freeze.freeze(start_line, end_line)
   if vim.fn.executable "freeze" ~= 1 then
     vim.notify("`freeze` not found!", vim.log.levels.WARN, { title = "Freeze" })
@@ -127,6 +154,9 @@ end
 
 --- Opens the last created image in macOS using `open`.
 --- @param filename string the filename to open
+--- Open an image file using the macOS `open` command.
+-- No-ops (warn) if `open` isn't available.
+-- @param filename string absolute path to image
 function freeze.open(filename)
   if vim.fn.executable "open" ~= 1 then
     vim.notify("`open` not found!", vim.log.levels.WARN, { title = "Freeze" })
@@ -149,6 +179,8 @@ end
 --- Setup function for enabling both user commands.
 --- Sets up :Freeze for freezing a selection and :FreezeLine
 --- to freeze a single line.
+--- Setup user commands (:Freeze, :FreezeLine) and merge custom options.
+-- @param plugin_opts table|nil overrides for opts
 function freeze.setup(plugin_opts)
   if plugin_opts then
     for k, v in pairs(plugin_opts) do

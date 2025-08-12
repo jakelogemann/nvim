@@ -14,6 +14,8 @@
 
 local api, fn = vim.api, vim.fn
 
+--- Unified indentation detection + virtual guides configuration.
+-- Adjust fields to tune heuristics and rendering behavior.
 local CONFIG = {
   detect = {
     max_lines = 400,      -- Maximum lines to scan per buffer
@@ -46,6 +48,9 @@ local function is_comment_line(line)
   return false
 end
 
+--- Heuristically detect indentation style for a buffer and apply options.
+-- Considers space vs tab usage and common deltas; aborts on insufficient samples.
+-- @param buf integer buffer handle
 local function detect_indent(buf)
   if vim.bo[buf].buftype ~= '' or vim.bo[buf].filetype == '' then return end
   local line_count = api.nvim_buf_line_count(buf)
@@ -105,6 +110,7 @@ local function detect_indent(buf)
   vim.b.indent_set = true
 end
 
+--- Run indent detection on the current buffer.
 function Det.run() detect_indent(0) end
 
 ------------------------------------------------------------------------
@@ -145,6 +151,8 @@ local function measure_indent(line)
   return col
 end
 
+--- Render indent guides for the visible window range.
+-- Skips special buffers; uses extmarks with virtual text.
 local function render()
   if not CONFIG.guides.enabled then return end
   local win = api.nvim_get_current_win()
@@ -183,7 +191,9 @@ local function schedule()
   end))
 end
 
+--- Request a (debounced) refresh of indent guides.
 function Guides.refresh() schedule() end
+--- Toggle guide visibility globally (affects subsequent renders).
 function Guides.toggle()
   CONFIG.guides.enabled = not CONFIG.guides.enabled
   if CONFIG.guides.enabled then schedule() else clear(0) end
