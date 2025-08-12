@@ -70,3 +70,48 @@ vim.api.nvim_create_autocmd({ "TermEnter" }, {
     o.relativenumber = false
   end,
 })
+
+-- Filetype specific (migrated from after/ftplugin/*)
+vim.api.nvim_create_autocmd("FileType", {
+  group = my_autocmds,
+  pattern = "c",
+  desc = "c local opts",
+  callback = function()
+    local o = vim.opt_local
+    o.shiftwidth = 2
+    o.formatoptions:remove "o"
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = my_autocmds,
+  pattern = "go",
+  desc = "go local opts",
+  callback = function()
+    local o = vim.opt_local
+    o.list = false
+    o.listchars = vim.tbl_extend("force", o.listchars:get(), { tab = "| " })
+    o.expandtab = false
+    o.foldmethod = "syntax"
+    o.foldenable = true
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = my_autocmds,
+  pattern = "help",
+  desc = "help local opts",
+  callback = function()
+    vim.opt_local.colorcolumn = { 80 }
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  group = my_autocmds,
+  pattern = "lua",
+  desc = "lua local opts",
+  callback = function()
+    local o = vim.opt_local
+    o.listchars = vim.tbl_extend("force", o.listchars:get(), { tab = "" })
+  end,
+})
