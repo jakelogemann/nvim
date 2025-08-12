@@ -1,6 +1,4 @@
 return {
-  { -- Replaced vim-eunuch with native implementations in plugin/eunuch.lua
-  },
   {
     "catppuccin/nvim",
     lazy = false,
@@ -56,12 +54,6 @@ return {
       "MasonUninstallAll",
       "MasonUpdate",
     },
-  },
-  { -- Add indentation guides even on blank lines
-    "lukas-reineke/indent-blankline.nvim",
-  },
-  { -- "gc" to comment visual regions/lines
-  -- Removed external dependency (numToStr/Comment.nvim); native implementation lives in plugin/comment.lua
   },
   { -- Detect tabstop and shiftwidth automatically
     "tpope/vim-sleuth",
