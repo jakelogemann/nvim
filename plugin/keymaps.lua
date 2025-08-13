@@ -42,42 +42,6 @@ n("<leader>bw", "<cmd>write<cr>", "write buffer")
 
 -- Files / project config
 n("<leader>pi", function() vim.cmd.edit(config_root .. "/init.lua") end, "Edit init.lua")
-n(
-  "<leader>pf",
-  function() require("telescope.builtin").find_files { cwd = config_root, prompt_title = "Config files" } end,
-  "Find config files"
-)
-n(
-  "<leader>pP",
-  function()
-    require("telescope.builtin").find_files { cwd = config_root .. "/lua/custom/plugins", prompt_title = "Plugin specs" }
-  end,
-  "Find plugin specs"
-)
-n(
-  "<leader>pR",
-  function()
-    require("telescope.builtin").find_files {
-      prompt_title = "Runtime files",
-      search_dirs = vim.api.nvim_list_runtime_paths(),
-    }
-  end,
-  "Find runtime files"
-)
-n("<leader>pL", function()
-  require("telescope.builtin").live_grep {
-    prompt_title = "Lua (config) grep",
-    search_dirs = { config_root .. "/lua" },
-    additional_args = function() return { "--glob", "*.lua" } end,
-  }
-end, "Grep Lua in config")
-n("<leader>pS", function()
-  require("telescope.builtin").live_grep {
-    prompt_title = "Lua (runtime) grep",
-    search_dirs = vim.tbl_map(function(p) return p .. "/lua" end, vim.api.nvim_list_runtime_paths()),
-    additional_args = function() return { "--glob", "*.lua" } end,
-  }
-end, "Grep Lua runtime")
 n("<leader>pM", function()
   local log = vim.fn.stdpath "cache" .. "/mason.log"
   if vim.loop.fs_stat(log) then
@@ -97,16 +61,8 @@ n("<leader>pS", function()
 end, "last session")
 n("<leader>p/", "<cmd>Telescope find_files<cr>", "find file")
 
--- Find (Telescope)
-n("<leader>ff", "<cmd>Telescope find_files<cr>", "find files")
-n("<leader>fg", "<cmd>Telescope live_grep<cr>", "live grep")
-n("<leader>fh", "<cmd>Telescope help_tags<cr>", "help tags")
-n("<leader>fo", "<cmd>Oil<cr>", "file explorer")
-n("<leader>sg", "<cmd>Telescope grep_string<cr>", "grep word")
-
 -- Git
 n("<leader>gg", "<cmd>Neogit kind=tab<cr>", "git gui")
-n("<leader>gs", "<cmd>Telescope git_status<cr>", "git status")
 n("<leader>gd", "<cmd>DiffviewOpen<cr>", "diff view")
 n("<leader>gq", "<cmd>DiffviewClose<cr>", "diff close")
 
