@@ -37,7 +37,7 @@ A lean, fast, and developer‑friendly Neovim setup built around **[lazy.nvim](h
 
 ## 📦 Core Plugin Snapshot
 
-Focuses on: UI (catppuccin, dressing), editing (mini.surround, ssr, spread, treesitter), navigation (oil, telescope, diffview, symbols‑outline), terminal (toggleterm), completion & AI (cmp + LuaSnip + copilot + lspkind), LSP/tooling (lspconfig, mason, neodev, schemastore, neoconf, persistence, trouble), debugging (dap + dap-ui + dap-go + virtual-text + nio), language extras (vim-go, typr), local AI (custom Ollama integration), and a bespoke minimal git signs module.
+Focuses on: UI (catppuccin, dressing), editing (mini.surround, ssr, spread, treesitter), navigation (oil, telescope, diffview, symbols‑outline), terminal (toggleterm), completion & AI (cmp + LuaSnip + copilot + lspkind), LSP/tooling (lspconfig, mason, neodev, schemastore, neoconf, persistence, trouble), debugging (dap + dap-ui + dap-go + virtual-text + nio), language extras (Go commands via native tools, typr), local AI (custom Ollama integration), and a bespoke minimal git signs module.
 
 ---
 

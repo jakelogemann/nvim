@@ -92,8 +92,10 @@ vim.api.nvim_create_autocmd("FileType", {
     o.list = false
     o.listchars = vim.tbl_extend("force", o.listchars:get(), { tab = "| " })
     o.expandtab = false
-    o.foldmethod = "syntax"
-    o.foldenable = true
+  -- Prefer Treesitter folding for Go
+  o.foldmethod = "expr"
+  o.foldexpr = "nvim_treesitter#foldexpr()"
+  o.foldenable = true
   end,
 })
 

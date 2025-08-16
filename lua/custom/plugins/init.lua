@@ -15,12 +15,6 @@ return {
     end,
   },
   {
-    "fatih/vim-go",
-    lazy = true,
-    ft = { "go", "gomod", "gosum", "gowork", "godoc" },
-    cmd = { "GoInstallBinaries" },
-  },
-  {
     "cshuaimin/ssr.nvim",
     opts = {
       min_width = 50,
