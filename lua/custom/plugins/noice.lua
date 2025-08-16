@@ -10,7 +10,7 @@ return {
     "hrsh7th/nvim-cmp",
   },
   opts = {
-    notify = {enabled = false},
+    notify = { enabled = false },
     lsp = {
       override = {
         -- override the default lsp markdown formatter with Noice

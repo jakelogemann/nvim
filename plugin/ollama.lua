@@ -64,8 +64,7 @@ local default_options = {
   no_auto_close = false,
   init = function() pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
   list_models = function(options)
-    local response =
-      vim.fn.systemlist("curl --silent --no-buffer http://" .. options.host .. ":" .. options.port .. "/api/tags")
+    local response = vim.fn.systemlist("curl --silent --no-buffer http://" .. options.host .. ":" .. options.port .. "/api/tags")
     local list = vim.fn.json_decode(response)
     local models = {}
     for key, _ in pairs(list.models) do
@@ -173,14 +172,7 @@ local function write_to_buffer(lines)
   local text = table.concat(lines or {}, "\n")
 
   vim.api.nvim_set_option_value("modifiable", true, { buf = globals.result_buffer })
-  vim.api.nvim_buf_set_text(
-    globals.result_buffer,
-    last_row - 1,
-    last_col,
-    last_row - 1,
-    last_col,
-    vim.split(text, "\n")
-  )
+  vim.api.nvim_buf_set_text(globals.result_buffer, last_row - 1, last_col, last_row - 1, last_col, vim.split(text, "\n"))
 
   if globals.float_win ~= nil and vim.api.nvim_win_is_valid(globals.float_win) then
     local cursor_pos = vim.api.nvim_win_get_cursor(globals.float_win)

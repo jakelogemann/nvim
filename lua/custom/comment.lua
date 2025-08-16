@@ -39,8 +39,7 @@ end
 -- @return boolean commented true when the line is considered commented
 local function is_commented(line, pre, post)
   if post == "" then
-    return vim.startswith(line, pre .. " ")
-      or (vim.startswith(line, pre) and (#line == #pre or line:sub(#pre + 1, #pre + 1):match "%s"))
+    return vim.startswith(line, pre .. " ") or (vim.startswith(line, pre) and (#line == #pre or line:sub(#pre + 1, #pre + 1):match "%s"))
   else
     return vim.startswith(line, pre) and line:sub(-#post) == post
   end

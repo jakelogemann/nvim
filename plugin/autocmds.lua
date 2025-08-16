@@ -92,10 +92,10 @@ vim.api.nvim_create_autocmd("FileType", {
     o.list = false
     o.listchars = vim.tbl_extend("force", o.listchars:get(), { tab = "| " })
     o.expandtab = false
-  -- Prefer Treesitter folding for Go
-  o.foldmethod = "expr"
-  o.foldexpr = "nvim_treesitter#foldexpr()"
-  o.foldenable = true
+    -- Prefer Treesitter folding for Go
+    o.foldmethod = "expr"
+    o.foldexpr = "nvim_treesitter#foldexpr()"
+    o.foldenable = true
   end,
 })
 
@@ -103,9 +103,7 @@ vim.api.nvim_create_autocmd("FileType", {
   group = my_autocmds,
   pattern = "help",
   desc = "help local opts",
-  callback = function()
-    vim.opt_local.colorcolumn = { 80 }
-  end,
+  callback = function() vim.opt_local.colorcolumn = { 80 } end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -114,7 +112,7 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "lua local opts",
   callback = function()
     local o = vim.opt_local
-  -- listchars 'tab' field must be at least two chars; use blanks to visually hide
-  o.listchars = vim.tbl_extend("force", o.listchars:get(), { tab = "  " })
+    -- listchars 'tab' field must be at least two chars; use blanks to visually hide
+    o.listchars = vim.tbl_extend("force", o.listchars:get(), { tab = "  " })
   end,
 })

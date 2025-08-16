@@ -18,7 +18,6 @@ return {
     { "<space>b", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint" },
     { "<space>gb", function() require("dap").run_to_cursor() end, desc = "Run to Cursor" },
     { "<space>?", function() require("dapui").eval(nil, { enter = true }) end, desc = "dap: eval" },
-
   },
   config = function()
     local dap = require "dap"
@@ -32,9 +31,7 @@ return {
       display_callback = function(variable)
         local name = string.lower(variable.name)
         local value = string.lower(variable.value)
-        if name:match "secret" or name:match "api" or value:match "secret" or value:match "api" then
-          return "*****"
-        end
+        if name:match "secret" or name:match "api" or value:match "secret" or value:match "api" then return "*****" end
 
         if #variable.value > 15 then return " " .. string.sub(variable.value, 1, 15) .. "... " end
 

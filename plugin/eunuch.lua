@@ -31,9 +31,7 @@ end
 api.nvim_create_user_command("Delete", function(opts)
   local path = current_path()
   if not path then return notify("No file name", vim.log.levels.WARN) end
-  if not fn.filereadable(path) and fn.isdirectory(path) == 0 then
-    return notify("File does not exist: " .. path, vim.log.levels.WARN)
-  end
+  if not fn.filereadable(path) and fn.isdirectory(path) == 0 then return notify("File does not exist: " .. path, vim.log.levels.WARN) end
   if not opts.bang and not confirm("Delete " .. path .. "?") then return end
   local ok, err = os.remove(path)
   if not ok then return notify("Delete failed: " .. tostring(err), vim.log.levels.ERROR) end
@@ -151,14 +149,10 @@ api.nvim_create_user_command("Cfind", function(opts)
   end
   handle:close()
   if #results == 0 then return notify "No matches" end
-  fn.setqflist(
-    {},
-    " ",
-    {
-      title = "Cfind " .. pattern,
-      items = vim.tbl_map(function(f) return { filename = f, lnum = 1, col = 1, text = f } end, results),
-    }
-  )
+  fn.setqflist({}, " ", {
+    title = "Cfind " .. pattern,
+    items = vim.tbl_map(function(f) return { filename = f, lnum = 1, col = 1, text = f } end, results),
+  })
   notify("Loaded " .. #results .. " files into quickfix")
   vim.cmd "copen"
 end, { nargs = 1 })
@@ -177,15 +171,10 @@ api.nvim_create_user_command("Lfind", function(opts)
   handle:close()
   if #results == 0 then return notify "No matches" end
   fn.setloclist(0, {}, " ") -- clear
-  fn.setloclist(
-    0,
-    {},
-    " ",
-    {
-      title = "Lfind " .. pattern,
-      items = vim.tbl_map(function(f) return { filename = f, lnum = 1, col = 1, text = f } end, results),
-    }
-  )
+  fn.setloclist(0, {}, " ", {
+    title = "Lfind " .. pattern,
+    items = vim.tbl_map(function(f) return { filename = f, lnum = 1, col = 1, text = f } end, results),
+  })
   notify("Loaded " .. #results .. " files into location list")
   vim.cmd "lopen"
 end, { nargs = 1 })
@@ -215,14 +204,10 @@ api.nvim_create_user_command("Clocate", function(opts)
   local pattern = opts.fargs[1]
   local results = run_locate(pattern)
   if #results == 0 then return notify "No matches (locate)" end
-  fn.setqflist(
-    {},
-    " ",
-    {
-      title = "Clocate " .. pattern,
-      items = vim.tbl_map(function(f) return { filename = f, lnum = 1, col = 1, text = f } end, results),
-    }
-  )
+  fn.setqflist({}, " ", {
+    title = "Clocate " .. pattern,
+    items = vim.tbl_map(function(f) return { filename = f, lnum = 1, col = 1, text = f } end, results),
+  })
   notify("Loaded " .. #results .. " files into quickfix (locate)")
   vim.cmd "copen"
 end, { nargs = 1 })
@@ -234,15 +219,10 @@ api.nvim_create_user_command("Llocate", function(opts)
   local results = run_locate(pattern)
   if #results == 0 then return notify "No matches (locate)" end
   fn.setloclist(0, {}, " ") -- clear
-  fn.setloclist(
-    0,
-    {},
-    " ",
-    {
-      title = "Llocate " .. pattern,
-      items = vim.tbl_map(function(f) return { filename = f, lnum = 1, col = 1, text = f } end, results),
-    }
-  )
+  fn.setloclist(0, {}, " ", {
+    title = "Llocate " .. pattern,
+    items = vim.tbl_map(function(f) return { filename = f, lnum = 1, col = 1, text = f } end, results),
+  })
   notify("Loaded " .. #results .. " files into location list (locate)")
   vim.cmd "lopen"
 end, { nargs = 1 })
@@ -280,8 +260,7 @@ api.nvim_create_user_command("Duplicate", function(opts)
     local candidate
     local idx = 0
     while true do
-      candidate =
-        string.format("%s/%s%s%s", dir, base, idx == 0 and suffix or (suffix .. idx), ext ~= "" and ("." .. ext) or "")
+      candidate = string.format("%s/%s%s%s", dir, base, idx == 0 and suffix or (suffix .. idx), ext ~= "" and ("." .. ext) or "")
       if fn.filereadable(candidate) == 0 then break end
       idx = idx + 1
     end

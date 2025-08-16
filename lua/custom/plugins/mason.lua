@@ -103,11 +103,7 @@ return {
         nmap("gD", vim.lsp.buf.declaration, "declaration")
         nmap("<localleader>wa", vim.lsp.buf.add_workspace_folder, "add workspace folder")
         nmap("<localleader>wr", vim.lsp.buf.remove_workspace_folder, "remove workspace folder")
-        nmap(
-          "<localleader>wl",
-          function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end,
-          "list workspace folders"
-        )
+        nmap("<localleader>wl", function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, "list workspace folders")
 
         if vim.lsp.inlay_hint then
           pcall(function()
@@ -140,5 +136,5 @@ return {
         lspconfig[name].setup { capabilities = capabilities, on_attach = on_attach, settings = servers[name] }
       end
     end,
-  }
+  },
 }
