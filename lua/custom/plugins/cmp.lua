@@ -8,8 +8,11 @@ return {
   -- dependencies are always lazy-loaded unless specified otherwise
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-nvim-lua",
+    "hrsh7th/cmp-nvim-lsp-signature-help",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
+    "f3fora/cmp-spell",
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
     {
@@ -24,10 +27,13 @@ return {
     opts.sources = cmp.config.sources({
       { name = "copilot" },
       { name = "nvim_lsp" },
+      { name = "nvim_lsp_signature_help" },
+      { name = "nvim_lua" },
       { name = "luasnip" },
     }, {
       { name = "buffer" },
       { name = "path" },
+      { name = "spell" },
     })
     -- Give Copilot higher priority and place its items at the top
     opts.sorting = opts.sorting or {}

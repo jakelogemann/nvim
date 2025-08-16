@@ -164,9 +164,11 @@ local function render()
         local levels = math.min(math.floor(indent_cols / shift), CONFIG.guides.max_indent_level)
         for i = 1, levels do
           local virt_col = (i - 1) * shift
-          api.nvim_buf_set_extmark(buf, ns, lnum - 1, virt_col, {
+          -- Place virtual text at a fixed window column to handle tabs correctly
+          api.nvim_buf_set_extmark(buf, ns, lnum - 1, 0, {
             virt_text = { { CONFIG.guides.char, CONFIG.guides.highlight } },
             virt_text_pos = "overlay",
+            virt_text_win_col = virt_col,
             priority = 50,
             hl_mode = "combine",
           })
