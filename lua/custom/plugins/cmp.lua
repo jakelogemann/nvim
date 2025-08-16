@@ -14,17 +14,40 @@ return {
       "hrsh7th/cmp-path",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
+      {
+        "zbirenbaum/copilot-cmp",
+        dependencies = { "zbirenbaum/copilot.lua" },
+        config = function()
+          require("copilot_cmp").setup()
+        end,
+      },
     },
 
     opts = function(_, opts)
       local cmp = require "cmp"
       opts.sources = cmp.config.sources({
+        { name = "copilot" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
       }, {
         { name = "buffer" },
         { name = "path" },
       })
+      -- Give Copilot higher priority and place its items at the top
+      opts.sorting = opts.sorting or {}
+      opts.sorting.priority_weight = 2
+      opts.sorting.comparators = {
+        require("copilot_cmp.comparators").prioritize,
+        cmp.config.compare.offset,
+        cmp.config.compare.exact,
+        cmp.config.compare.score,
+        cmp.config.compare.recently_used,
+        cmp.config.compare.locality,
+        cmp.config.compare.kind,
+        cmp.config.compare.sort_text,
+        cmp.config.compare.length,
+        cmp.config.compare.order,
+      }
       opts.snippet = {
         expand = function(args) require("luasnip").lsp_expand(args.body) end,
       }

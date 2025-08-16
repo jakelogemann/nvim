@@ -6,12 +6,16 @@ return {
     config = function() vim.cmd.colorscheme "catppuccin-macchiato" end,
   },
   {
-    "github/copilot.vim",
+    "zbirenbaum/copilot.lua",
     lazy = true,
     event = "InsertEnter",
-    config = function()
-      vim.cmd [[ imap <silent><script><expr> <M-CR> copilot#Accept("\<CR>") ]]
-      vim.g.copilot_no_tab_map = true
+    cmd = { "Copilot" },
+    opts = {
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+    },
+    config = function(_, opts)
+      require("copilot").setup(opts)
     end,
   },
   {
