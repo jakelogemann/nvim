@@ -67,4 +67,4 @@ return {
         TypeParameter = { icon = "𝙏", hl = "TSParameter" },
       },
     },
-  },
+  }
