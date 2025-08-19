@@ -56,6 +56,15 @@ return {
     },
   },
   {
+    "folke/styler.nvim", -- Sets custom colorschemes by filetype.
+    cmd = { "Styler" },
+    opts = {
+      themes = {
+        help = { colorscheme = "gruvbuddy", background = "dark" },
+      },
+    },
+  },
+  {
     "folke/neoconf.nvim",
     cmd = { "Neoconf" },
     lazy = true,
@@ -71,8 +80,15 @@ return {
     module = "persistence",
   },
   {
-    "folke/neodev.nvim",
-    opts = {},
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        -- See the configuration section for more details
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
   },
   {
     "stevearc/dressing.nvim",
