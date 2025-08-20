@@ -15,7 +15,6 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "neovim/nvim-lspconfig",
-      "hrsh7th/cmp-nvim-lsp",
       "nvim-telescope/telescope.nvim",
     },
     event = "BufReadPre",

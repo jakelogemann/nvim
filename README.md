@@ -1,204 +1,194 @@
-# ✨ Jake's Neovim Configuration
+# ✨ Jake’s Neovim — fast, friendly, batteries‑included
 
-[![Neovim 0.9+](https://img.shields.io/badge/Neovim-0.9%2B-57A143?logo=neovim)](https://neovim.io)
-[![macOS](https://img.shields.io/badge/macOS-✓-000000?logo=apple)](https://www.apple.com/macos)
-[![lazy.nvim](https://img.shields.io/badge/Plugin%20Manager-lazy.nvim-blue)](https://github.com/folke/lazy.nvim)
+[![Neovim 0.9+](https://img.shields.io/badge/Neovim-0.9%2B-57A143?logo=neovim)][neovim]
+[![macOS](https://img.shields.io/badge/macOS-✓-000000?logo=apple)][macos]
+[![lazy.nvim](https://img.shields.io/badge/Plugin%20Manager-lazy.nvim-blue)][lazy]
+[![Blink.cmp](https://img.shields.io/badge/Completion-blink.cmp-6441a5)][blink]
+[![Treesitter](https://img.shields.io/badge/Parsing-Treesitter-5eaa2f)][treesitter]
+[![DAP](https://img.shields.io/badge/Debugging-nvim--dap-orange)][dap]
+[![Ollama](https://img.shields.io/badge/AI-Ollama-6C4CF5)][ollama]
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Lua](https://img.shields.io/badge/Lua-%E2%99%A5-000080?logo=lua)](https://www.lua.org)
-[![Go Ready](https://img.shields.io/badge/Go-ready-29BEB0?logo=go)](https://go.dev)
-[![Rust Ready](https://img.shields.io/badge/Rust-ready-000?logo=rust)](https://www.rust-lang.org)
-[![Ollama](https://img.shields.io/badge/AI-Ollama-6C4CF5)](https://github.com/ollama/ollama)
-[![Treesitter](https://img.shields.io/badge/Parsing-Treesitter-5eaa2f)](https://github.com/nvim-treesitter/nvim-treesitter)
 
-A lean, fast, and developer‑friendly Neovim setup built around **[lazy.nvim](https://github.com/folke/lazy.nvim)** with first‑class support for Go, Rust, Lua, YAML, Markdown, and more. It blends powerful defaults, thoughtful UX tweaks, and a few bespoke plugins (welcome screen, lightweight git signs, AI / Ollama integration, screenshotting code, etc.) to keep you in flow.
+A lean Neovim setup that stays out of your way while giving you a modern IDE feel. It’s built on [lazy.nvim][lazy] and tuned for Go, Rust, Lua, YAML, Markdown, and general scripting. Thoughtful defaults, a clean UI, and a few bespoke modules (AI prompts, lightweight git signs, code screenshots, etc.) help you get into flow quickly.
 
-> 🧪 Targeted at Neovim 0.9+ (works great on 0.10). macOS focused but portable.
+Target: Neovim 0.9+ (great on 0.10). Primary platform: macOS (portable elsewhere).
+
 
 ---
 
-## 🚀 Highlights
+## Why use this config?
 
-- ⚡ **Fast startup** via lazy loading & optional profiler hook.
-- 🎨 **Beautiful UI**: Catppuccin theme, minimal status, floating terminals, curated UI plugins.
-- 🧠 **Smart editing**: Treesitter highlighting, surround, commenting, structural search & replace.
-- 💻 **Language tooling**: Mason + LSPConfig auto‑installs; rich LSP keymaps & inlay hints.
-- 🐛 **Debugging built in**: `nvim-dap` + UI + Go debug helpers.
-- 🧵 **Completion & snippets**: `nvim-cmp` + LuaSnip + Copilot (optional).
-- 🗂️ **File navigation**: [`oil.nvim`](https://github.com/stevearc/oil.nvim) (buffer‑centric file explorer) + Telescope wrapper.
-- 🔍 **Find everything** with Telescope + custom `:Find {file|buffer|help|...}` dispatcher.
-- 🧭 **Session & project smarts**: Persistence, Neoconf, SchemaStore, yaml schema mapping.
-- 🧪 **Custom lightweight Git signs** (no dependency bloat, just diff marks + toggle).
-- 🤖 **Local AI integration** with Ollama prompt workflows (enhance code, review, summarize, etc.).
-- 🖼️ **Freeze CLI integration**: snapshot code selection to a styled image (great for sharing).
-- 👋 **Custom splash / welcome screen** drawn & centered dynamically.
-- 🧩 **Ergonomic keymaps** (discoverable w/ which‑key groups) and pragmatic defaults.
+- Fast startup with on‑demand plugin loading.
+- Discoverable keymaps and a friendly UI.
+- Strong language tooling without bloat (LSP, completion, debug, sessions).
+- Local AI workflows (review, enhance, summarize) that work on selections.
+- Sensible custom helpers: Go commands, quick terminal runner, code snapshotting.
 
 ---
 
-## 📦 Core Plugin Snapshot
+## What’s inside (high level)
 
-Focuses on: UI (catppuccin, dressing), editing (mini.surround, ssr, spread, treesitter), navigation (oil, telescope, diffview, symbols‑outline), terminal (toggleterm), completion & AI (cmp + LuaSnip + copilot + lspkind), LSP/tooling (lspconfig, mason, neodev, schemastore, neoconf, persistence, trouble), debugging (dap + dap-ui + dap-go + virtual-text + nio), language extras (Go commands via native tools, typr), local AI (custom Ollama integration), and a bespoke minimal git signs module.
+- UI: [Catppuccin][catppuccin], [lualine][lualine], [which‑key][whichkey], [dressing][dressing], [noice][noice] (+[nui][nui], +[notify][notify]), [Symbols Outline][symbols-outline].
+- Navigation & search: [Snacks][snacks] pickers (files, grep, buffers, projects, undo). [Oil][oil] for a buffer‑centric file explorer. A tiny `:Find` dispatcher built on [Telescope][telescope].
+- Editing & refactors: [Treesitter][treesitter], [mini.surround][mini], [ssr.nvim][ssr] (structural search/replace), [spread.nvim][spread].
+- LSP & tools: [mason.nvim][mason], [mason‑lspconfig][mason-lsp], [nvim‑lspconfig][lspconfig], [SchemaStore][schemastore], [neoconf][neoconf], [lazydev][lazydev], [fidget][fidget], [lspkind][lspkind].
+- Completion: [blink.cmp][blink] + [friendly‑snippets][friendly-snippets] (Lua dev extras via [lazydev][lazydev]). Copilot optional via [copilot.lua][copilot].
+- Debugging: [nvim‑dap][dap], [dap‑ui][dap-ui], [dap‑go][dap-go], [dap virtual‑text][dap-vt], [nvim‑nio][nio].
+- Git: [Neogit][neogit], [vim‑fugitive][fugitive], [diffview][diffview], and a custom lightweight “git signs” module.
+- AI (local): custom Ollama integration ([Ollama][ollama]) with streaming UI and selection‑aware transforms.
+- Extras: typing practice with [typr][typr].
 
----
-
-## 🛠️ Built‑In Custom Modules
-
-welcome (splash) · git_signs (lean diff marks) · ollama (AI prompts) · comment (lightweight toggler) · freeze (code snapshot via CLI) · utils (helpers / term runner).
-
----
-
-## ⌨️ Keymap Sampler
-
-Leader is `<Space>` (also local leader).
-
-| Action | Keys | Notes |
-| ------ | ---- | ----- |
-| File explorer | `-` or `<leader>e` | Opens Oil (directory buffer). |
-| Telescope find files | `<leader>ff` | Global project search. |
-| Live grep | `<leader>fg` | Ripgrep via Telescope. |
-| Toggle terminal (float) | `<leader>\`` / `<leader>zt` | Uses `<C-Space>` to toggle when in insert/normal. |
-| Session restore | `<leader>ps` / `<leader>pS` | Load last / previous session. |
-| Diff view open / close | `<leader>gd` / `<leader>gq` | Uses diffview.nvim. |
-| LSP rename | `<leader>lr` | Contextual symbol rename. |
-| LSP code action | `<leader>la` | Quick actions. |
-| Diagnostics float | `<leader>ld` | Under-cursor diagnostics. |
-| Debugger continue | `<leader>dc` | DAP control suite under `<leader>d*`. |
-| Toggle git signs | `<leader>zg` | Calls custom toggle. |
-| Comment toggle | `<leader>c` (normal/visual) | Provided by custom comment module. |
-| Run current file | `<leader>xx` | Dispatch by filetype (Go, Rust, Python, Shell). |
-| AI Prompt (Ollama) | `<leader>op` etc. | Review: `<leader>or`, Enhance: `<leader>oe`, Change: `<leader>oc`. |
-| Symbols outline | `<leader>zo` | Right side tree. |
-
-Discover groups via which‑key (if installed) by pressing `<leader>`.
+Custom modules included: welcome screen · comment toggler · freeze (code → image) · git signs · Go commands · terminal runner · virtcolumn.
 
 ---
 
-## 🧠 LSP / Completion Quick Notes
-
-Mason auto‑installs servers; inlay hints enabled when available. `:Format` buffer command. YAML schemas pre‑mapped (actions, catalog, ansible). Completion: cmp + LuaSnip + Copilot (`<M-CR>` accept). Go: import organize on save + dap‑go helpers. Rust: cargo shortcuts.
-
----
-
-## 🐛 DAP Keys
-
-`<space>b` breakpoint · `<space>gb` run to cursor · `<F1>` continue · `<F2>/<F3>/<F4>/<F5>` step into/over/out/back · `<space>?` eval · `<leader>du` UI toggle. Virtual text auto‑redacts likely secrets.
-
----
-
-## 🤖 Ollama Workflow
-
-Use `<leader>o*` mappings or `:Ollama` to select a prompt:
-
-- Enhancements, change requests, code review, summarization.
-- Works on visual selection or current buffer.
-- Streaming output in a floating window with accept (`<C-CR>`), retry (`<C-R>`), or quit (`q`).
-- Extracts code blocks back into buffer for certain transforms.
-
-Ensure the [Ollama](https://github.com/ollama/ollama) daemon is running (`ollama serve`). The integration auto-attempts to start it if not.
-
----
-
-## 🖼️ Freeze: Code Snapshotting
-
-Install the external `freeze` CLI (provide your own implementation or preferred binary). Then:
-
-- `:Freeze` — snapshot whole file or a visual range (use `:'<,'>Freeze`).
-- `:FreezeLine` — snapshot current line.
-- Configurable filename template with placeholders `{timestamp}`, `{filename}`, `{start_line}`, `{end_line}`.
-- Optional auto-open (macOS `open`).
-
----
-
-## 🧪 Minimal Git Signs
-
-Custom `git_signs.lua` avoids dependencies and just renders:
-
-- `+` additions
-- `~` changes
-- `-` deletions (placed at logical target line)
-
-Efficiently debounced and safe on large files (auto-bails). Toggle on/off: `:GitSignsToggle` or mapping `<leader>zg`.
-
----
-
-## 🧰 Options & UX Tweaks
-
-Some notable `:set` decisions (see `plugin/options.lua`):
-
-- `cmdheight = 0` modern minimal command line.
-- Global statusline (`laststatus = 3`).
-- Conceal enabled by default (`conceallevel = 2`) with toggle `<leader>zc`.
-- Persistent undo & smart splits (`splitright`, no `wrap` by default).
-- Icons + Nerd Font assumed (`vim.g.icons = true`).
-
----
-
-## 📂 Structure Overview
-
-```text
-init.lua                -- bootstrap lazy + core modules
-lua/custom/plugins/     -- plugin specs grouped (core, lsp, cmp, ui, etc.)
-plugin/*.lua            -- runtime plugin-specific config (auto-sourced)
-lua/custom/*.lua        -- utilities & bespoke modules (comment, utils)
-lua/freeze.lua          -- freeze CLI wrapper
-spell/                  -- custom spelling + thesaurus
-```
-
----
-
-## 🛫 Quick Start
+## Quick start
 
 ```bash
-# clone into a config directory (example: custom clone path)
 mkdir -p ~/.config/nvim
 cd ~/.config/nvim
-# (or use this repo directly)
-# git clone https://github.com/jakelogemann/nvim .
-
-# first launch
+git clone https://github.com/jakelogemann/nvim .
 nvim
-# lazy.nvim will auto-bootstrap and install plugins
 ```
 
-Recommended system packages:
+First launch bootstraps [lazy.nvim][lazy] and installs plugins.
 
-- `ripgrep` (live grep)
-- `git`
-- `curl` (Ollama integration transport)
-- `go`, `rustup`, `node`, `python3` (language tooling as needed)
-- `ollama` (optional AI)
-- `freeze` (optional code snapshotting)
+Recommended system packages: `git`, `ripgrep`, `curl`; language toolchains as needed (`go`, `rustup`, `node`, `python3`). Optional: `ollama` for AI and `freeze` for screenshots.
 
 ---
 
-## 🧩 Customization Tips
+## Everyday usage (a tiny tour)
 
-- Add or remove plugins in `lua/custom/plugins/*.lua` (separated by concern).
-- Override theme: change the `catppuccin` variant in its config block.
-- Adjust keymaps in `plugin/keymaps.lua` (single source of truth).
-- Toggle features via global vars in `plugin/options.lua` (e.g. `vim.g.autoformat_enabled`).
+- Explore files: press `-` to open [Oil][oil] in the current directory.
+- Search files/grep/buffers: `⟨leader⟩ff`, `⟨leader⟩/`, `⟨leader⟩,` via [Snacks][snacks].
+- Git workflows: `:Neogit` for a full UI; open/close diff view with `⟨leader⟩gd` / `⟨leader⟩gq`.
+- LSP: rename `⟨leader⟩lr`, code actions `⟨leader⟩la`, hover `K`, diagnostics float `⟨leader⟩ld`.
+- Debug: `⟨leader⟩d…` for common actions (continue, step, toggle UI). Quick toggles also on `F1–F5`.
+- Comments: toggle with `⟨leader⟩c` (line or visual selection).
+- Run current file: `⟨leader⟩xx` (dispatches for Go/Rust/Python/Shell).
+- AI prompts: `:Ollama` or `⟨leader⟩o{p|e|c|r|s}` to prompt/enhance/change/review/summarize.
 
----
-
-## 🔍 Troubleshooting
-
-| Symptom | Suggestion |
-| ------- | ---------- |
-| Missing syntax or LSP | Run `:Mason` and ensure tools installed. |
-| Slow startup | Temporarily enable profiler (impatient) if installed. |
-| No AI responses | Verify `ollama serve` running & model pulled. |
-| Git signs missing | Run inside a git repo & ensure file is tracked. |
+Tip: press `⟨leader⟩` to discover groups via [which‑key][whichkey].
 
 ---
 
-## 📜 License & Attribution
+## Language tooling
 
-This configuration aggregates open source plugins (each under their own license). See linked repositories for details. Custom Lua modules in this repo are MIT unless otherwise noted.
+LSP servers are installed and configured through [mason.nvim][mason] and [mason‑lspconfig][mason-lsp] with [nvim‑lspconfig][lspconfig]. YAML schemas are pre‑mapped via [SchemaStore][schemastore]. Inlay hints are enabled when the server supports them. `:Format` is available per buffer.
+
+Completion is powered by [blink.cmp][blink] with snippet support from [friendly‑snippets][friendly-snippets]. Lua development gains typed completions via [lazydev][lazydev]. Copilot can be toggled with `:Copilot enable|disable` if desired.
+
+Debugging is ready out of the box with [nvim‑dap][dap], UI via [dap‑ui][dap-ui], Go helpers via [dap‑go][dap-go], and inline values from [nvim‑dap‑virtual‑text][dap-vt] (with simple secret‑redaction).
 
 ---
 
-## ❤️ Thanks
+## Local AI (Ollama)
 
-Huge thanks to the Neovim ecosystem & plugin authors for the tooling that makes this setup possible.
+Use `:Ollama` to pick a prompt or the `⟨leader⟩o…` shortcuts. Works on a visual selection or whole file. Streaming output appears in a floating window with accept (`Ctrl‑Enter`), retry (`Ctrl‑R`), and quit (`q`). For best results, run the Ollama daemon (`ollama serve`). The integration will try to start it if not running.
+
+---
+
+## Code screenshots (Freeze)
+
+Install the `freeze` CLI to render pretty images of code:
+
+- `:Freeze` — snapshot the whole buffer or a visual range (`:'<,'>Freeze`).
+- `:FreezeLine` — snapshot the current line.
+
+File names are templated (timestamp, filename, start/end lines) and can auto‑open on macOS.
+
+---
+
+## Minimal git signs
+
+A tiny built‑in module draws `+` additions, `~` changes, and `-` deletions with smart placement. It’s fast, debounced, and safe on large files. Toggle with `:GitSignsToggle` or `⟨leader⟩zg`.
+
+---
+
+## Options & layout
+
+Notable choices (see `plugin/options.lua`): modern command line (`cmdheight=0`), global statusline, conceal by default (toggle `⟨leader⟩zc`), persistent undo, and sane splits. Nerd Font icons are expected.
+
+Project structure at a glance:
+
+```text
+init.lua                — bootstrap lazy + core modules
+lua/custom/plugins/     — plugin specs (UI, LSP, cmp, tools, etc.)
+plugin/*.lua            — runtime config and custom features (auto‑sourced)
+lua/custom/*.lua        — bespoke modules (comment, utils)
+lua/freeze.lua          — freeze CLI wrapper
+spell/                  — spelling & thesaurus
+```
+
+---
+
+## Troubleshooting
+
+- Missing syntax or LSP? Open `:Mason` and ensure tools are installed.
+- No AI responses? Verify `ollama serve` and a model are available.
+- Git signs missing? Make sure you’re inside a git repo and the file is tracked.
+- Startup slower than expected? Temporarily enable profiling (if the optional profiler is present).
+
+
+---
+
+## Screenshots
+
+![Welcome screen](screenshots/welcome.png)
+_Welcome Screen_.
+
+![Completion menu (blink.cmp)](screenshots/completion.png)
+_Completion via [blink]._
+
+![Inline documentation / hover](screenshots/documentation.png)
+_Inline documentation_.
+
+---
+
+## License
+
+Custom Lua in this repo is MIT unless noted. Each third‑party plugin remains under its own license.
+
+---
+
+[neovim]: https://neovim.io
+[macos]: https://www.apple.com/macos
+[lazy]: https://github.com/folke/lazy.nvim
+[catppuccin]: https://github.com/catppuccin/nvim
+[whichkey]: https://github.com/folke/which-key.nvim
+[dressing]: https://github.com/stevearc/dressing.nvim
+[noice]: https://github.com/folke/noice.nvim
+[nui]: https://github.com/MunifTanjim/nui.nvim
+[notify]: https://github.com/rcarriga/nvim-notify
+[lualine]: https://github.com/nvim-lualine/lualine.nvim
+[symbols-outline]: https://github.com/simrat39/symbols-outline.nvim
+[snacks]: https://github.com/folke/snacks.nvim
+[oil]: https://github.com/stevearc/oil.nvim
+[telescope]: https://github.com/nvim-telescope/telescope.nvim
+[treesitter]: https://github.com/nvim-treesitter/nvim-treesitter
+[mini]: https://github.com/echasnovski/mini.nvim
+[ssr]: https://github.com/cshuaimin/ssr.nvim
+[spread]: https://github.com/aarondiel/spread.nvim
+[mason]: https://github.com/williamboman/mason.nvim
+[mason-lsp]: https://github.com/williamboman/mason-lspconfig.nvim
+[lspconfig]: https://github.com/neovim/nvim-lspconfig
+[schemastore]: https://github.com/b0o/SchemaStore.nvim
+[neoconf]: https://github.com/folke/neoconf.nvim
+[lazydev]: https://github.com/folke/lazydev.nvim
+[fidget]: https://github.com/j-hui/fidget.nvim
+[lspkind]: https://github.com/onsails/lspkind.nvim
+[blink]: https://github.com/saghen/blink.cmp
+[friendly-snippets]: https://github.com/rafamadriz/friendly-snippets
+[copilot]: https://github.com/zbirenbaum/copilot.lua
+[dap]: https://github.com/mfussenegger/nvim-dap
+[dap-ui]: https://github.com/rcarriga/nvim-dap-ui
+[dap-go]: https://github.com/leoluz/nvim-dap-go
+[dap-vt]: https://github.com/theHamsta/nvim-dap-virtual-text
+[nio]: https://github.com/nvim-neotest/nvim-nio
+[neogit]: https://github.com/TimUntersberger/neogit
+[fugitive]: https://github.com/tpope/vim-fugitive
+[diffview]: https://github.com/sindrets/diffview.nvim
+[typr]: https://github.com/nvzone/typr
+[ollama]: https://github.com/ollama/ollama
 
 Happy hacking! 🛠️
