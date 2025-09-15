@@ -21,10 +21,6 @@ end
 -- @param fn function|string rhs
 function utils.nmap(keys, desc, fn) vim.keymap.set("n", keys, fn, { desc = desc }) end
 
--- Merge extended options with a default table of options
--- @param opts the new options that should be merged with the default table
--- @param default the default table that you want to merge into
--- @return the merged table
 --- Merge a user options table into defaults (deep extend, force strategy).
 -- @generic T
 -- @param opts table|nil user provided overrides

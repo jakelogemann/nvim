@@ -32,6 +32,18 @@ opt.listchars.extends = "⟩"
 opt.listchars.precedes = "⟨"
 opt.listchars.tab = "│→"
 opt.listchars.trail = "·"
+opt.sessionoptions.blank = false
+opt.sessionoptions.buffers = false
+opt.sessionoptions.curdir = true
+opt.sessionoptions.folds = true
+opt.sessionoptions.globals = false
+opt.sessionoptions.help = true
+opt.sessionoptions.localoptions = true
+opt.sessionoptions.skiprtp = true
+opt.sessionoptions.tabpages = true
+opt.sessionoptions.terminal = true
+opt.sessionoptions.winpos = true
+opt.sessionoptions.winsize = true
 opt.listchars.nbsp = "␣"
 opt.mouse = "a"
 opt.mousemoveevent = true
@@ -70,7 +82,7 @@ opt.wrap = false
 opt.writebackup = false
 
 if vim.g.neovide then
-  opt.guifont = "DaddyTimeMono Nerd Font:h13"
+  opt.guifont = "Monaspace Neon NF:h13"
   vim.g.neovide_cursor_animate_in_insert_mode = false
   vim.g.neovide_refresh_rate_idle = 5
   vim.g.neovide_scale_factor = 1.0

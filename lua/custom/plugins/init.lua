@@ -76,8 +76,23 @@ return {
   },
   {
     "folke/persistence.nvim",
+    
     event = "BufReadPre",
+    -- this will only start session saving when an actual file was opened
     module = "persistence",
+    keys = {
+      { "<leader>Sl", '<cmd>lua require("persistence").load()<cr>', desc = "Load Session" },
+      { "<leader>SL", '<cmd>lua require("persistence").load({ last = true })<cr>', desc = "Last Session" },
+      { "<leader>Ss", '<cmd>lua require("persistence").select()<cr>', desc = "Select Session" },
+      { "<leader>Sd", '<cmd>lua require("persistence").stop()<cr>', desc = "Don't Save Session" },
+    },
+    opts = {
+      dir = vim.fn.stdpath("state") .. "/sessions/", -- directory where session files are saved
+      -- minimum number of file buffers that need to be open to save
+      -- Set to 0 to always save
+      need = 1,
+      branch = true, -- use git branch to save session
+    },
   },
   {
     "folke/lazydev.nvim",

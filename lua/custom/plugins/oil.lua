@@ -12,6 +12,7 @@ return {
     { "<leader>,", "<cmd>Oil ~/.config/nvim<cr>", desc = "config" },
   },
   opts = {
+    -- Oil will take over directory buffers (e.g. `vim .` or `:e src/`)
     default_file_explorer = true,
     -- Id is automatically added at the beginning, and name at the end
     -- See :help oil-columns
@@ -22,7 +23,10 @@ return {
       -- "mtime",
     },
     -- Buffer-local options to use for oil buffers
-    buf_options = {},
+    buf_options = {
+      buflisted = false,
+      bufhidden = "hide",
+    },
     -- Window-local options to use for oil buffers
     win_options = {
       wrap = false,
@@ -36,6 +40,11 @@ return {
       conceallevel = 3,
       concealcursor = "n",
     },
+
+    -- Send deleted files to the trash instead of permanently deleting them (:help oil-trash)
+    delete_to_trash = true,
+    -- Watch the filesystem for changes and reload oil.
+    watch_for_changes = true,
     -- Restore window options to previous values when leaving an oil buffer
     restore_win_options = true,
     -- Skip the confirmation popup for simple operations
@@ -46,27 +55,28 @@ return {
     -- it will use the mapping at require("oil.action").<name>
     -- Set to `false` to remove a keymap
     keymaps = {
-      ["g?"] = "actions.show_help",
+      ["g?"] = { "actions.show_help", mode = "n" },
       ["<CR>"] = "actions.select",
-      ["<C-s>"] = false,
-      ["<M-v>"] = "actions.select_vsplit",
-      ["<C-h>"] = false,
-      ["<M-h>"] = "actions.select_split",
+      ["<C-s>"] = { "actions.select", opts = { vertical = true } },
+      ["<C-h>"] = { "actions.select", opts = { horizontal = true } },
+      ["<C-t>"] = { "actions.select", opts = { tab = true } },
       ["<C-p>"] = "actions.preview",
-      ["<Space>-"] = { callback = function() require("oil").toggle_float() end },
-      ["<C-c>"] = "actions.close",
+      ["<C-c>"] = { "actions.close", mode = "n" },
       ["<C-l>"] = "actions.refresh",
-      ["-"] = "actions.parent",
-      ["_"] = "actions.open_cwd",
-      ["`"] = "actions.cd",
-      ["~"] = "actions.tcd",
-      ["g."] = "actions.toggle_hidden",
+      ["-"] = { "actions.parent", mode = "n" },
+      ["_"] = { "actions.open_cwd", mode = "n" },
+      ["`"] = { "actions.cd", mode = "n" },
+      ["~"] = { "actions.cd", opts = { scope = "tab" }, mode = "n" },
+      ["gs"] = { "actions.change_sort", mode = "n" },
+      ["gx"] = "actions.open_external",
+      ["g."] = { "actions.toggle_hidden", mode = "n" },
+      ["g\\"] = { "actions.toggle_trash", mode = "n" },
     },
     -- Set to false to disable all of the above keymaps
     use_default_keymaps = true,
     view_options = {
-      -- Show files and directories that start with "."
       show_hidden = false,
+      case_insensitive = true,
     },
     -- Configuration for the floating window in oil.open_float
     float = {

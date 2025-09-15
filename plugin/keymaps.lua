@@ -25,12 +25,21 @@ n("<c-w>\\", function()
   if ok then w.show { keys = "<c-w>", loop = true } end
 end, "window mode")
 
--- Plugin management
-n("<leader>pl", "<cmd>Lazy<cr>", "Lazy: UI")
-n("<leader>ps", "<cmd>Lazy sync<cr>", "Lazy: sync (install/update)")
-n("<leader>pu", "<cmd>Lazy update<cr>", "Lazy: update only")
-n("<leader>pp", "<cmd>Lazy profile<cr>", "Lazy: profile load times")
-n("<leader>pm", "<cmd>Mason<cr>", "Mason: UI")
+-- [Neo]VIM Plugin Management
+n("<leader>Vl", "<cmd>Lazy<cr>", "Lazy: UI")
+n("<leader>Vs", "<cmd>Lazy sync<cr>", "Lazy: Sync")
+n("<leader>Vu", "<cmd>Lazy update<cr>", "Lazy: Update")
+n("<leader>Vp", "<cmd>Lazy profile<cr>", "Lazy: Profile")
+n("<leader>Vm", "<cmd>Mason<cr>", "Mason: UI")
+n("<leader>Vi", function() vim.cmd.edit(config_root .. "/init.lua") end, "Edit Config")
+n("<leader>VM", function()
+  local log = vim.fn.stdpath "cache" .. "/mason.log"
+  if vim.loop.fs_stat(log) then
+    vim.cmd.edit(log)
+  else
+    vim.notify("No mason.log yet", vim.log.levels.INFO)
+  end
+end, "Open mason.log")
 
 -- Buffers
 n("<leader>bN", "<cmd>bnew<cr>", "new buffer")
@@ -41,15 +50,6 @@ n("<leader>bp", "<cmd>bprev<cr>", "prev buffer")
 n("<leader>bw", "<cmd>write<cr>", "write buffer")
 
 -- Files / project config
-n("<leader>pi", function() vim.cmd.edit(config_root .. "/init.lua") end, "Edit init.lua")
-n("<leader>pM", function()
-  local log = vim.fn.stdpath "cache" .. "/mason.log"
-  if vim.loop.fs_stat(log) then
-    vim.cmd.edit(log)
-  else
-    vim.notify("No mason.log yet", vim.log.levels.INFO)
-  end
-end, "Open mason.log")
 n("<leader>pc", "<cmd>Neoconf<cr>", "project config")
 n("<leader>ps", function()
   local ok, p = pcall(require, "persistence")
@@ -188,10 +188,10 @@ end, "Set shiftwidth")
 n("<leader>zW", function() vim.wo.wrap = not vim.wo.wrap end, "Toggle wrap")
 
 -- Quickfix
-n("<leader>qq", "<cmd>copen<cr>", "open quickfix")
-n("<leader>qc", "<cmd>cclose<cr>", "close quickfix")
-n("<leader>qn", "<cmd>cnext<cr>", "next qf")
-n("<leader>qp", "<cmd>cprev<cr>", "prev qf")
+n("<leader>qq", "<cmd>copen<cr>", "copen")
+n("<leader>qc", "<cmd>cclose<cr>", "cclose")
+n("<leader>qn", "<cmd>cnext<cr>", "cnext")
+n("<leader>qp", "<cmd>cprev<cr>", "cprev")
 
 -- Tabs
 n("<leader>tn", "<cmd>tabNext<cr>", "next tab")
@@ -223,6 +223,7 @@ pcall(function()
     { "<leader>l", group = "LSP" },
     { "<leader>o", group = "Ollama" },
     { "<leader>p", group = "Project" },
+    { "<leader>V", group = "neoVIM" },
     { "<leader>q", group = "Quickfix" },
     { "<leader>r", group = "Rust" },
     { "<leader>s", group = "Search" },
