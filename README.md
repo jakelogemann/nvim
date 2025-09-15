@@ -31,7 +31,7 @@ Target: Neovim 0.9+ (great on 0.10). Primary platform: macOS (portable elsewhere
 - UI: [Catppuccin][catppuccin], [lualine][lualine], [which‑key][whichkey], [dressing][dressing], [noice][noice] (+[nui][nui], +[notify][notify]), [Symbols Outline][symbols-outline].
 - Navigation & search: [Snacks][snacks] pickers (files, grep, buffers, projects, undo). [Oil][oil] for a buffer‑centric file explorer. A tiny `:Find` dispatcher built on [Telescope][telescope].
 - Editing & refactors: [Treesitter][treesitter], [mini.surround][mini], [ssr.nvim][ssr] (structural search/replace), [spread.nvim][spread].
-- LSP & tools: [mason.nvim][mason], [mason‑lspconfig][mason-lsp], [nvim‑lspconfig][lspconfig], [SchemaStore][schemastore], [neoconf][neoconf], [lazydev][lazydev], [fidget][fidget], [lspkind][lspkind].
+- LSP & tools: [mason.nvim][mason], [mason‑lspconfig][mason-lsp], [nvim‑lspconfig][lspconfig], [SchemaStore][schemastore], [neoconf][neoconf], [lazydev][lazydev], [fidget][fidget], [lspkind][lspkind], sessions via [persistence.nvim](https://github.com/folke/persistence.nvim).
 - Completion: [blink.cmp][blink] + [friendly‑snippets][friendly-snippets] (Lua dev extras via [lazydev][lazydev]). Copilot optional via [copilot.lua][copilot].
 - Debugging: [nvim‑dap][dap], [dap‑ui][dap-ui], [dap‑go][dap-go], [dap virtual‑text][dap-vt], [nvim‑nio][nio].
 - Git: [Neogit][neogit], [vim‑fugitive][fugitive], [diffview][diffview], and a custom lightweight “git signs” module.
@@ -59,7 +59,7 @@ Recommended system packages: `git`, `ripgrep`, `curl`; language toolchains as ne
 
 ## Everyday usage (a tiny tour)
 
-- Explore files: press `-` to open [Oil][oil] in the current directory.
+- Explore files: press `-` (or `<leader>e`) to open [Oil][oil] in the current directory. Open your config dir with `<leader>,`.
 - Search files/grep/buffers: `⟨leader⟩ff`, `⟨leader⟩/`, `⟨leader⟩,` via [Snacks][snacks].
 - Git workflows: `:Neogit` for a full UI; open/close diff view with `⟨leader⟩gd` / `⟨leader⟩gq`.
 - LSP: rename `⟨leader⟩lr`, code actions `⟨leader⟩la`, hover `K`, diagnostics float `⟨leader⟩ld`.
@@ -67,6 +67,9 @@ Recommended system packages: `git`, `ripgrep`, `curl`; language toolchains as ne
 - Comments: toggle with `⟨leader⟩c` (line or visual selection).
 - Run current file: `⟨leader⟩xx` (dispatches for Go/Rust/Python/Shell).
 - AI prompts: `:Ollama` or `⟨leader⟩o{p|e|c|r|s}` to prompt/enhance/change/review/summarize.
+- Plugin management: `⟨leader⟩Vl` Lazy UI, `⟨leader⟩Vs` sync, `⟨leader⟩Vu` update, `⟨leader⟩Vp` profile, `⟨leader⟩Vm` Mason UI, `⟨leader⟩Vi` edit `init.lua`, `⟨leader⟩VM` open mason.log.
+- Terminals: `⟨leader⟩Tt` toggle a floating terminal (ToggleTerm), `⟨leader⟩Tn` open a new terminal (Snacks).
+- Project config & sessions: `⟨leader⟩pc` Neoconf UI. Sessions: `⟨leader⟩Sl` load, `⟨leader⟩SL` load last, `⟨leader⟩Ss` select, `⟨leader⟩Sd` stop saving.
 
 Tip: press `⟨leader⟩` to discover groups via [which‑key][whichkey].
 
@@ -99,6 +102,24 @@ File names are templated (timestamp, filename, start/end lines) and can auto‑o
 
 ---
 
+## Sessions (persistence.nvim)
+
+Sessions are lightweight and branch‑aware by default. The session options are tuned for reliability (saving window sizes/positions, folds, terminals, and the current working directory).
+
+- Load session: `⟨leader⟩Sl`
+- Load last session: `⟨leader⟩SL`
+- Select session: `⟨leader⟩Ss`
+- Stop saving in this workspace: `⟨leader⟩Sd`
+
+### Notes
+
+- Sessions are saved only when at least one file buffer is open (need = 1).
+- Storage location: `:echo stdpath('state') .. '/sessions'`.
+- Session saving is paused when you run `:PersistenceStop`.
+
+
+---
+
 ## Minimal git signs
 
 A tiny built‑in module draws `+` additions, `~` changes, and `-` deletions with smart placement. It’s fast, debounced, and safe on large files. Toggle with `:GitSignsToggle` or `⟨leader⟩zg`.
@@ -128,6 +149,7 @@ spell/                  — spelling & thesaurus
 - No AI responses? Verify `ollama serve` and a model are available.
 - Git signs missing? Make sure you’re inside a git repo and the file is tracked.
 - Startup slower than expected? Temporarily enable profiling (if the optional profiler is present).
+- Sessions not saving? Ensure at least one file buffer is open. You can temporarily disable saving with `⟨leader⟩Sd`.
 
 
 ---
