@@ -106,9 +106,15 @@ return {
 
         if vim.lsp.inlay_hint then
           pcall(function()
+            -- Neovim 0.10+ signature
             if type(vim.lsp.inlay_hint.enable) == "function" then
-              vim.lsp.inlay_hint.enable(bufnr, true)
+              local ok_new = pcall(vim.lsp.inlay_hint.enable, true, { bufnr = bufnr })
+              if not ok_new then
+                -- Some intermediary versions use (bufnr, true)
+                pcall(vim.lsp.inlay_hint.enable, bufnr, true)
+              end
             elseif type(vim.lsp.inlay_hint) == "function" then
+              -- Older API: vim.lsp.inlay_hint(bufnr, true)
               vim.lsp.inlay_hint(bufnr, true)
             end
           end)

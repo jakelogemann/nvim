@@ -216,7 +216,9 @@ local function create_window(cmd, opts)
     vim.cmd "vnew gen.nvim"
     setup_split()
   end
-  vim.keymap.set("n", "<esc>", function() vim.fn.jobstop(Job_id) end, { buffer = globals.result_buffer })
+  vim.keymap.set("n", "<esc>", function()
+    if globals.job_id then vim.fn.jobstop(globals.job_id) end
+  end, { buffer = globals.result_buffer })
   vim.keymap.set("n", M.quit_map, "<cmd>quit<cr>", { buffer = globals.result_buffer })
   vim.keymap.set("n", M.accept_map, function()
     opts.replace = true
@@ -412,11 +414,11 @@ M.run_command = function(cmd, opts)
       partial_data = table.remove(lines) or ""
 
       for _, line in ipairs(lines) do
-        Process_response(line, globals.job_id, opts.json_response)
+        Process_response(line, opts.json_response)
       end
 
       if partial_data:sub(-1) == "}" then
-        Process_response(partial_data, globals.job_id, opts.json_response)
+        Process_response(partial_data, opts.json_response)
         partial_data = ""
       end
     end,
