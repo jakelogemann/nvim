@@ -75,6 +75,32 @@ Tip: press `⟨leader⟩` to discover groups via [which‑key][whichkey].
 
 ---
 
+## Keymap Quick Reference
+
+Find / Search (Snacks)
+- Smart: `⟨leader⟩<space>`
+- Files: `⟨leader⟩ff` · Git files: `⟨leader⟩fg` · Config files: `⟨leader⟩fc`
+- Grep: `⟨leader⟩/` · Recent: `⟨leader⟩fr` · Projects: `⟨leader⟩fp`
+- Buffers: `⟨leader⟩,` · Notifications: `⟨leader⟩n` · Cmd history: `⟨leader⟩:`
+
+LSP (buffer‑local)
+- Definition: `gd` · Declaration: `gD` · References: `gr` · Implementation: `gI`
+- Rename: `⟨localleader⟩rn` · Code action: `⟨localleader⟩ca` · Hover: `K`
+- Doc symbols: `⟨localleader⟩ds` · Workspace symbols: `⟨localleader⟩ws`
+- Diagnostics: float `⟨leader⟩ld` · Prev/Next `[d`/`]d`
+- Inlay hints toggle: `⟨leader⟩lI` · Format: `:Format` or `⟨leader⟩lf`
+
+Git
+- Neogit UI: `:Neogit` · Diff view open/close: `⟨leader⟩gd`/`⟨leader⟩gq` · Signs toggle: `⟨leader⟩zg`
+
+Terminals
+- ToggleTerm float: `⟨leader⟩Tt` · New Snacks terminal: `⟨leader⟩Tn`
+
+Misc
+- Oil explorer: `-` or `⟨leader⟩e` · Run current file: `⟨leader⟩xx` · Comment toggle: `⟨leader⟩c`
+
+---
+
 ## Language tooling
 
 LSP servers are installed and configured through [mason.nvim][mason] and [mason‑lspconfig][mason-lsp] with [nvim‑lspconfig][lspconfig]. YAML schemas are pre‑mapped via [SchemaStore][schemastore]. Inlay hints are enabled when the server supports them. `:Format` is available per buffer.
