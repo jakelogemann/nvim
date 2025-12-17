@@ -64,6 +64,13 @@ return {
     picker = {
       hidden = true,
       ignored = true,
+      -- Layout preset for consistent UX across pickers
+      layout = {
+        preset = "vertical", -- common, compact layout (fallback-friendly)
+        width = 0.9,
+        height = 0.85,
+      },
+      border = "rounded",
     },
     scope = {},
     scratch = {},
