@@ -8,3 +8,6 @@
 *.log
 freeze.png
 .vscode
+.nvimcache/
+.nvimlog
+.nvimstate/
