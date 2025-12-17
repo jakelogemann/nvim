@@ -13,7 +13,12 @@ return {
     -- Custom lightweight components -------------------------------
     local function lsp_clients()
       local bufnr = vim.api.nvim_get_current_buf()
-      local clients = vim.lsp.get_active_clients { bufnr = bufnr }
+      local clients
+      if vim.lsp and vim.lsp.get_clients then
+        clients = vim.lsp.get_clients { bufnr = bufnr }
+      else
+        clients = vim.lsp.get_active_clients { bufnr = bufnr }
+      end
       if #clients == 0 then return "" end
       local names = {}
       for _, c in ipairs(clients) do
