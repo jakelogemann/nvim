@@ -177,6 +177,22 @@ spell/                  — spelling & thesaurus
 - Startup slower than expected? Temporarily enable profiling (if the optional profiler is present).
 - Sessions not saving? Ensure at least one file buffer is open. You can temporarily disable saving with `⟨leader⟩Sd`.
 
+### Verification & CI tips
+
+- See AGENTS.md for comprehensive, offline‑first verification guidance.
+- Local headless runs:
+  - `nvim --headless "+Lazy check" +qa`
+  - `nvim --headless "+Lazy sync" +qa`
+  - `nvim --headless "+checkhealth" +qa`
+  - `nvim --headless "+checkhealth custom" +qa`
+- Sandbox/CI (no writes to `~`):
+  - `XDG_CACHE_HOME="$PWD/.nvimcache" XDG_STATE_HOME="$PWD/.nvimstate" XDG_DATA_HOME="$PWD/.nvimdata" nvim --headless "+Lazy check" +qa`
+  - Set `NVIM_TS_PARSER_DIR="$PWD/.nvimparsers"` if Treesitter parser writes are blocked.
+  
+### Commit messages
+
+- This repo uses Conventional Commits (see AGENTS.md for a template and examples).
+
 
 ---
 
