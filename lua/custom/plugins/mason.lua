@@ -130,9 +130,35 @@ return {
       local ensure = vim.tbl_keys(servers)
       require("mason-lspconfig").setup { ensure_installed = ensure, automatic_installation = true }
 
-      local lspconfig = require "lspconfig"
-      for _, name in ipairs(ensure) do
-        lspconfig[name].setup { capabilities = capabilities, on_attach = on_attach, settings = servers[name] }
+      -- Apply defaults to all installed servers via handlers when available,
+      -- otherwise iterate installed servers directly.
+      local mlsp = require "mason-lspconfig"
+      local function configure(name)
+        if vim.lsp and vim.lsp.config then
+          local cfg = vim.tbl_deep_extend(
+            "force",
+            vim.lsp.config[name] or {},
+            { capabilities = capabilities, on_attach = on_attach, settings = servers[name] or {} }
+          )
+          vim.lsp.config[name] = cfg
+        else
+          local ok_lsp, lspconfig = pcall(require, "lspconfig")
+          if ok_lsp and lspconfig[name] then
+            lspconfig[name].setup {
+              capabilities = capabilities,
+              on_attach = on_attach,
+              settings = servers[name],
+            }
+          end
+        end
+      end
+
+      if type(mlsp.setup_handlers) == "function" then
+        mlsp.setup_handlers { function(name) configure(name) end }
+      else
+        for _, name in ipairs(mlsp.get_installed_servers()) do
+          configure(name)
+        end
       end
     end,
   },
