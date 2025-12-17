@@ -7,9 +7,9 @@
 [![Treesitter](https://img.shields.io/badge/Parsing-Treesitter-5eaa2f)][treesitter]
 [![DAP](https://img.shields.io/badge/Debugging-nvim--dap-orange)][dap]
 [![Ollama](https://img.shields.io/badge/AI-Ollama-6C4CF5)][ollama]
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-A lean Neovim setup that stays out of your way while giving you a modern IDE feel. It’s built on [lazy.nvim][lazy] and tuned for Go, Rust, Lua, YAML, Markdown, and general scripting. Thoughtful defaults, a clean UI, and a few bespoke modules (AI prompts, lightweight git signs, code screenshots, etc.) help you get into flow quickly.
+A lean, offline‑first Neovim setup that stays out of your way while giving you a modern IDE feel. It’s built on [lazy.nvim][lazy] and tuned for Go, Rust, Lua, YAML, Markdown, and general scripting. Thoughtful defaults, a clean UI, and a few bespoke modules (AI prompts, lightweight git signs, code screenshots, etc.) help you get into flow quickly.
 
 Target: Neovim 0.9+ (great on 0.10). Primary platform: macOS (portable elsewhere).
 
@@ -29,7 +29,7 @@ Target: Neovim 0.9+ (great on 0.10). Primary platform: macOS (portable elsewhere
 ## What’s inside (high level)
 
 - UI: [Catppuccin][catppuccin], [lualine][lualine], [which‑key][whichkey], [dressing][dressing], [noice][noice] (+[nui][nui], +[notify][notify]), [Symbols Outline][symbols-outline].
-- Navigation & search: [Snacks][snacks] pickers (files, grep, buffers, projects, undo). [Oil][oil] for a buffer‑centric file explorer. A tiny `:Find` dispatcher built on Snacks.
+- Navigation & search: [Snacks][snacks] pickers (files, grep, buffers, projects, undo). [Oil][oil] for a buffer‑centric file explorer. A tiny `:Find` dispatcher built on Snacks. Telescope is intentionally not used.
 - Editing & refactors: [Treesitter][treesitter], [mini.surround][mini], [ssr.nvim][ssr] (structural search/replace), [spread.nvim][spread].
 - LSP & tools: [mason.nvim][mason], [mason‑lspconfig][mason-lsp], [nvim‑lspconfig][lspconfig], [SchemaStore][schemastore], [neoconf][neoconf], [lazydev][lazydev], [fidget][fidget], [lspkind][lspkind], sessions via [persistence.nvim](https://github.com/folke/persistence.nvim).
 - Completion: [blink.cmp][blink] + [friendly‑snippets][friendly-snippets] (Lua dev extras via [lazydev][lazydev]). Copilot optional via [copilot.lua][copilot].
@@ -55,6 +55,16 @@ First launch bootstraps [lazy.nvim][lazy] and installs plugins.
 
 Recommended system packages: `git`, `ripgrep`, `curl`; language toolchains as needed (`go`, `rustup`, `node`, `python3`). Optional: `ollama` for AI and `freeze` for screenshots.
 
+Headless verify (safe local dirs):
+
+```bash
+XDG_CACHE_HOME="$PWD/.nvimcache" \
+XDG_STATE_HOME="$PWD/.nvimstate" \
+XDG_DATA_HOME="$PWD/.nvimdata" \
+NVIM_TS_PARSER_DIR="$PWD/.nvimparsers" \
+nvim --headless "+Lazy check" +qa
+```
+
 ---
 
 ## Everyday usage (a tiny tour)
@@ -69,7 +79,7 @@ Recommended system packages: `git`, `ripgrep`, `curl`; language toolchains as ne
 - Debug: `⟨leader⟩d…` for common actions (continue, step, toggle UI). Quick toggles also on `F1–F5`.
 - Comments: toggle with `⟨leader⟩c` (line or visual selection).
 - Run current file: `⟨leader⟩xx` (dispatches for Go/Rust/Python/Shell).
-- AI prompts: `:Ollama` or `⟨leader⟩o{p|e|c|r|s}` to prompt/enhance/change/review/summarize.
+- AI prompts: `:Ollama` or `⟨leader⟩o{p|e|c|r|s}` to prompt/enhance/change/review/summarize. Model picker: `⟨leader⟩om`.
 - Plugin management: `⟨leader⟩Vl` Lazy UI, `⟨leader⟩Vs` sync, `⟨leader⟩Vu` update, `⟨leader⟩Vp` profile, `⟨leader⟩Vm` Mason UI, `⟨leader⟩Vi` edit `init.lua`, `⟨leader⟩VM` open mason.log.
 - Health checks: `⟨leader⟩Vh` runs `:checkhealth custom`.
 - Terminals: `⟨leader⟩Tt` toggle a floating terminal (ToggleTerm), `⟨leader⟩Tn` open a new terminal (Snacks).
@@ -109,7 +119,7 @@ Misc
 
 LSP servers are installed and configured through [mason.nvim][mason] and [mason‑lspconfig][mason-lsp] with [nvim‑lspconfig][lspconfig]. YAML schemas are pre‑mapped via [SchemaStore][schemastore]. Inlay hints are enabled when the server supports them. `:Format` is available per buffer.
 
-Completion is powered by [blink.cmp][blink] with snippet support from [friendly‑snippets][friendly-snippets]. Lua development gains typed completions via [lazydev][lazydev]. Copilot can be toggled with `:Copilot enable|disable` if desired.
+Completion is powered by [blink.cmp][blink] with snippet support from [friendly‑snippets][friendly-snippets]. Lua development gains typed completions via [lazydev][lazydev]. Copilot is optional and can be toggled with `:Copilot enable|disable`.
 
 Debugging is ready out of the box with [nvim‑dap][dap], UI via [dap‑ui][dap-ui], Go helpers via [dap‑go][dap-go], and inline values from [nvim‑dap‑virtual‑text][dap-vt] (with simple secret‑redaction).
 
@@ -168,6 +178,7 @@ lua/custom/plugins/     — plugin specs (UI, LSP, cmp, tools, etc.)
 plugin/*.lua            — runtime config and custom features (auto‑sourced)
 lua/custom/*.lua        — bespoke modules (comment, utils)
 lua/freeze.lua          — freeze CLI wrapper
+lua/ollama_modelfile.lua — Modelfile filetype/highlights (optional)
 spell/                  — spelling & thesaurus
 ```
 
