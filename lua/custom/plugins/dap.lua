@@ -2,10 +2,10 @@ return {
   "mfussenegger/nvim-dap",
   lazy = true,
   dependencies = {
-    "leoluz/nvim-dap-go",
-    "rcarriga/nvim-dap-ui",
-    "theHamsta/nvim-dap-virtual-text",
-    "nvim-neotest/nvim-nio",
+    { "leoluz/nvim-dap-go", module = "dap-go" },
+    { "rcarriga/nvim-dap-ui", module = "dapui" },
+    { "theHamsta/nvim-dap-virtual-text", module = "nvim-dap-virtual-text" },
+    { "nvim-neotest/nvim-nio", lazy = true },
   },
 
   keys = {
