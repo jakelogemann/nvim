@@ -8,12 +8,12 @@ return {
     preset = "helix",
     show_help = true, -- show help message on the command line when the popup is visible
     show_keys = true, -- show the currently pressed key and its label as a message in the command line
-    -- Disabled by deafult for Telescope
+    -- Popup disable rules
     disable = {
       -- disable the WhichKey popup for certain buf types.
       bt = {},
       -- disable the WhichKey popup for certain file types.
-      ft = { "TelescopePrompt" },
+      ft = {},
     },
     -- Delay before showing the popup. Can be a number or a function that returns a number.
     ---@type number | fun(ctx: { keys: string, mode: string, plugin?: string }):number

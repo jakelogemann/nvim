@@ -186,7 +186,6 @@ Custom Lua in this repo is MIT unless noted. Each third‑party plugin remains u
 [symbols-outline]: https://github.com/simrat39/symbols-outline.nvim
 [snacks]: https://github.com/folke/snacks.nvim
 [oil]: https://github.com/stevearc/oil.nvim
-[telescope]: https://github.com/nvim-telescope/telescope.nvim
 [treesitter]: https://github.com/nvim-treesitter/nvim-treesitter
 [mini]: https://github.com/echasnovski/mini.nvim
 [ssr]: https://github.com/cshuaimin/ssr.nvim
