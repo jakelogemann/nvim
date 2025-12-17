@@ -17,6 +17,15 @@ local function v(lhs, rhs, desc) vim.keymap.set("v", lhs, rhs, { silent = true, 
 -- @param desc string
 local function t(lhs, rhs, desc) vim.keymap.set("t", lhs, rhs, { silent = true, desc = desc }) end
 
+-- Global :Format command (buffer-local versions may override); safe if already defined
+pcall(vim.api.nvim_create_user_command, "Format", function()
+  if vim.lsp and vim.lsp.buf and vim.lsp.buf.format then
+    vim.lsp.buf.format()
+  else
+    vim.notify(":Format requires LSP", vim.log.levels.WARN)
+  end
+end, { desc = "Format current buffer with LSP" })
+
 -- General
 n("<C-s>", "<cmd>write<cr>", "write buffer")
 n("<leader><leader>", "<c-^>", "alternate buffer")
@@ -86,6 +95,27 @@ n("<leader>lr", function() vim.lsp.buf.rename() end, "rename")
 n("<leader>lR", function() vim.lsp.buf.references() end, "references")
 n("<leader>ls", function() vim.lsp.buf.document_symbol() end, "doc symbols")
 n("<leader>lS", function() vim.lsp.buf.workspace_symbol() end, "ws symbols")
+
+-- Toggle inlay hints (buffer-local), supports both new/old APIs
+n("<leader>lI", function()
+  local ih = vim.lsp.inlay_hint
+  if not ih then return end
+  local bufnr = vim.api.nvim_get_current_buf()
+  local enabled = vim.b._inlay_hints_enabled
+  if type(ih.is_enabled) == "function" then
+    local ok, res = pcall(ih.is_enabled, { bufnr = bufnr })
+    if ok then enabled = res end
+  end
+  enabled = not enabled
+  vim.b._inlay_hints_enabled = enabled
+  if type(ih.enable) == "function" then
+    local ok_new = pcall(ih.enable, enabled, { bufnr = bufnr })
+    if not ok_new then pcall(ih.enable, bufnr, enabled) end
+  elseif type(ih) == "function" then
+    ih(bufnr, enabled)
+  end
+  vim.notify("Inlay hints: " .. (enabled and "on" or "off"), vim.log.levels.INFO)
+end, "toggle hints")
 
 -- Ollama AI
 local function _sel_prefix() return (vim.fn.mode():match "[vV]" and "'<,'>" or "") end

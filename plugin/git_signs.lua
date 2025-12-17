@@ -60,6 +60,24 @@ local function get_repo_root(buf)
   return out[1]
 end
 
+--- Compute path relative to repo root (git -C <root> requires relative pathspec).
+-- @param root string absolute repo root
+-- @param path string absolute file path
+-- @return string relative path (or original basename when outside)
+local function relpath(root, path)
+  if not root or not path or root == "" or path == "" then return path end
+  local norm_root = fn.fnamemodify(root, ":p")
+  -- ensure trailing slash for prefix test
+  if not norm_root:match("/$") then norm_root = norm_root .. "/" end
+  local norm_path = fn.fnamemodify(path, ":p")
+  if norm_path:sub(1, #norm_root) == norm_root then
+    local rel = norm_path:sub(#norm_root + 1)
+    if rel == "" then return fn.fnamemodify(path, ":t") end
+    return rel
+  end
+  return fn.fnamemodify(path, ":.")
+end
+
 --- Determine if path is untracked (missing from index).
 -- @param path string relative path
 -- @return boolean
@@ -155,7 +173,7 @@ local function refresh()
     clear(buf)
     return
   end
-  local rel = path
+  local rel = relpath(root, path)
   -- Bail on huge files
   if api.nvim_buf_line_count(buf) > max_lines_threshold then return end
   clear(buf)
