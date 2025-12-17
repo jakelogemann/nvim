@@ -74,7 +74,7 @@ This file guides human and automated agents working inside this repo. It is offl
 - Configuration: Prefer `vim.lsp.config[server]` when available (Neovim/lspconfig ≥ 0.11). Fallback to `require('lspconfig')[server].setup(...)` automatically.
 - Defaults: `on_attach` keymaps and `capabilities` apply to all Mason‑installed servers via handler or per‑server iteration (guarded for compatibility).
 - Tuned servers: `lua_ls`, `yamlls`, `gopls` with inlay hints, analyses, and YAML schema mappings.
-- Keymaps (buffer‑local, set on attach): diagnostic nav, rename, code actions, hover, signature help, telescope integrations.
+- Keymaps (buffer‑local, set on attach): diagnostic nav, rename, code actions, hover, signature help, Snacks picker integrations (with built‑in fallbacks).
 
 ### LSP Contract
 - Source file: `lua/custom/plugins/mason.lua`.
@@ -102,6 +102,19 @@ This file guides human and automated agents working inside this repo. It is offl
   - DAP: `<leader>db` breakpoint, `<leader>dc` continue, `<leader>du` UI
   - Ollama: `<leader>op` prompt, `<leader>ox` pick prompt
   - Go: `<leader>Gt`, `<leader>Gf`, Rust: `<leader>rr`, `<leader>rb`
+
+## Snacks Pickers
+- Default integration uses `Snacks.picker` with graceful fallbacks when Snacks is missing.
+- Common pickers available via keymaps/commands:
+  - Files: `Snacks.picker.files()`
+  - Grep: `Snacks.picker.grep()`
+  - Buffers: `Snacks.picker.buffers()`
+  - Recent: `Snacks.picker.recent()`
+  - Projects: `Snacks.picker.projects()`
+  - Undo: `Snacks.picker.undo()`
+  - LSP: `lsp_references()`, `lsp_symbols()`, `lsp_workspace_symbols()`
+  - Notifications: `Snacks.picker.notifications()`
+  - Commands/Keymaps/Help: `commands()`, `keymaps()`, `help()`
 
 ### Keymap Rules
 - Define in `plugin/keymaps.lua` using local wrappers; keep descriptions concise.
