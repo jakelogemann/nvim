@@ -59,8 +59,8 @@ Recommended system packages: `git`, `ripgrep`, `curl`; language toolchains as ne
 
 ## Everyday usage (a tiny tour)
 
-- Explore files: press `-` (or `<leader>e`) to open [Oil][oil] in the current directory. Open your config dir with `<leader>,`.
-- Search files/grep/buffers: `⟨leader⟩ff`, `⟨leader⟩/`, `⟨leader⟩,` via [Snacks][snacks].
+- Explore files: press `-` (or `<leader>e`) to open [Oil][oil] in the current directory. Open buffers with `⟨leader⟩,`, and your config files with `⟨leader⟩fc`.
+- Search with [Snacks][snacks]: smart `⟨leader⟩<space>`, files `⟨leader⟩ff`, grep `⟨leader⟩/`, recent `⟨leader⟩fr`, projects `⟨leader⟩fp`, notifications `⟨leader⟩n`, command history `⟨leader⟩:`.
 - Git workflows: `:Neogit` for a full UI; open/close diff view with `⟨leader⟩gd` / `⟨leader⟩gq`.
 - LSP: rename `⟨leader⟩lr`, code actions `⟨leader⟩la`, hover `K`, diagnostics float `⟨leader⟩ld`.
 - Debug: `⟨leader⟩d…` for common actions (continue, step, toggle UI). Quick toggles also on `F1–F5`.
