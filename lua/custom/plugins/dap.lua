@@ -21,37 +21,63 @@ return {
   },
   config = function()
     local dap = require "dap"
-    local ui = require "dapui"
 
-    require("dapui").setup()
-    require("dap-go").setup()
+    local _ui_ready, _vt_ready, _go_ready = false, false, false
+    local function ensure_ui()
+      if _ui_ready then return end
+      local ok_ui, dapui = pcall(require, "dapui")
+      if ok_ui then dapui.setup() end
+      _ui_ready = ok_ui
+    end
+    local function ensure_vt()
+      if _vt_ready then return end
+      local ok_vt, vt = pcall(require, "nvim-dap-virtual-text")
+      if ok_vt then
+        vt.setup {
+          display_callback = function(variable)
+            local name = string.lower(variable.name)
+            local value = string.lower(variable.value)
+            if name:match "secret" or name:match "api" or value:match "secret" or value:match "api" then return "*****" end
+            if #variable.value > 15 then return " " .. string.sub(variable.value, 1, 15) .. "... " end
+            return " " .. variable.value
+          end,
+        }
+      end
+      _vt_ready = ok_vt
+    end
+    local function ensure_go()
+      if _go_ready then return end
+      local ok_go, dgo = pcall(require, "dap-go")
+      if ok_go then dgo.setup() end
+      _go_ready = ok_go
+    end
 
-    require("nvim-dap-virtual-text").setup {
-      -- This just tries to mitigate the chance that I leak tokens here. Probably won't stop it from happening...
-      display_callback = function(variable)
-        local name = string.lower(variable.name)
-        local value = string.lower(variable.value)
-        if name:match "secret" or name:match "api" or value:match "secret" or value:match "api" then return "*****" end
+    -- Initialize Go adapter when editing Go files
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "go",
+      callback = ensure_go,
+    })
 
-        if #variable.value > 15 then return " " .. string.sub(variable.value, 1, 15) .. "... " end
-
-        return " " .. variable.value
-      end,
-    }
-
-    -- Handled by nvim-dap-go
-    -- dap.adapters.go = {
-    --   type = "server",
-    --   port = "${port}",
-    --   executable = {
-    --     command = "dlv",
-    --     args = { "dap", "-l", "127.0.0.1:${port}" },
-    --   },
-    -- }
-
-    dap.listeners.before.attach.dapui_config = function() ui.open() end
-    dap.listeners.before.launch.dapui_config = function() ui.open() end
-    dap.listeners.before.event_terminated.dapui_config = function() ui.close() end
-    dap.listeners.before.event_exited.dapui_config = function() ui.close() end
+    -- UI open/close on dap lifecycle, initialized on first use
+    dap.listeners.before.attach.dapui_config = function()
+      ensure_ui()
+      ensure_vt()
+      local ok, dapui = pcall(require, "dapui")
+      if ok then dapui.open() end
+    end
+    dap.listeners.before.launch.dapui_config = function()
+      ensure_ui()
+      ensure_vt()
+      local ok, dapui = pcall(require, "dapui")
+      if ok then dapui.open() end
+    end
+    dap.listeners.before.event_terminated.dapui_config = function()
+      local ok, dapui = pcall(require, "dapui")
+      if ok then dapui.close() end
+    end
+    dap.listeners.before.event_exited.dapui_config = function()
+      local ok, dapui = pcall(require, "dapui")
+      if ok then dapui.close() end
+    end
   end,
 }

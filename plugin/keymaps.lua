@@ -19,12 +19,17 @@ local function t(lhs, rhs, desc) vim.keymap.set("t", lhs, rhs, { silent = true, 
 
 -- Global :Format command (buffer-local versions may override); safe if already defined
 pcall(vim.api.nvim_create_user_command, "Format", function()
+  local ok_conform, conform = pcall(require, "conform")
+  if ok_conform and conform and conform.format then
+    conform.format { lsp_fallback = true, async = false }
+    return
+  end
   if vim.lsp and vim.lsp.buf and vim.lsp.buf.format then
     vim.lsp.buf.format()
   else
-    vim.notify(":Format requires LSP", vim.log.levels.WARN)
+    vim.notify(":Format requires LSP or conform.nvim", vim.log.levels.WARN)
   end
-end, { desc = "Format current buffer with LSP" })
+end, { desc = "Format current buffer (conform or LSP)" })
 
 -- :FormatToggle[!] — toggles format-on-save
 pcall(vim.api.nvim_create_user_command, "FormatToggle", function(opts)
