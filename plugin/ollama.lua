@@ -404,22 +404,26 @@ M.run_command = function(cmd, opts)
         return
       end
       if opts.debug then vim.print("Response data: ", data) end
-      for _, line in ipairs(data) do
-        partial_data = partial_data .. line
-        if line:sub(-1) == "}" then partial_data = partial_data .. "\n" end
-      end
+      for _, chunk in ipairs(data) do
+        if not chunk or #chunk == 0 then goto continue end
+        if not opts.json_response then
+          -- Plain text mode: stream directly
+          Process_response(chunk, false)
+          goto continue
+        end
 
-      local lines = vim.split(partial_data, "\n", { trimempty = true })
-
-      partial_data = table.remove(lines) or ""
-
-      for _, line in ipairs(lines) do
-        Process_response(line, opts.json_response)
-      end
-
-      if partial_data:sub(-1) == "}" then
-        Process_response(partial_data, opts.json_response)
-        partial_data = ""
+        -- JSON mode: accumulate until we can decode a full JSON object
+        local candidate = partial_data .. chunk
+        local to_test = candidate
+        if to_test:sub(1, 6) == "data: " then to_test = to_test:sub(7) end
+        local ok = pcall(function() return vim.fn.json_decode(to_test) end)
+        if ok then
+          Process_response(candidate, true)
+          partial_data = ""
+        else
+          partial_data = candidate
+        end
+        ::continue::
       end
     end,
     on_stderr = function(_, data, _)

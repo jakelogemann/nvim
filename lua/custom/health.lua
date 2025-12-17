@@ -59,6 +59,20 @@ return {
   check = function()
     if vim.g.neovide then vim.health.info "running in neovide" end
 
+    -- Neovim version & LSP API availability
+    local v = vim.version()
+    vim.health.info(string.format("Neovim %d.%d.%d", v.major, v.minor, v.patch))
+    if vim.lsp and vim.lsp.config then
+      vim.health.ok "vim.lsp.config available (new LSP setup path)"
+    else
+      vim.health.warn "vim.lsp.config missing; falling back to nvim-lspconfig.setup"
+    end
+    if vim.lsp and type(vim.lsp.inlay_hint) == "table" and type(vim.lsp.inlay_hint.enable) == "function" then
+      vim.health.ok "inlay_hint.enable API present"
+    else
+      vim.health.info "legacy inlay_hint API (compatibility path in use)"
+    end
+
     -- Tool detection
     vim.health.start "Tool detection"
     for _, tool in ipairs(config.tools) do
@@ -75,7 +89,7 @@ return {
     vim.health.start "Sanity checks"
     vim.health.info("config dir is " .. vim.fn.stdpath "config")
     vim.health.info("data dir is " .. vim.fn.stdpath "data")
-    vim.health.info("cache dir is" .. vim.fn.stdpath "cache")
+    vim.health.info("cache dir is " .. vim.fn.stdpath "cache")
 
     -- Spell file checks
     local spell_dir = vim.fn.stdpath "config" .. "/spell"

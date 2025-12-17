@@ -41,6 +41,16 @@ return {
         },
       }
 
+      servers["jsonls"] = {
+        json = {
+          validate = { enable = true },
+          schemas = (function()
+            local ok, schemastore = pcall(require, "schemastore")
+            return ok and schemastore.json.schemas() or {}
+          end)(),
+        },
+      }
+
       servers["gopls"] = {
         gopls = {
           memoryMode = "DegradedClosed",
