@@ -191,6 +191,24 @@ return {
 - Targeted health: `nvim --headless "+lua require('custom.health').check()" +qa`
 - Clean artifacts: `mise run clean` (removes `freeze.png`)
 
+### Verification (Headless & Local Envs)
+- Standard (local):
+  - `nvim --headless "+Lazy check" +qa`
+  - `nvim --headless "+Lazy sync" +qa`
+  - `nvim --headless "+checkhealth" +qa`
+  - `nvim --headless "+checkhealth custom" +qa`
+- Sandbox/CI (no write to `~`):
+  - Use local XDG dirs to avoid EPERM on cache/state/data writes:
+    - `XDG_CACHE_HOME="$PWD/.nvimcache" XDG_STATE_HOME="$PWD/.nvimstate" XDG_DATA_HOME="$PWD/.nvimdata" nvim --headless "+Lazy check" +qa`
+  - Treesitter parsers: ensure a writable directory:
+    - Env: `NVIM_TS_PARSER_DIR="$PWD/.nvimparsers"`
+    - Or rely on `vim.g.treesitter_parsers_dir` set in `plugin/options.lua` (make sure it exists).
+- Common issues and fixes:
+  - luac cache EPERM in `~/.cache/nvim/luac`: set `XDG_CACHE_HOME` as above.
+  - Treesitter parser dir warning: set `NVIM_TS_PARSER_DIR` or create the configured parser dir.
+  - DAP UI requires `nvim-nio`: run `+Lazy sync` (see dap deps in `lua/custom/plugins/dap.lua`).
+  - Old Neovim without `vim.lsp.config`: health warns; fallback to `lspconfig.setup` is built in.
+
 ## Safety & Guards
 - External binaries must be gated with `vim.fn.executable(...) == 1` and fail softly via `vim.notify`.
 - Optional dependencies must use `pcall(require, ...)` guards.
@@ -240,6 +258,36 @@ return {
 - Check spec issues: `nvim --headless "+Lazy check" +qa`
 - LSP info: `:LspInfo`
 - Health: `nvim --headless "+checkhealth" +qa`
+
+## Commit Messages
+- Use Conventional Commits: `type(scope): subject` (~72 chars).
+- Types: `feat`, `fix`, `docs`, `refactor`, `perf`, `style`, `test`, `build`, `ci`, `chore`, `revert`.
+- Scopes (examples): `nvim`, `lsp`, `picker`, `snacks`, `ollama`, `git`, `dap`, `opts`, `health`, `docs`.
+- Body: concise bullets explaining what and why; group by domain; call out new toggles/commands.
+- Evidence: add headless runs (Lazy/health), manual flows, and note screenshots/recordings for UI/keymap changes.
+- Footer: optional `BREAKING CHANGE:`, `Refs: #123`, `Co-authored-by:`.
+
+### Template
+```
+type(scope): concise subject (~72 chars)
+
+Context / rationale (1–2 lines)
+
+- Domain A: change
+- Domain B: change
+- Validation:
+  - nvim --headless "+Lazy check" +qa → ok
+  - nvim --headless "+checkhealth custom" +qa → ok
+
+Refs: #issue (optional)
+BREAKING CHANGE: description (if any)
+```
+
+### Examples
+- `feat(picker): standardize Snacks wrappers; add :Files/:Rg`
+- `fix(ollama): robust line JSON streaming; keep buffer on error`
+- `feat(lsp): global inlay hints toggle and buffer keymap`
+- `feat(git): :GitSignsDiffTarget to switch head|staged`
 
 ## Metadata (machine hints)
 - Leaders: `mapleader = " "`, `maplocalleader = " "`.
