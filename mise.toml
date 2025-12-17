@@ -1,2 +1,21 @@
 [tasks.clean]
 run = "rm -vrf freeze.png"
+
+# Neovim headless verification and helpers
+[tasks.lazy_check]
+run = "mkdir -p .nvimcache .nvimstate .nvimdata .nvimparsers && XDG_CACHE_HOME=\"$PWD/.nvimcache\" XDG_STATE_HOME=\"$PWD/.nvimstate\" XDG_DATA_HOME=\"$PWD/.nvimdata\" NVIM_TS_PARSER_DIR=\"$PWD/.nvimparsers\" nvim --headless \"+Lazy check\" +qa"
+
+[tasks.lazy_sync]
+run = "mkdir -p .nvimcache .nvimstate .nvimdata .nvimparsers && XDG_CACHE_HOME=\"$PWD/.nvimcache\" XDG_STATE_HOME=\"$PWD/.nvimstate\" XDG_DATA_HOME=\"$PWD/.nvimdata\" NVIM_TS_PARSER_DIR=\"$PWD/.nvimparsers\" nvim --headless \"+Lazy sync\" +qa"
+
+[tasks.health]
+run = "mkdir -p .nvimcache .nvimstate .nvimdata .nvimparsers && XDG_CACHE_HOME=\"$PWD/.nvimcache\" XDG_STATE_HOME=\"$PWD/.nvimstate\" XDG_DATA_HOME=\"$PWD/.nvimdata\" NVIM_TS_PARSER_DIR=\"$PWD/.nvimparsers\" nvim --headless \"+checkhealth\" +qa"
+
+[tasks.health_custom]
+run = "mkdir -p .nvimcache .nvimstate .nvimdata .nvimparsers && XDG_CACHE_HOME=\"$PWD/.nvimcache\" XDG_STATE_HOME=\"$PWD/.nvimstate\" XDG_DATA_HOME=\"$PWD/.nvimdata\" NVIM_TS_PARSER_DIR=\"$PWD/.nvimparsers\" nvim --headless \"+checkhealth custom\" +qa"
+
+[tasks.verify]
+run = "mise run lazy_check && mise run lazy_sync && mise run health && mise run health_custom"
+
+[tasks.clean_cache]
+run = "rm -rf .nvimcache .nvimstate .nvimdata .nvimparsers"
