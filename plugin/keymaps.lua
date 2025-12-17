@@ -34,6 +34,9 @@ n("<c-w>\\", function()
   if ok then w.show { keys = "<c-w>", loop = true } end
 end, "window mode")
 
+-- Help
+n("<leader>h?", "<cmd>Cheatsheet<cr>", "cheatsheet")
+
 -- [Neo]VIM Plugin Management
 n("<leader>Vl", "<cmd>Lazy<cr>", "Lazy: UI")
 n("<leader>Vs", "<cmd>Lazy sync<cr>", "Lazy: Sync")
