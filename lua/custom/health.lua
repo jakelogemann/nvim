@@ -79,6 +79,22 @@ return {
       check_tool(tool)
     end
 
+    -- Snacks and completion presence
+    do
+      vim.health.start "Plugins presence"
+      local snacks_ok = pcall(require, "snacks")
+      if snacks_ok then vim.health.ok "Snacks loaded" else vim.health.warn "Snacks not found" end
+      local blink_ok = pcall(require, "blink.cmp")
+      local cmp_ok = pcall(require, "cmp")
+      if blink_ok then
+        vim.health.ok "blink.cmp loaded"
+      elseif cmp_ok then
+        vim.health.ok "nvim-cmp loaded"
+      else
+        vim.health.warn "No completion engine loaded (blink.cmp or nvim-cmp)"
+      end
+    end
+
     -- LSP server detection
     vim.health.start "Language Server Protocol (LSP) detection"
     for _, lsp in ipairs(config.lsp_servers) do
@@ -121,6 +137,19 @@ return {
       vim.health.ok "Terminal integration available"
     else
       vim.health.warn "Terminal integration NOT available"
+    end
+
+    -- Optional Ollama reachability (skip in CI)
+    if not vim.env.CI then
+      if vim.fn.executable "curl" == 1 then
+        local host = "http://" .. (vim.g.ollama_host or "localhost") .. ":" .. (vim.g.ollama_port or "11434") .. "/api/tags"
+        local out = vim.fn.systemlist { "curl", "--silent", "--max-time", "1", host }
+        if vim.v.shell_error == 0 and #out > 0 then
+          vim.health.ok("Ollama reachable at " .. host)
+        else
+          vim.health.info("Ollama not reachable at " .. host .. " (may be fine if remote/off)")
+        end
+      end
     end
   end,
 }

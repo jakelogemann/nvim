@@ -65,6 +65,7 @@ local default_options = {
   quit_map = "q",
   accept_map = "<c-cr>",
   retry_map = "<c-r>",
+  cancel_map = "<c-c>",
   command_name = "Ollama",
   hidden = false,
   thread = true, -- whether to keep conversation context between prompts
@@ -74,7 +75,13 @@ local default_options = {
   json_response = true,
   display_mode = "float",
   no_auto_close = false,
-  init = function() pcall(io.popen, "ollama serve > /dev/null 2>&1 &") end,
+  init = function()
+    if vim.fn.executable "ollama" == 1 then
+      pcall(io.popen, "ollama serve > /dev/null 2>&1 &")
+    else
+      vim.notify("`ollama` not found; using remote host if configured", vim.log.levels.INFO)
+    end
+  end,
   list_models = function(options)
     local response = vim.fn.systemlist("curl --silent --no-buffer http://" .. options.host .. ":" .. options.port .. "/api/tags")
     local list = vim.fn.json_decode(response)
@@ -232,6 +239,11 @@ local function create_window(cmd, opts)
     if globals.job_id then vim.fn.jobstop(globals.job_id) end
   end, { buffer = globals.result_buffer })
   vim.keymap.set("n", M.quit_map, "<cmd>quit<cr>", { buffer = globals.result_buffer })
+  if M.cancel_map and M.cancel_map ~= "" then
+    vim.keymap.set("n", M.cancel_map, function()
+      if globals.job_id then vim.fn.jobstop(globals.job_id) end
+    end, { buffer = globals.result_buffer, desc = "Cancel streaming" })
+  end
   vim.keymap.set("n", M.accept_map, function()
     opts.replace = true
     close_window(opts)
@@ -254,6 +266,10 @@ end
 -- @param options table prompt/model overrides
 M.exec = function(options)
   local opts = vim.tbl_deep_extend("force", M, options)
+  if vim.fn.executable "curl" ~= 1 then
+    vim.notify("`curl` is required for Ollama integration", vim.log.levels.ERROR)
+    return
+  end
   if opts.hidden then
     -- the only reasonable thing to do if no output can be seen
     opts.display_mode = "float" -- uses the `hide` option
@@ -599,6 +615,17 @@ end, {
     return promptKeys
   end,
 })
+
+-- Cancel current Ollama job and keep buffer open for inspection
+vim.api.nvim_create_user_command("OllamaCancel", function()
+  if globals.job_id then
+    vim.fn.jobstop(globals.job_id)
+    globals.job_id = nil
+    vim.notify("Ollama job cancelled")
+  else
+    vim.notify("No running Ollama job", vim.log.levels.INFO)
+  end
+end, { desc = "Cancel current Ollama job" })
 
 --- Process a single line/chunk of streaming response JSON or plain text.
 -- Updates global context and writes incremental output.
