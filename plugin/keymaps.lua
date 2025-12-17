@@ -295,7 +295,7 @@ pcall(function()
     { "<leader>Vh", desc = "Health (custom)" },
     { "<leader>q", group = "Quickfix" },
     { "<leader>r", group = "Rust" },
-    { "<leader>s", group = "Find & Search (Snacks)" },
+    -- removed <leader>s group; consolidated under <leader>f
     { "<leader>t", group = "Tab" },
     { "<leader>T", group = "Terminal" },
     { "<leader>x", group = "Execute" },
