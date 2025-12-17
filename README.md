@@ -64,6 +64,7 @@ Recommended system packages: `git`, `ripgrep`, `curl`; language toolchains as ne
 - Git workflows: `:Neogit` for a full UI; open/close diff view with `⟨leader⟩gd` / `⟨leader⟩gq`.
 - LSP: rename `⟨leader⟩lr`, code actions `⟨leader⟩la`, hover `K`, diagnostics float `⟨leader⟩ld`.
 - Inlay hints: toggle per-buffer with `⟨leader⟩lI` (defaults on; global toggle via `vim.g.inlay_hints_enabled`).
+- Diagnostics: toggle per-buffer with `⟨leader⟩zd`.
 - Debug: `⟨leader⟩d…` for common actions (continue, step, toggle UI). Quick toggles also on `F1–F5`.
 - Comments: toggle with `⟨leader⟩c` (line or visual selection).
 - Run current file: `⟨leader⟩xx` (dispatches for Go/Rust/Python/Shell).
@@ -156,7 +157,7 @@ A tiny built‑in module draws `+` additions, `~` changes, and `-` deletions wit
 
 ## Options & layout
 
-Notable choices (see `plugin/options.lua`): modern command line (`cmdheight=0`), global statusline, conceal by default (toggle `⟨leader⟩zc`), persistent undo, and sane splits. Toggle format‑on‑save with `⟨leader⟩zf` (global), or run `:Format` on demand. Nerd Font icons are expected.
+Notable choices (see `plugin/options.lua`): modern command line (`cmdheight=0`), global statusline, conceal by default (toggle `⟨leader⟩zc`), persistent undo, and sane splits. Toggle format‑on‑save with `⟨leader⟩zf` (global), or `:FormatToggle` (global) / `:FormatToggle!` (buffer). Run `:Format` on demand. Nerd Font icons are expected.
 
 Project structure at a glance:
 
