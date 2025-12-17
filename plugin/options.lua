@@ -109,6 +109,7 @@ if vim.g.neovide then
 end
 
 vim.g.treesitter_parsers_dir = vim.fn.stdpath "data" .. "/parsers"
+pcall(vim.fn.mkdir, vim.g.treesitter_parsers_dir, "p")
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.autoformat_enabled = false

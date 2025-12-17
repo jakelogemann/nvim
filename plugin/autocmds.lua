@@ -53,7 +53,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   group = my_autocmds,
   pattern = "*",
   callback = function()
-    if vim.g.autoformat_enabled then pcall(vim.cmd, "Format") end
+    local b = vim.b._autoformat_enabled
+    local enabled = b
+    if enabled == nil then enabled = vim.g.autoformat_enabled end
+    if enabled then pcall(vim.cmd, "Format") end
   end,
 })
 

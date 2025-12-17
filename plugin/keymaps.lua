@@ -26,6 +26,19 @@ pcall(vim.api.nvim_create_user_command, "Format", function()
   end
 end, { desc = "Format current buffer with LSP" })
 
+-- :FormatToggle[!] — toggles format-on-save
+pcall(vim.api.nvim_create_user_command, "FormatToggle", function(opts)
+  if opts.bang then
+    local cur = vim.b._autoformat_enabled
+    if cur == nil then cur = vim.g.autoformat_enabled end
+    vim.b._autoformat_enabled = not cur
+    vim.notify("Autoformat (buffer): " .. (vim.b._autoformat_enabled and "on" or "off"))
+  else
+    vim.g.autoformat_enabled = not vim.g.autoformat_enabled
+    vim.notify("Autoformat (global): " .. (vim.g.autoformat_enabled and "on" or "off"))
+  end
+end, { desc = "Toggle format on save (global). Use ! for buffer", bang = true })
+
 -- General
 n("<C-s>", "<cmd>write<cr>", "write buffer")
 n("<leader><leader>", "<c-^>", "alternate buffer")
@@ -210,6 +223,17 @@ n("<leader>zf", function()
   vim.g.autoformat_enabled = not vim.g.autoformat_enabled
   vim.notify("Autoformat on save: " .. (vim.g.autoformat_enabled and "on" or "off"))
 end, "Toggle format on save")
+n("<leader>zd", function()
+  if vim.b._diagnostics_disabled then
+    vim.b._diagnostics_disabled = false
+    vim.diagnostic.enable(0)
+    vim.notify("Diagnostics (buffer): on")
+  else
+    vim.b._diagnostics_disabled = true
+    vim.diagnostic.disable(0)
+    vim.notify("Diagnostics (buffer): off")
+  end
+end, "Toggle diagnostics (buffer)")
 n("<leader>zl", function() vim.bo.list = not vim.bo.list end, "Toggle list")
 n("<leader>zi", "<cmd>IndentGuidesToggle<cr>", "Toggle guides")
 n("<leader>zI", "<cmd>IndentDetect<cr>", "Detect indent")

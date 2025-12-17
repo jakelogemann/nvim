@@ -61,7 +61,10 @@ return {
     indent = {},
     lazygit = {},
     notifier = {},
-    picker = {},
+    picker = {
+      hidden = true,
+      ignored = true,
+    },
     scope = {},
     scratch = {},
     scroll = {},

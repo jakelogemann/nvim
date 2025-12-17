@@ -52,10 +52,18 @@ end
 
 function M.files(opts)
   opts = opts or {}
-  opts.cwd = opts.cwd or M.root()
+  local root = opts.cwd or M.root()
+  opts.cwd = root
   local p = M.ensure()
-  if p and p.files then
-    return p.files(opts)
+  if p then
+    -- Prefer git_files inside a git worktree when available
+    local in_git = false
+    if vim.fn.executable "git" == 1 then
+      local out = vim.fn.systemlist { "git", "-C", root, "rev-parse", "--is-inside-work-tree" }
+      in_git = (vim.v.shell_error == 0) and (out[1] == "true")
+    end
+    if in_git and p.git_files then return p.git_files(opts) end
+    if p.files then return p.files(opts) end
   end
   -- fallback
   vim.cmd("find ")

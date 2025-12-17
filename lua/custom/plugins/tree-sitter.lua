@@ -6,6 +6,7 @@ return {
   lazy = false,
   init = function()
     require("nvim-treesitter.configs").setup {
+      parser_install_dir = vim.g.treesitter_parsers_dir,
       -- A list of parser names, or "all"
       ensure_installed = {
         "arduino",
