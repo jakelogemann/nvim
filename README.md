@@ -192,6 +192,9 @@ spell/                  — spelling & thesaurus
 - Sandbox/CI (no writes to `~`):
   - `XDG_CACHE_HOME="$PWD/.nvimcache" XDG_STATE_HOME="$PWD/.nvimstate" XDG_DATA_HOME="$PWD/.nvimdata" nvim --headless "+Lazy check" +qa`
   - Set `NVIM_TS_PARSER_DIR="$PWD/.nvimparsers"` if Treesitter parser writes are blocked.
+  - Or use the provided mise tasks:
+    - `mise run verify` (runs Lazy check/sync and health checks with safe env)
+    - `mise run clean_cache` to remove local XDG dirs created for headless runs
   
 ### Commit messages
 
