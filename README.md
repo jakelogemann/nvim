@@ -181,6 +181,21 @@ spell/                  — spelling & thesaurus
 - Startup slower than expected? Temporarily enable profiling (if the optional profiler is present).
 - Sessions not saving? Ensure at least one file buffer is open. You can temporarily disable saving with `⟨leader⟩Sd`.
 
+### Formatting with Conform
+
+- :Format prefers external formatters via conform.nvim and falls back to LSP when none are configured for a filetype. If a configured formatter runs and fails, Conform reports an error (it will not fall back after a hard failure).
+- Common tools used here: stylua, shfmt, jq, yamlfmt, prettier, rustfmt, gofumpt, goimports, eslint_d, shellcheck, luacheck, markdownlint, golangci-lint.
+- Install examples (macOS):
+  - brew install stylua shfmt jq yamlfmt shellcheck luacheck golangci-lint gofumpt
+  - npm i -g prettier eslint_d markdownlint-cli
+  - rustup component add rustfmt
+  - go install golang.org/x/tools/cmd/goimports@latest
+- If you see “Client stylua quit with exit code 2”, run the tool directly on the file to inspect the error: `stylua path/to/file.lua`. Also check `:messages` and `~/.local/state/nvim/lsp.log`.
+
+### LSP deprecation warnings
+
+- Message: `vim.lsp.get_active_clients() is deprecated` typically comes from a plugin. Run `:checkhealth vim.deprecated` to see more details and update the offending plugin. This config already uses `vim.lsp.get_clients()` and newer APIs.
+
 ### Verification & CI tips
 
 - See AGENTS.md for comprehensive, offline‑first verification guidance.
