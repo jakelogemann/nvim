@@ -16,6 +16,20 @@ local config = {
     "tree-sitter",
     "ollama",
     "freeze",
+    -- formatters/linters used by conform.nvim / nvim-lint
+    "stylua",
+    "shfmt",
+    "jq",
+    "yamlfmt",
+    "prettier",
+    "rustfmt",
+    "goimports",
+    "gofumpt",
+    "eslint_d",
+    "shellcheck",
+    "luacheck",
+    "markdownlint",
+    "golangci-lint",
   },
   -- Define the list of LSP servers to check for on the system.
   lsp_servers = {
