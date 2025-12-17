@@ -24,6 +24,13 @@ return {
       -- we drive autoformat via our own autocmd + :FormatToggle
       format_on_save = false,
       notify_on_error = true,
+      -- Ensure safe, explicit args for known formatters
+      formatters = {
+        stylua = {
+          prepend_args = { "--search-parent-directories" },
+          args = { "--stdin-filepath", "$FILENAME", "-" },
+        },
+      },
     },
     config = function(_, opts)
       local ok, conform = pcall(require, "conform")
@@ -32,4 +39,3 @@ return {
     end,
   },
 }
-
