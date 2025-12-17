@@ -42,3 +42,11 @@ end, {
 vim.api.nvim_create_user_command("Files", function() pick.files() end, { desc = "Find files (project root)" })
 vim.api.nvim_create_user_command("Rg", function() pick.grep() end, { desc = "Grep (project root)" })
 vim.api.nvim_create_user_command("Buffers", function() pick.buffers() end, { desc = "Open buffers" })
+
+-- Set cwd to detected project root
+vim.api.nvim_create_user_command("RootHere", function()
+  local root = pick.root()
+  if not root or root == "" then return end
+  vim.cmd.cd(root)
+  vim.notify("cd " .. root)
+end, { desc = "Set cwd to project root" })

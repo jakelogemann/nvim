@@ -90,6 +90,7 @@ n("<leader>pS", function()
   local ok, p = pcall(require, "persistence")
   if ok then p.load { last = true } end
 end, "last session")
+n("<leader>pR", "<cmd>RootHere<cr>", "project root here")
 -- removed duplicate find mapping; use <leader>ff instead
 
 -- Git
