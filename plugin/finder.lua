@@ -1,21 +1,38 @@
---- Lightweight umbrella :Find {subcommand} dispatcher over telescope builtins.
--- Extend the `subcommands` table to add new aliases. Provides custom completion.
+--- Lightweight umbrella :Find {subcommand} dispatcher built on Snacks pickers.
+-- Falls back to vim built-ins if Snacks is unavailable.
 local subcommands = {}
-local builtins = require "telescope.builtin"
 
-subcommands.qf = builtins.quickfix
-subcommands.help = builtins.help_tags
-subcommands.man = builtins.man_pages
-subcommands.symbol = builtins.symbols
-subcommands.file = builtins.find_files
-subcommands.command = builtins.commands
-subcommands.buffer = builtins.buffers
+local function snacks()
+  return _G.Snacks and Snacks.picker or nil
+end
 
+subcommands.qf = function()
+  local p = snacks()
+  if p and p.qflist then p.qflist() else vim.cmd.copen() end
+end
+subcommands.help = function()
+  local p = snacks()
+  if p and p.help then p.help() else vim.cmd.help() end
+end
+subcommands.man = function()
+  local p = snacks()
+  if p and p.man then p.man() else vim.cmd.Man() end
+end
+subcommands.symbol = function()
+  local p = snacks()
+  if p and p.lsp_symbols then p.lsp_symbols() else vim.lsp.buf.document_symbol() end
+end
+subcommands.file = function()
+  local p = snacks()
+  if p and p.files then p.files() else vim.cmd("find ") end
+end
+subcommands.command = function()
+  local p = snacks()
+  if p and p.commands then p.commands() else vim.cmd("command") end
+end
 subcommands.buffer = function()
-  require("telescope.builtin").buffers {
-    ignore_current_buffer = true,
-    sort_lastused = true,
-  }
+  local p = snacks()
+  if p and p.buffers then p.buffers() else vim.cmd.buffers() end
 end
 
 local finder_names = vim.tbl_keys(subcommands)

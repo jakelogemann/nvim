@@ -68,7 +68,13 @@ n("<leader>pS", function()
   local ok, p = pcall(require, "persistence")
   if ok then p.load { last = true } end
 end, "last session")
-n("<leader>p/", "<cmd>Telescope find_files<cr>", "find file")
+n("<leader>p/", function()
+  if _G.Snacks and Snacks.picker and Snacks.picker.files then
+    Snacks.picker.files()
+  else
+    vim.cmd("find ")
+  end
+end, "find file")
 
 -- Git
 n("<leader>gg", "<cmd>Neogit kind=tab<cr>", "git gui")

@@ -29,7 +29,7 @@ Target: Neovim 0.9+ (great on 0.10). Primary platform: macOS (portable elsewhere
 ## What’s inside (high level)
 
 - UI: [Catppuccin][catppuccin], [lualine][lualine], [which‑key][whichkey], [dressing][dressing], [noice][noice] (+[nui][nui], +[notify][notify]), [Symbols Outline][symbols-outline].
-- Navigation & search: [Snacks][snacks] pickers (files, grep, buffers, projects, undo). [Oil][oil] for a buffer‑centric file explorer. A tiny `:Find` dispatcher built on [Telescope][telescope].
+- Navigation & search: [Snacks][snacks] pickers (files, grep, buffers, projects, undo). [Oil][oil] for a buffer‑centric file explorer. A tiny `:Find` dispatcher built on Snacks.
 - Editing & refactors: [Treesitter][treesitter], [mini.surround][mini], [ssr.nvim][ssr] (structural search/replace), [spread.nvim][spread].
 - LSP & tools: [mason.nvim][mason], [mason‑lspconfig][mason-lsp], [nvim‑lspconfig][lspconfig], [SchemaStore][schemastore], [neoconf][neoconf], [lazydev][lazydev], [fidget][fidget], [lspkind][lspkind], sessions via [persistence.nvim](https://github.com/folke/persistence.nvim).
 - Completion: [blink.cmp][blink] + [friendly‑snippets][friendly-snippets] (Lua dev extras via [lazydev][lazydev]). Copilot optional via [copilot.lua][copilot].

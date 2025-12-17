@@ -15,7 +15,6 @@ return {
     dependencies = {
       "williamboman/mason.nvim",
       "neovim/nvim-lspconfig",
-      "nvim-telescope/telescope.nvim",
     },
     event = "BufReadPre",
     config = function()
@@ -102,11 +101,29 @@ return {
         nmap("<localleader>rn", vim.lsp.buf.rename, "rename")
         nmap("<localleader>ca", vim.lsp.buf.code_action, "code action")
         nmap("gd", vim.lsp.buf.definition, "definition")
-        nmap("gr", require("telescope.builtin").lsp_references, "references")
+        nmap("gr", function()
+          if _G.Snacks and Snacks.picker and Snacks.picker.lsp_references then
+            Snacks.picker.lsp_references()
+          else
+            vim.lsp.buf.references()
+          end
+        end, "references")
         nmap("gI", vim.lsp.buf.implementation, "implementation")
         nmap("<localleader>D", vim.lsp.buf.type_definition, "type def")
-        nmap("<localleader>ds", require("telescope.builtin").lsp_document_symbols, "doc symbols")
-        nmap("<localleader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "workspace symbols")
+        nmap("<localleader>ds", function()
+          if _G.Snacks and Snacks.picker and Snacks.picker.lsp_symbols then
+            Snacks.picker.lsp_symbols()
+          else
+            vim.lsp.buf.document_symbol()
+          end
+        end, "doc symbols")
+        nmap("<localleader>ws", function()
+          if _G.Snacks and Snacks.picker and Snacks.picker.lsp_workspace_symbols then
+            Snacks.picker.lsp_workspace_symbols()
+          else
+            vim.lsp.buf.workspace_symbol()
+          end
+        end, "workspace symbols")
         nmap("K", vim.lsp.buf.hover, "hover")
         nmap("<C-k>", vim.lsp.buf.signature_help, "signature help")
         nmap("gD", vim.lsp.buf.declaration, "declaration")
