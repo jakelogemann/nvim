@@ -113,7 +113,7 @@ return {
         nmap("<localleader>wr", vim.lsp.buf.remove_workspace_folder, "remove workspace folder")
         nmap("<localleader>wl", function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end, "list workspace folders")
 
-        if vim.lsp.inlay_hint then
+        if vim.lsp.inlay_hint and vim.g.inlay_hints_enabled ~= false then
           pcall(function()
             -- Neovim 0.10+ signature
             if type(vim.lsp.inlay_hint.enable) == "function" then

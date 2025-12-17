@@ -42,6 +42,17 @@ local function trim_table(tbl)
   return tbl
 end
 
+-- JSON helpers (prefer vim.json when available)
+local function json_encode(tbl)
+  if vim.json and vim.json.encode then return vim.json.encode(tbl) end
+  return vim.fn.json_encode(tbl)
+end
+
+local function json_decode(str)
+  if vim.json and vim.json.decode then return vim.json.decode(str) end
+  return vim.fn.json_decode(str)
+end
+
 local default_options = {
   model = "default:latest",
   host = "localhost",
@@ -56,6 +67,7 @@ local default_options = {
   retry_map = "<c-r>",
   command_name = "Ollama",
   hidden = false,
+  thread = true, -- whether to keep conversation context between prompts
   command = function(options)
     return "curl --silent --no-buffer -X POST http://" .. options.host .. ":" .. options.port .. "/api/chat -d $body"
   end,
@@ -327,7 +339,7 @@ M.exec = function(options)
   local cmd
 
   opts.json = function(body, shellescape)
-    local json = vim.fn.json_encode(body)
+    local json = json_encode(body)
     if shellescape then
       json = vim.fn.shellescape(json)
       if vim.o.shell == "cmd.exe" then json = string.gsub(json, '\\""', '\\\\\\"') end
@@ -351,6 +363,7 @@ M.exec = function(options)
   if string.find(cmd, "%$body") then
     local body = vim.tbl_extend("force", { model = opts.model, stream = true }, opts.body)
     local messages = {}
+    if opts.thread == false then globals.context = nil end
     if globals.context then messages = globals.context end
     -- Add new prompt to the context
     table.insert(messages, { role = "user", content = prompt })
@@ -390,8 +403,11 @@ M.run_command = function(cmd, opts)
     create_window(cmd, opts)
     if opts.show_model then write_to_buffer { "# Chat with " .. opts.model, "" } end
   end
-  local partial_data = ""
+  local partial_line = ""
   if opts.debug then print(cmd) end
+
+  -- expose current opts for response processor
+  M._current_opts = opts
 
   globals.job_id = vim.fn.jobstart(cmd, {
     -- stderr_buffered = opts.debug,
@@ -407,21 +423,24 @@ M.run_command = function(cmd, opts)
       for _, chunk in ipairs(data) do
         if not chunk or #chunk == 0 then goto continue end
         if not opts.json_response then
-          -- Plain text mode: stream directly
           Process_response(chunk, false)
           goto continue
         end
-
-        -- JSON mode: accumulate until we can decode a full JSON object
-        local candidate = partial_data .. chunk
-        local to_test = candidate
-        if to_test:sub(1, 6) == "data: " then to_test = to_test:sub(7) end
-        local ok = pcall(function() return vim.fn.json_decode(to_test) end)
-        if ok then
-          Process_response(candidate, true)
-          partial_data = ""
-        else
-          partial_data = candidate
+        -- Line-oriented NDJSON-like streaming; handle optional "data: " prefix
+        local combined = partial_line .. chunk
+        for line in (combined .. "\n"):gmatch("([^\n]*)\n") do
+          if line == "" then goto nextline end
+          local payload = line
+          if payload:sub(1, 6) == "data: " then payload = payload:sub(7) end
+          local ok = pcall(json_decode, payload)
+          if ok then
+            Process_response(payload, true)
+            partial_line = ""
+          else
+            -- keep partial for next chunk
+            partial_line = payload
+          end
+          ::nextline::
         end
         ::continue::
       end
@@ -442,7 +461,11 @@ M.run_command = function(cmd, opts)
       end
     end,
     on_exit = function(_, b)
-      if b == 0 and opts.replace and globals.result_buffer then close_window(opts) end
+      if b == 0 then
+        if opts.replace and globals.result_buffer then close_window(opts) end
+      else
+        write_to_buffer { "", "---", "Process exited with code " .. tostring(b), "" }
+      end
     end,
   })
 
@@ -584,28 +607,28 @@ end, {
 function Process_response(str, json_response)
   if string.len(str) == 0 then return end
   local text
+  local thread = true
+  if M._current_opts and M._current_opts.thread == false then thread = false end
 
   if json_response then
     -- llamacpp response string -- 'data: {"content": "hello", .... }' -- remove 'data: ' prefix, before json_decode
     if string.sub(str, 1, 6) == "data: " then str = string.gsub(str, "data: ", "", 1) end
-    local success, result = pcall(function() return vim.fn.json_decode(str) end)
+    local success, result = pcall(json_decode, str)
 
     if success then
       if result.message and result.message.content then -- ollama chat endpoint
         local content = result.message.content
         text = content
 
-        globals.context = globals.context or {}
-        globals.context_buffer = globals.context_buffer or ""
-        globals.context_buffer = globals.context_buffer .. content
+        if thread then
+          globals.context = globals.context or {}
+          globals.context_buffer = globals.context_buffer or ""
+          globals.context_buffer = globals.context_buffer .. content
+        end
 
         -- When the message sequence is complete, add it to the context
-        if result.done then
-          table.insert(globals.context, {
-            role = "assistant",
-            content = globals.context_buffer,
-          })
-          -- Clear the buffer as we're done with this sequence of messages
+        if thread and result.done then
+          table.insert(globals.context, { role = "assistant", content = globals.context_buffer })
           globals.context_buffer = ""
         end
       elseif result.choices then -- groq chat endpoint
@@ -613,27 +636,23 @@ function Process_response(str, json_response)
         local content = choice.delta.content
         text = content
 
-        if content ~= nil then
+        if content ~= nil and thread then
           globals.context = globals.context or {}
           globals.context_buffer = globals.context_buffer or ""
           globals.context_buffer = globals.context_buffer .. content
         end
 
         -- When the message sequence is complete, add it to the context
-        if choice.finish_reason == "stop" then
-          table.insert(globals.context, {
-            role = "assistant",
-            content = globals.context_buffer,
-          })
-          -- Clear the buffer as we're done with this sequence of messages
+        if thread and choice.finish_reason == "stop" then
+          table.insert(globals.context, { role = "assistant", content = globals.context_buffer })
           globals.context_buffer = ""
         end
       elseif result.content then -- llamacpp version
         text = result.content
-        if result.content then globals.context = result.content end
+        if thread and result.content then globals.context = result.content end
       elseif result.response then -- ollama generate endpoint
         text = result.response
-        if result.context then globals.context = result.context end
+        if thread and result.context then globals.context = result.context end
       end
     else
       write_to_buffer { "", "====== ERROR ====", str, "-------------", "" }

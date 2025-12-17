@@ -37,3 +37,8 @@ end, {
     return vim.tbl_filter(function(key) return key:find(line:match "^%s*%w+ (%w*)" or "") == 1 end, finder_names)
   end,
 })
+
+-- Convenience aliases using unified custom.pick wrappers
+vim.api.nvim_create_user_command("Files", function() pick.files() end, { desc = "Find files (project root)" })
+vim.api.nvim_create_user_command("Rg", function() pick.grep() end, { desc = "Grep (project root)" })
+vim.api.nvim_create_user_command("Buffers", function() pick.buffers() end, { desc = "Open buffers" })

@@ -44,6 +44,7 @@ n("<leader>Vu", "<cmd>Lazy update<cr>", "Lazy: Update")
 n("<leader>Vp", "<cmd>Lazy profile<cr>", "Lazy: Profile")
 n("<leader>Vm", "<cmd>Mason<cr>", "Mason: UI")
 n("<leader>Vi", function() vim.cmd.edit(config_root .. "/init.lua") end, "Edit Config")
+n("<leader>Vh", "<cmd>checkhealth custom<cr>", "Health: custom")
 n("<leader>VM", function()
   local log = vim.fn.stdpath "cache" .. "/mason.log"
   if vim.loop.fs_stat(log) then
@@ -71,7 +72,7 @@ n("<leader>pS", function()
   local ok, p = pcall(require, "persistence")
   if ok then p.load { last = true } end
 end, "last session")
-n("<leader>p/", function() require("custom.pick").files() end, "find file")
+-- removed duplicate find mapping; use <leader>ff instead
 
 -- Git
 n("<leader>gg", "<cmd>Neogit kind=tab<cr>", "git gui")
@@ -205,6 +206,10 @@ n("<leader>mk", function() vim.cmd "move .-2 | normal ==" end, "line up")
 n("<leader>sw", function() vim.cmd "set list!" end, "toggle invisibles")
 n("<leader>zc", function() vim.opt.conceallevel = vim.opt.conceallevel == 0 and 2 or 0 end, "Toggle conceal")
 n("<leader>zg", "<cmd>GitSignsToggle<cr>", "Toggle git signs")
+n("<leader>zf", function()
+  vim.g.autoformat_enabled = not vim.g.autoformat_enabled
+  vim.notify("Autoformat on save: " .. (vim.g.autoformat_enabled and "on" or "off"))
+end, "Toggle format on save")
 n("<leader>zl", function() vim.bo.list = not vim.bo.list end, "Toggle list")
 n("<leader>zi", "<cmd>IndentGuidesToggle<cr>", "Toggle guides")
 n("<leader>zI", "<cmd>IndentDetect<cr>", "Detect indent")
@@ -257,6 +262,7 @@ pcall(function()
     { "<leader>o", group = "Ollama" },
     { "<leader>p", group = "Project" },
     { "<leader>V", group = "neoVIM" },
+    { "<leader>Vh", desc = "Health (custom)" },
     { "<leader>q", group = "Quickfix" },
     { "<leader>r", group = "Rust" },
     { "<leader>s", group = "Search (Snacks)" },

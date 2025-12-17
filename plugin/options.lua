@@ -112,6 +112,7 @@ vim.g.treesitter_parsers_dir = vim.fn.stdpath "data" .. "/parsers"
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.autoformat_enabled = false
+vim.g.inlay_hints_enabled = true
 vim.g.cmp_enabled = true
 vim.g.matchup_matchparen_deferred = 1
 vim.g.autopairs_enabled = true

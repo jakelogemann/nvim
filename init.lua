@@ -55,6 +55,7 @@ end
 
 plugin_manager.setup()
 utils.try_to_enable_profiler()
-require("freeze").setup()
-require("custom.comment").setup()
-require("ollama_modelfile").setup()
+
+pcall(function() require("freeze").setup() end)
+pcall(function() require("custom.comment").setup() end)
+pcall(function() require("ollama_modelfile").setup() end)

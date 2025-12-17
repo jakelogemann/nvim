@@ -4,8 +4,8 @@ return {
     { "<leader>.", function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
     { "<leader>S", function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
     { "<leader><space>", function() require("custom.pick").smart() end, desc = "Smart Find Files" },
-    { "<leader>,", function() Snacks.picker.buffers() end, desc = "Buffers" },
-    { "<leader>/", function() Snacks.picker.grep() end, desc = "Grep" },
+    { "<leader>,", function() require("custom.pick").buffers() end, desc = "Buffers" },
+    { "<leader>/", function() require("custom.pick").grep() end, desc = "Grep" },
     { "<leader>:", function() Snacks.picker.command_history() end, desc = "Command History" },
     { "<leader>n", function() Snacks.picker.notifications() end, desc = "Notification History" },
     { "<leader>e", function() Snacks.explorer() end, desc = "File Explorer" },
@@ -13,11 +13,18 @@ return {
 
     -- find
     -- buffers available via <leader>,; avoid duplicate under <leader>f
-    { "<leader>fc", function() Snacks.picker.files { cwd = vim.fn.stdpath "config" } end, desc = "Find Config File" },
-    { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
-    { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
-    { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
-    { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
+    { "<leader>fc", function() require("custom.pick").files { cwd = vim.fn.stdpath "config" } end, desc = "Find Config File" },
+    { "<leader>ff", function() require("custom.pick").files() end, desc = "Find Files" },
+    { "<leader>fg", function()
+      local pick = require "custom.pick"
+      local ok, snacks = pcall(require, "snacks")
+      if ok and snacks.picker and snacks.picker.git_files then
+        return snacks.picker.git_files { cwd = pick.root() }
+      end
+      return pick.files { cwd = pick.root() }
+    end, desc = "Find Git Files" },
+    { "<leader>fp", function() require("custom.pick").projects() end, desc = "Projects" },
+    { "<leader>fr", function() require("custom.pick").recent() end, desc = "Recent" },
 
     -- search
     { "<leader>sC", function() Snacks.picker.commands() end, desc = "Commands" },

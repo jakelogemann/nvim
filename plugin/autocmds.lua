@@ -47,6 +47,16 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 --  callback = function() vim.cmd "Format" end,
 -- })
 
+-- Opt-in autoformat on save, toggled by vim.g.autoformat_enabled (see plugin/options.lua)
+vim.api.nvim_create_autocmd("BufWritePre", {
+  desc = "Autoformat when enabled",
+  group = my_autocmds,
+  pattern = "*",
+  callback = function()
+    if vim.g.autoformat_enabled then pcall(vim.cmd, "Format") end
+  end,
+})
+
 -- Terminal buffer local options
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
   desc = "Terminal local opts",

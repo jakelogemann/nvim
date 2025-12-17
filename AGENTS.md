@@ -72,7 +72,7 @@ This file guides human and automated agents working inside this repo. It is offl
 ## LSP & Tools
 - Manager: `mason.nvim` + `mason-lspconfig.nvim`.
 - Configuration: Prefer `vim.lsp.config[server]` when available (Neovim/lspconfig ≥ 0.11). Fallback to `require('lspconfig')[server].setup(...)` automatically.
-- Defaults: `on_attach` keymaps and `capabilities` apply to all Mason‑installed servers via handler or per‑server iteration (guarded for compatibility).
+- Defaults: `on_attach` keymaps and `capabilities` apply to all Mason‑installed servers via handler or per‑server iteration (guarded for compatibility). Inlay hints default to enabled and can be toggled globally via `vim.g.inlay_hints_enabled` or per‑buffer with `<leader>lI`.
 - Tuned servers: `lua_ls`, `yamlls`, `gopls` with inlay hints, analyses, and YAML schema mappings.
 - Keymaps (buffer‑local, set on attach): diagnostic nav, rename, code actions, hover, signature help, Snacks picker integrations (with built‑in fallbacks).
 
@@ -161,7 +161,7 @@ end
 - Doc comments: terse `---@` annotations for non‑obvious logic.
 - Keep top‑level cost low (no heavy work during require); defer to `opts`/`config`.
 - Respect leader namespaces and update which‑key groups when adding bindings.
-- Run `:Format` before committing (project has `.stylua.toml` and `.luacheckrc`).
+- Run `:Format` before committing (project has `.stylua.toml` and `.luacheckrc`). To opt‑in format‑on‑save set `vim.g.autoformat_enabled = true` or toggle with `<leader>zf`.
 
 ### Performance Budget
 - No heavy loops or network calls at top‑level in modules.
@@ -208,7 +208,7 @@ return {
 - Add an LSP server: extend the `servers` table in `lua/custom/plugins/mason.lua` with `servers["name"] = { settings = ... }`.
 - Apply defaults to all servers: handled via mason‑lspconfig handlers or iteration; `on_attach` and `capabilities` are global defaults.
 - Add keymaps: edit `plugin/keymaps.lua` and update which‑key groups accordingly.
-- Extend Ollama prompts: add to `M.prompts` in `plugin/ollama.lua` (use `$text`, `$filetype`, `$input`, `$register`, `$register_x`).
+- Extend Ollama prompts: add to `M.prompts` in `plugin/ollama.lua` (use `$text`, `$filetype`, `$input`, `$register`, `$register_x`). Streaming parser is line‑oriented and robust to partial JSON; set `thread = false` in options for stateless prompts.
 - Change Freeze output: set `freeze.setup { output = "{filename}-{timestamp}.png", open = true }` in `init.lua` or a dedicated module.
 
 ### Change Matrix (what to touch)
@@ -229,6 +229,10 @@ return {
 - Mason handlers nil: guarded; code iterates installed servers when handlers API is absent.
 - Freeze missing: install `freeze` or disable usage; notifications will warn.
 - Ollama connection: ensure `ollama serve` is running or reachable on `host:port`.
+  - Use `:Ollama` and select a prompt; errors keep the window open with the exit code.
+
+### Pickers
+- Snacks is the canonical picker; `custom.pick` wraps it with a consistent project root. Telescope is intentionally not used. Aliases: `:Files`, `:Rg`, `:Buffers`.
 
 ### Diagnostic Commands
 - List plugin specs loaded: `:Lazy`

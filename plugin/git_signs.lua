@@ -30,6 +30,7 @@ local timer
 local debounce_ms = 120
 local max_lines_threshold = 100000
 local git_missing_notified = false
+local too_large_notified = {}
 
 -- Define sign types once
 local defined = false
@@ -174,8 +175,14 @@ local function refresh()
     return
   end
   local rel = relpath(root, path)
-  -- Bail on huge files
-  if api.nvim_buf_line_count(buf) > max_lines_threshold then return end
+  -- Bail on huge files (notify once per buffer)
+  if api.nvim_buf_line_count(buf) > max_lines_threshold then
+    if not vim.b._gitsigns_too_large_notified then
+      vim.b._gitsigns_too_large_notified = true
+      vim.notify("git signs disabled for large buffer (>" .. max_lines_threshold .. " lines)", vim.log.levels.INFO)
+    end
+    return
+  end
   clear(buf)
   define_signs()
   if is_untracked(root, rel) then
@@ -186,7 +193,14 @@ local function refresh()
     end
     return
   end
-  local diff_cmd = { "git", "-C", root, "--no-pager", "diff", "--no-color", "--no-ext-diff", "-U0", "HEAD", "--", rel }
+  local target = vim.b._gitsigns_target or "HEAD" -- or "STAGED"
+  local diff_cmd = { "git", "-C", root, "--no-pager", "diff", "--no-color", "--no-ext-diff", "-U0" }
+  if target == "STAGED" then
+    table.insert(diff_cmd, "--staged")
+  else
+    table.insert(diff_cmd, "HEAD")
+  end
+  vim.list_extend(diff_cmd, { "--", rel })
   local output = fn.systemlist(diff_cmd)
   if vim.v.shell_error ~= 0 then return end
   local hunks = parse_diff(output)
@@ -222,6 +236,21 @@ function M.toggle()
 end
 
 api.nvim_create_user_command("GitSignsToggle", M.toggle, {})
+
+-- Toggle or set diff target for the current buffer: HEAD or STAGED
+api.nvim_create_user_command("GitSignsDiffTarget", function(opts)
+  local val = (opts.args or ""):lower()
+  if val == "head" then
+    vim.b._gitsigns_target = "HEAD"
+  elseif val == "staged" then
+    vim.b._gitsigns_target = "STAGED"
+  else
+    -- toggle when no/invalid arg provided
+    vim.b._gitsigns_target = (vim.b._gitsigns_target == "STAGED") and "HEAD" or "STAGED"
+  end
+  vim.notify("Git signs target: " .. vim.b._gitsigns_target)
+  schedule_refresh()
+end, { nargs = "?", complete = function() return { "head", "staged" } end })
 
 api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "TextChanged", "TextChangedI", "FocusGained" }, {
   group = api.nvim_create_augroup("MiniGitSignsRefresh", { clear = true }),
