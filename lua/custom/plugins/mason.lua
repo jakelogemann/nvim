@@ -32,12 +32,12 @@ return {
 
       servers["yamlls"] = {
         yaml = {
-          schemas = {
-            ["http://json.schemastore.org/github-workflow"] = ".github/workflows/*.{yml,yaml}",
-            ["http://json.schemastore.org/catalog-info"] = "{catalog-info,catalog/**/*}.{yml,yaml}",
-            ["http://json.schemastore.org/github-action"] = ".github/action.{yml,yaml}",
-            ["http://json.schemastore.org/ansible-stable-2.9"] = "roles/tasks/*.{yml,yaml}",
-          },
+          -- Use local SchemaStore catalog for offline-first behavior
+          schemaStore = { enable = false, url = "" },
+          schemas = (function()
+            local ok, schemastore = pcall(require, "schemastore")
+            return ok and schemastore.yaml.schemas() or {}
+          end)(),
         },
       }
 

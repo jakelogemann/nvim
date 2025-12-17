@@ -29,6 +29,7 @@ local ns = api.nvim_create_namespace "MiniGitSigns"
 local timer
 local debounce_ms = 120
 local max_lines_threshold = 100000
+local git_missing_notified = false
 
 -- Define sign types once
 local defined = false
@@ -44,19 +45,26 @@ end
 --- Check whether buffer path is inside a git working tree.
 -- @param buf integer buffer handle
 -- @return boolean
-local function in_git_repo(buf)
+local function get_repo_root(buf)
+  if fn.executable "git" ~= 1 then
+    if not git_missing_notified then
+      git_missing_notified = true
+      vim.notify("git not found; disabling git signs", vim.log.levels.WARN)
+    end
+    return nil
+  end
   local dir = fn.fnamemodify(api.nvim_buf_get_name(buf), ":p:h")
-  if dir == "" then return false end
-  local cmd = { "git", "-C", dir, "rev-parse", "--is-inside-work-tree" }
-  local out = fn.systemlist(cmd)
-  return out[1] == "true"
+  if dir == "" then return nil end
+  local out = fn.systemlist { "git", "-C", dir, "rev-parse", "--show-toplevel" }
+  if fn.trim(out[1] or "") == "" then return nil end
+  return out[1]
 end
 
 --- Determine if path is untracked (missing from index).
 -- @param path string relative path
 -- @return boolean
-local function is_untracked(path)
-  local out = fn.systemlist { "git", "ls-files", "--error-unmatch", path }
+local function is_untracked(root, path)
+  local out = fn.systemlist { "git", "-C", root, "ls-files", "--error-unmatch", "--", path }
   return #out == 0 -- error-unmatch returns error; systemlist captures empty + sets v:shell_error
 end
 
@@ -142,16 +150,17 @@ local function refresh()
   if vim.bo[buf].buftype ~= "" or vim.bo[buf].modifiable == false then return end
   local path = api.nvim_buf_get_name(buf)
   if path == "" then return end
-  if not in_git_repo(buf) then
+  local root = get_repo_root(buf)
+  if not root then
     clear(buf)
     return
   end
-  local rel = fn.fnamemodify(path, ":.")
+  local rel = path
   -- Bail on huge files
   if api.nvim_buf_line_count(buf) > max_lines_threshold then return end
   clear(buf)
   define_signs()
-  if is_untracked(rel) then
+  if is_untracked(root, rel) then
     -- mark all nonblank lines as added
     local lines = api.nvim_buf_get_lines(buf, 0, -1, false)
     for idx, l in ipairs(lines) do
@@ -159,7 +168,7 @@ local function refresh()
     end
     return
   end
-  local diff_cmd = { "git", "--no-pager", "diff", "--no-color", "--no-ext-diff", "-U0", "HEAD", "--", rel }
+  local diff_cmd = { "git", "-C", root, "--no-pager", "diff", "--no-color", "--no-ext-diff", "-U0", "HEAD", "--", rel }
   local output = fn.systemlist(diff_cmd)
   if vim.v.shell_error ~= 0 then return end
   local hunks = parse_diff(output)

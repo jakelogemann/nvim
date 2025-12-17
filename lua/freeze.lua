@@ -40,6 +40,7 @@ local freeze = {
     open = false,
   },
   output = nil,
+  _dir_warned = false,
 }
 
 ---The callback for reading stdout.
@@ -110,6 +111,15 @@ function freeze.freeze(start_line, end_line)
   local file = vim.api.nvim_buf_get_name(0)
   local config = freeze.opts.config
   local dir = freeze.opts.dir
+  -- Validate output directory; fallback to cache if missing/unwritable
+  if not dir or vim.fn.isdirectory(dir) ~= 1 or vim.fn.filewritable(dir) ~= 2 then
+    local fallback = vim.fn.stdpath "cache"
+    if not freeze._dir_warned then
+      vim.notify("Output dir unavailable; using " .. fallback, vim.log.levels.WARN, { title = "Freeze" })
+      freeze._dir_warned = true
+    end
+    dir = fallback
+  end
   local stdout = vim.loop.new_pipe(false)
   local stderr = vim.loop.new_pipe(false)
   local output = freeze.opts.output
@@ -151,20 +161,22 @@ end
 -- No-ops (warn) if `open` isn't available.
 -- @param filename string absolute path to image
 function freeze.open(filename)
-  if vim.fn.executable "open" ~= 1 then
-    vim.notify("`open` not found!", vim.log.levels.WARN, { title = "Freeze" })
+  local cmd, args
+  if vim.fn.executable "open" == 1 then
+    cmd, args = "open", { filename }
+  elseif vim.fn.executable "xdg-open" == 1 then
+    cmd, args = "xdg-open", { filename }
+  elseif vim.fn.has "win32" == 1 then
+    cmd, args = "cmd", { "/C", "start", "", filename }
+  else
+    vim.notify("No opener found (open/xdg-open)", vim.log.levels.WARN, { title = "Freeze" })
     return
   end
 
   local stdout = vim.loop.new_pipe(false)
   local stderr = vim.loop.new_pipe(false)
-  local handle = vim.loop.spawn("open", {
-    args = {
-      filename,
-    },
-    stdio = { nil, stdout, stderr },
-  }, onExit(stdout, stderr))
-  if not handle then vim.notify("Failed to spawn freeze", vim.log.levels.ERROR, { title = "Freeze" }) end
+  local handle = vim.loop.spawn(cmd, { args = args, stdio = { nil, stdout, stderr } }, onExit(stdout, stderr))
+  if not handle then vim.notify("Failed to spawn opener", vim.log.levels.ERROR, { title = "Freeze" }) end
   if stdout ~= nil then vim.loop.read_start(stdout, onReadStdOut) end
   if stderr ~= nil then vim.loop.read_start(stderr, onReadStdErr) end
 end

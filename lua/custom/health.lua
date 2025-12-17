@@ -5,6 +5,7 @@ local config = {
   tools = {
     "brew",
     "cargo",
+    "curl",
     "go",
     "node",
     "npm",
@@ -13,6 +14,8 @@ local config = {
     "python3",
     "rustc",
     "tree-sitter",
+    "ollama",
+    "freeze",
   },
   -- Define the list of LSP servers to check for on the system.
   lsp_servers = {
