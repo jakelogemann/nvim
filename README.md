@@ -62,6 +62,7 @@ Recommended system packages: `git`, `ripgrep`, `curl`; language toolchains as ne
 - Explore files: press `-` (or `<leader>e`) to open [Oil][oil] in the current directory. Open buffers with `⟨leader⟩,`, and your config files with `⟨leader⟩fc`.
 - Search with [Snacks][snacks]: smart `⟨leader⟩<space>`, files `⟨leader⟩ff`, grep `⟨leader⟩/`, recent `⟨leader⟩fr`, projects `⟨leader⟩fp`, notifications `⟨leader⟩n`, command history `⟨leader⟩:`.
 - Git workflows: `:Neogit` for a full UI; open/close diff view with `⟨leader⟩gd` / `⟨leader⟩gq`.
+- Project root: set cwd to the detected project root with `⟨leader⟩pR` (`:RootHere`).
 - LSP: rename `⟨leader⟩lr`, code actions `⟨leader⟩la`, hover `K`, diagnostics float `⟨leader⟩ld`.
 - Inlay hints: toggle per-buffer with `⟨leader⟩lI` (defaults on; global toggle via `vim.g.inlay_hints_enabled`).
 - Diagnostics: toggle per-buffer with `⟨leader⟩zd`.
