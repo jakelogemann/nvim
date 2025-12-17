@@ -11,3 +11,4 @@ freeze.png
 .nvimcache/
 .nvimlog
 .nvimstate/
+.nvimdata
