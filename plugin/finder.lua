@@ -9,6 +9,7 @@ subcommands.symbol = function() pick.lsp_symbols() end
 subcommands.file = function() pick.files() end
 subcommands.buffer = function() pick.buffers() end
 subcommands.grep = function() pick.grep() end
+subcommands.smart = function() pick.smart() end
 subcommands.recent = function() pick.recent() end
 subcommands.projects = function() pick.projects() end
 subcommands.undo = function() pick.undo() end

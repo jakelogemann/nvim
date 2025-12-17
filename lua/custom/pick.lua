@@ -117,5 +117,18 @@ function M.lsp_workspace_symbols(opts)
   return vim.lsp.buf.workspace_symbol()
 end
 
-return M
+--- Smart find: prefer Snacks smart, else grep word under cursor or files.
+-- @param opts table|nil
+function M.smart(opts)
+  opts = opts or {}
+  local p = M.ensure()
+  if p and p.smart then return p.smart(opts) end
+  local root = M.root()
+  local w = vim.fn.expand "<cword>"
+  if type(w) == "string" and #w >= 3 then
+    return M.grep { cwd = root, default = w }
+  end
+  return M.files { cwd = root }
+end
 
+return M
