@@ -7,12 +7,13 @@
 -- @module custom.utils
 local utils = { ui = {} }
 
---- Attempt to enable the 'impatient' profiling extension (if installed).
--- Silently no-ops when unavailable.
+--- Prefer native Lua module loader for faster startup.
+-- Enables `vim.loader` when available (Neovim 0.9+). No-ops otherwise.
 function utils.try_to_enable_profiler()
-  -- use profiling, if available.
-  local ok, profiler = pcall(require, "impatient")
-  if ok then profiler.enable_profile() end
+  local ok = pcall(function()
+    if vim.loader and vim.loader.enable then vim.loader.enable() end
+  end)
+  return ok
 end
 
 --- Map a normal mode key with a description (wrapper around vim.keymap.set).

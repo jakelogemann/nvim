@@ -1,3 +1,8 @@
+-- Prefer native Lua module loader for faster startup (Neovim 0.9+)
+pcall(function()
+  if vim.loader and vim.loader.enable then vim.loader.enable() end
+end)
+
 local utils = require "custom.utils"
 
 --- Lazy plugin manager bootstrap descriptor.
@@ -54,7 +59,8 @@ function plugin_manager.setup()
 end
 
 plugin_manager.setup()
-utils.try_to_enable_profiler()
+-- Enable fast loader (noop on older versions)
+pcall(utils.try_to_enable_profiler)
 
 pcall(function() require("freeze").setup() end)
 pcall(function() require("custom.comment").setup() end)

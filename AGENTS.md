@@ -52,7 +52,7 @@ This file guides human and automated agents working inside this repo. It is offl
 
 ## Boot & Runtime
 - Startup: `init.lua` bootstraps lazy.nvim (cloned under `stdpath('data')/lazy`) and calls `require('lazy').setup('custom/plugins', opts)`.
-- Performance: disables some default runtime plugins; optional profiling via `impatient` if installed.
+- Performance: disables some default runtime plugins; prefers the native module loader via `vim.loader` when available (no `impatient` needed).
 - Auto modules: everything under `plugin/` is sourced on startup (keep lightweight).
 
 ## Plugin Patterns (lazy.nvim)
@@ -203,6 +203,7 @@ return {
   - Treesitter parsers: ensure a writable directory:
     - Env: `NVIM_TS_PARSER_DIR="$PWD/.nvimparsers"`
     - Or rely on `vim.g.treesitter_parsers_dir` set in `plugin/options.lua` (make sure it exists).
+  - Headless behavior: Treesitter installs are skipped in headless runs to avoid network access (`ensure_installed = {}`, `auto_install = false`, `sync_install = false`). Install parsers interactively as needed.
 - Common issues and fixes:
   - luac cache EPERM in `~/.cache/nvim/luac`: set `XDG_CACHE_HOME` as above.
   - Treesitter parser dir warning: set `NVIM_TS_PARSER_DIR` or create the configured parser dir.

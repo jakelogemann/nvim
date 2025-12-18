@@ -5,10 +5,8 @@ return {
   priority = 100,
   lazy = false,
   init = function()
-    require("nvim-treesitter.configs").setup {
-      parser_install_dir = vim.g.treesitter_parsers_dir,
-      -- A list of parser names, or "all"
-      ensure_installed = {
+    local headless = #vim.api.nvim_list_uis() == 0
+    local ensure = headless and {} or {
         "arduino",
         "astro",
         "bash",
@@ -50,7 +48,13 @@ return {
         "vim",
         "vimdoc",
         "yaml",
-      },
+      }
+    require("nvim-treesitter.configs").setup {
+      parser_install_dir = vim.g.treesitter_parsers_dir,
+      -- Avoid network/install attempts in headless/CI
+      ensure_installed = ensure,
+      auto_install = false,
+      sync_install = false,
       highlight = { enable = true },
       indent = { enable = true, disable = { "python" } },
       -- incremental_selection = {
