@@ -265,6 +265,7 @@ return {
 - Scopes (examples): `nvim`, `lsp`, `picker`, `snacks`, `ollama`, `git`, `dap`, `opts`, `health`, `docs`.
 - Body: concise bullets explaining what and why; group by domain; call out new toggles/commands.
 - Evidence: add headless runs (Lazy/health), manual flows, and note screenshots/recordings for UI/keymap changes.
+- CLI tip: when committing from the shell, prefer multiple `-m` flags for paragraphs instead of embedding `\n` characters (which often don’t interpolate correctly in shells/CI). Example: `git commit -m "fix(scope): subject" -m "Context line" -m "- bullet A" -m "- bullet B"`.
 - Footer: optional `BREAKING CHANGE:`, `Refs: #123`, `Co-authored-by:`.
 
 ### Template
