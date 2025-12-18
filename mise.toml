@@ -19,3 +19,6 @@ run = "mise run lazy_check && mise run lazy_sync && mise run health && mise run 
 
 [tasks.clean_cache]
 run = "rm -rf .nvimcache .nvimstate .nvimdata .nvimparsers"
+
+[tasks.keymap_overlaps]
+run = "mkdir -p .nvimcache .nvimstate .nvimdata .nvimparsers && XDG_CACHE_HOME=\"$PWD/.nvimcache\" XDG_STATE_HOME=\"$PWD/.nvimstate\" XDG_DATA_HOME=\"$PWD/.nvimdata\" NVIM_TS_PARSER_DIR=\"$PWD/.nvimparsers\" nvim --headless '+lua require(\"custom.keymap_overlap\").run()' +qa"
