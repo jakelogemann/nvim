@@ -2,7 +2,7 @@ return {
   "folke/snacks.nvim",
   keys = {
     { "<leader>.", function() Snacks.scratch() end, desc = "Toggle Scratch Buffer" },
-    { "<leader>S", function() Snacks.scratch.select() end, desc = "Select Scratch Buffer" },
+    { "<leader>.s", function() Snacks.scratch.select() end, desc = "Scratch: Select" },
     { "<leader><space>", function() require("custom.pick").smart() end, desc = "Smart Find Files" },
     { "<leader>,", function() require("custom.pick").buffers() end, desc = "Buffers" },
     { "<leader>/", function() require("custom.pick").grep() end, desc = "Grep" },

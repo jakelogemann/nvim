@@ -291,6 +291,7 @@ pcall(function()
     { "<leader>l", group = "LSP" },
     { "<leader>o", group = "Ollama" },
     { "<leader>p", group = "Project" },
+    { "<leader>S", group = "Session" },
     { "<leader>V", group = "neoVIM" },
     { "<leader>Vh", desc = "Health (custom)" },
     { "<leader>q", group = "Quickfix" },
